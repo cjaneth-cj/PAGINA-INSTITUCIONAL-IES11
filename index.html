@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IES N° 11 Jujuy - Portal Oficial</title>
+    <!-- Google Fonts y Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Enlace al archivo CSS principal -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="page-body">
+
+<!-- ========================================== -->
+<!-- COMPONENTE REUTILIZABLE: HEADER            -->
+<!-- ========================================== -->
+<header class="site-header">
+    <div class="header-container">
+        <div class="header-brand">
+            <img src="assets/images/logo-ies11.webp" alt="Logo IES N° 11 Jujuy" class="brand-logo">
+            <div class="brand-texts">
+                <span class="brand-title">IES N° 11 Jujuy</span>
+                <span class="brand-subtitle">Instituto de Educación Superior</span>
+            </div>
+        </div>
+
+        <div class="header-search">
+            <span class="material-symbols-outlined search-icon">search</span>
+            <input type="text" placeholder="Buscar carreras, trámites, resoluciones..." class="search-input">
+        </div>
+
+        <div class="header-actions">
+            <div class="header-phone">
+                <span class="material-symbols-outlined">call</span>
+                <span>+54 (0388) 422-1234</span>
+            </div>
+            <a href="https://superior.jujuy.edu.ar/login/index.php" target="_blank" rel="noopener noreferrer" class="btn-campus">
+                <span class="material-symbols-outlined">school</span>
+                <span>Campus Virtual</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="header-nav-bar">
+        <nav class="nav-container">
+            <a href="index.html" class="nav-link active">Inicio</a>
+            <a href="autoridades.html" class="nav-link">Autoridades</a>
+            <a href="oferta-academica.html" class="nav-link">Oferta Académica</a>
+            <a href="estudiante.html" class="nav-link">Estudiante</a>
+            <a href="novedades.html" class="nav-link">Novedades y Contacto</a>
+        </nav>
+    </div>
+</header>
+
+    <!-- ========================================== -->
+    <!-- CONTENIDO PRINCIPAL: INDEX                 -->
+    <!-- ========================================== -->
+    <main class="site-main">
+
+        <!-- 1. HERO CAROUSEL SECTION -->
+        <section class="hero-carousel-section" id="hero-carousel">
+            <div class="hero-slide-container">
+                <div class="hero-bg-image" id="carousel-bg" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBq83VI5Oy4eKxIVLx_sP3XFxT7dV07-Xh7oQFw56ItZrYhtvMrrIOcAvSmAJIawjr7pWO8vPYKwAzqQBI-yDHrq60_U21UCjGxcthfAtFXucec5QtqSltZflCJY9gDhLZueI3qJDUDW2KNMjlyjGVFb9IYmG41FSCVodYxsXzDigCWVxoRcFuh0Ggr042qBLSR8cgmilcXL8gvRhDYxh4iDrWB8WPtkN0MXHxc2cQjXvzuQ4LgKd6_Ig')">
+                </div>
+                <div class="hero-overlay"></div>
+
+                <div class="hero-content-wrapper">
+                    <div class="hero-text-box">
+                        <div class="hero-badge">
+                            <span class="dot-pulse"></span>
+                            <span>Ciclo Lectivo 2025 • Educación Superior Pública y Gratuita</span>
+                        </div>
+                        <h1 class="hero-main-title">
+                            Construí tu Futuro Profesional en Jujuy
+                        </h1>
+                        <p class="hero-subtitle">
+                            Formación técnica y docente con excelencia académica, compromiso social y salida laboral orientada al desarrollo productivo y cultural regional.
+                        </p>
+                        <div class="hero-buttons">
+                            <a href="oferta-academica.html" class="btn-primary-hero">
+                                Ver Carreras <span class="material-symbols-outlined">arrow_forward</span>
+                            </a>
+                            <a href="#quienes-somos" class="btn-outline-hero">
+                                <span class="material-symbols-outlined">apartment</span> Conocé el Instituto
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controles del Carrusel -->
+                <div class="hero-controls-layer">
+                    <div class="hero-controls-container">
+                        <div class="slide-indicators">
+                            <span id="slide-counter" class="slide-counter">01 / 03</span>
+                            <div class="dots-group">
+                                <button aria-label="Slide 1" class="dot active"></button>
+                                <button aria-label="Slide 2" class="dot"></button>
+                                <button aria-label="Slide 3" class="dot"></button>
+                            </div>
+                        </div>
+                        <div class="arrow-buttons">
+                            <button aria-label="Anterior" class="arrow-btn" type="button">
+                                <span class="material-symbols-outlined">arrow_back</span>
+                            </button>
+                            <button aria-label="Siguiente" class="arrow-btn" type="button">
+                                <span class="material-symbols-outlined">arrow_forward</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. METRICS / STATS SECTION -->
+        <section class="metrics-overlap-section">
+            <div class="metrics-container">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon-box"><span class="material-symbols-outlined">school</span></div>
+                        <div>
+                            <span class="metric-number">15+</span>
+                            <h3 class="metric-title">Carreras de Grado Técnico</h3>
+                            <p class="metric-desc">Tecnicaturas Superiores y Profesorados con validez nacional y ministerial.</p>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon-box"><span class="material-symbols-outlined">groups</span></div>
+                        <div>
+                            <span class="metric-number">6000+</span>
+                            <h3 class="metric-title">Estudiantes Regulares</h3>
+                            <p class="metric-desc">Comunidad activa en nuestras sedes urbanas y plataformas virtuales de estudio.</p>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon-box"><span class="material-symbols-outlined">workspace_premium</span></div>
+                        <div>
+                            <span class="metric-number">1500+</span>
+                            <h3 class="metric-title">Egresados Profesionales</h3>
+                            <p class="metric-desc">Profesionales plenamente insertados en el sector productivo, público y educativo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. ABOUT US SECTION ("¿Quiénes Somos?") -->
+        <section class="about-section" id="quienes-somos">
+            <div class="about-container">
+                <div class="about-grid">
+                    <div class="about-texts">
+                        <span class="section-tag">Identidad Institucional</span>
+                        <h2 class="section-title">¿Quiénes Somos?</h2>
+                        <p class="section-desc">
+                            El <strong>Instituto de Educación Superior N° 11</strong> es una institución pública referente en la provincia de Jujuy, dedicada a la formación técnico-profesional y docente de excelencia.
+                        </p>
+                        <div class="about-bullets">
+                            <div class="bullet-item">
+                                <span class="material-symbols-outlined">check</span>
+                                <div>
+                                    <h4>Formación socioproductiva orientada</h4>
+                                    <p>Diseño curricular coordinado con los polos industriales de Jujuy y el NOA.</p>
+                                </div>
+                            </div>
+                            <div class="bullet-item">
+                                <span class="material-symbols-outlined">check</span>
+                                <div>
+                                    <h4>Cuerpo docente de trayectoria</h4>
+                                    <p>Profesionales activos y pedagogos experimentados que guían la práctica académica.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-image-box">
+                        <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&q=80&w=800" alt="Edificio Institucional IES 11 Jujuy" class="about-img">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. MISSION & VISION BLOCK -->
+        <section class="mission-section">
+            <div class="mission-container">
+                <div class="mission-grid">
+                    <div class="mission-card">
+                        <h3>Misión Institucional</h3>
+                        <p>Garantizar una educación superior pública, inclusiva e innovadora que capacite a técnicos y docentes comprometidos con el desarrollo regional.</p>
+                    </div>
+                    <div class="mission-card">
+                        <h3>Visión Estratégica</h3>
+                        <p>Consolidarnos como el instituto superior de referencia en el NOA, reconocido por la calidad de sus egresados y vinculación socioproductiva.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- COMPONENTE REUTILIZABLE: FOOTER            -->
+    <!-- ========================================== -->
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <span class="footer-brand-title">IES N° 11 Jujuy</span>
+                <p class="footer-text">Instituto de Educación Superior N° 11 - Formando profesionales para el desarrollo regional.</p>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Enlaces Rápidos</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="oferta-academica.html">Oferta Académica</a></li>
+                    <li><a href="estudiante.html">Espacio Estudiantil</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Contacto & Sedes</h4>
+                <p class="footer-text">Alvear 1151 - San Salvador de Jujuy</p>
+                <p class="footer-text">Tel: +54 (0388) 422-1234</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025/2026 IES N° 11 Jujuy - Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Script de Interactividad -->
+    <script src="js/script.js"></script>
+</body>
+</html>

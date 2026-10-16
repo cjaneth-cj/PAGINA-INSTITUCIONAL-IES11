@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espacio Estudiantil - IES N° 11 Jujuy</title>
+    <!-- Google Fonts y Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Enlace al archivo CSS principal -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="page-body">
+
+    <!-- ========================================== -->
+<!-- COMPONENTE REUTILIZABLE: HEADER            -->
+<!-- ========================================== -->
+<header class="site-header">
+    <div class="header-container">
+        <div class="header-brand">
+            <img src="assets/images/logo-ies11.webp" alt="Logo IES N° 11 Jujuy" class="brand-logo">
+            <div class="brand-texts">
+                <span class="brand-title">IES N° 11 Jujuy</span>
+                <span class="brand-subtitle">Instituto de Educación Superior</span>
+            </div>
+        </div>
+
+        <div class="header-search">
+            <span class="material-symbols-outlined search-icon">search</span>
+            <input type="text" placeholder="Buscar carreras, trámites, resoluciones..." class="search-input">
+        </div>
+
+        <div class="header-actions">
+            <div class="header-phone">
+                <span class="material-symbols-outlined">call</span>
+                <span>+54 (0388) 422-1234</span>
+            </div>
+            <a href="https://superior.jujuy.edu.ar/login/index.php" target="_blank" rel="noopener noreferrer" class="btn-campus">
+                <span class="material-symbols-outlined">school</span>
+                <span>Campus Virtual</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="header-nav-bar">
+        <nav class="nav-container">
+            <a href="index.html" class="nav-link active">Inicio</a>
+            <a href="autoridades.html" class="nav-link">Autoridades</a>
+            <a href="oferta-academica.html" class="nav-link">Oferta Académica</a>
+            <a href="estudiante.html" class="nav-link">Estudiante</a>
+            <a href="novedades.html" class="nav-link">Novedades y Contacto</a>
+        </nav>
+    </div>
+</header>
+
+    <!-- ========================================== -->
+    <!-- SECCIÓN: ESPACIO ESTUDIANTIL               -->
+    <!-- ========================================== -->
+    <main class="site-main">
+        
+        <!-- Hero Institucional de Estudiantes -->
+        <section class="student-hero-section">
+            <div class="student-container">
+                <nav class="student-breadcrumb" aria-label="Migas de pan">
+                    <a href="index.html"><span class="material-symbols-outlined">home</span> Inicio</a>
+                    <span>/</span>
+                    <span>Estudiantes</span>
+                    <span>/</span>
+                    <span class="current">Espacio Estudiantil</span>
+                </nav>
+
+                <div class="student-hero-content">
+                    <div class="student-badge">
+                        <span class="dot-pulse"></span>
+                        Portal de Gestión y Acompañamiento Académico • Ciclo Lectivo
+                    </div>
+                    <h1 class="student-title">Espacio Estudiantil</h1>
+                    <p class="student-subtitle">
+                        Encontrá toda la información administrativa, académica y reglamentaria para tu trayectoria en el IES N° 11. Gestioná certificados, consultá fechas de inscripción y accedé al Régimen Académico Marco (RAM).
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Barra de Pestañas de Navegación Interactiva -->
+        <div class="tab-bar-wrapper">
+            <div class="student-container">
+                <div class="tab-bar" id="tabBar">
+                    <button class="tab-button active" id="tabBtn-ingreso" onclick="switchTab('ingreso')">
+                        <span class="material-symbols-outlined">how_to_reg</span> Ingreso 2027
+                    </button>
+                    <button class="tab-button" id="tabBtn-tramites" onclick="switchTab('tramites')">
+                        <span class="material-symbols-outlined">description</span> Trámites y Certificados
+                    </button>
+                    <button class="tab-button" id="tabBtn-ram" onclick="switchTab('ram')">
+                        <span class="material-symbols-outlined">gavel</span> RAM / Régimen Estudiantil
+                    </button>
+                    <button class="tab-button" id="tabBtn-calendario" onclick="switchTab('calendario')">
+                        <span class="material-symbols-outlined">event_available</span> Calendario de Exámenes
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido Dinámico por Secciones -->
+        <div class="student-container student-main-content">
+            
+            <!-- BLOQUE A: INGRESO 2027 -->
+            <section id="section-ingreso" class="content-section">
+                <div class="section-header">
+                    <h2>Convocatoria & Proceso de Ingreso 2027</h2>
+                    <p>Planificá tu postulación a nuestras tecnicaturas superiores y profesorados en la provincia de Jujuy.</p>
+                </div>
+
+                <div class="cards-grid-3">
+                    <!-- Tarjeta Cronograma -->
+                    <div class="student-card">
+                        <h3>Cronograma y Fechas Clave</h3>
+                        <p>Hitos formales del ciclo de ingreso para las cohortes:</p>
+                        <ul class="timeline-list">
+                            <li><strong>Preinscripción Online:</strong> 01 de Noviembre al 15 de Diciembre</li>
+                            <li><strong>Recepción de Legajos:</strong> 05 de Febrero al 20 de Febrero en Bedelía</li>
+                            <li><strong>Cursillo de Ambientación:</strong> 01 al 20 de Marzo (Obligatorio)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Tarjeta Checklist -->
+                    <div class="student-card">
+                        <h3>Requisitos & Checklist</h3>
+                        <p>Documentación obligatoria para armar tu carpeta de legajo:</p>
+                        <ul class="checklist" id="checklistGroup">
+                            <li onclick="toggleCheck(this)"><span class="material-symbols-outlined">check_box</span> DNI actualizado (original y copia)</li>
+                            <li onclick="toggleCheck(this)"><span class="material-symbols-outlined">check_box</span> Título Secundario o Constancia</li>
+                            <li onclick="toggleCheck(this)"><span class="material-symbols-outlined">check_box</span> 2 Fotos carnet 4x4</li>
+                            <li onclick="toggleCheck(this)"><span class="material-symbols-outlined">check_box</span> Certificado de Aptitud Psicofísica</li>
+                        </ul>
+                    </div>
+
+                    <!-- Tarjeta Guía -->
+                    <div class="student-card">
+                        <h3>Guía del Ingresante</h3>
+                        <p>Pasos para asegurar tu ingreso formal a las carreras superiores del instituto.</p>
+                        <a href="#" class="btn-student-download">Descargar Guía (PDF)</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BLOQUE B: TRÁMITES Y CERTIFICADOS -->
+            <section id="section-tramites" class="content-section">
+                <div class="section-header">
+                    <h2>Trámites Frecuentes y Certificados Online</h2>
+                    <p>Solicitá documentación oficial con validación de firma digital y código QR.</p>
+                </div>
+
+                <div class="cards-grid-4">
+                    <div class="student-card">
+                        <h3>Constancia de Alumno Regular</h3>
+                        <p>Válida para boleto estudiantil SUBE, ANSES (Progresar) y obra social.</p>
+                        <button class="btn-action">Solicitar Online</button>
+                    </div>
+                    <div class="student-card">
+                        <h3>Certificado Analítico Parcial</h3>
+                        <p>Detalle de materias cursadas, aprobadas y promedio general.</p>
+                        <button class="btn-action">Solicitar Analítico</button>
+                    </div>
+                    <div class="student-card">
+                        <h3>Inicio de Trámite de Título</h3>
+                        <p>Para estudiantes que completaron el 100% de la currícula.</p>
+                        <button class="btn-action">Iniciar Graduación</button>
+                    </div>
+                    <div class="student-card">
+                        <h3>Equivalencias y Pases</h3>
+                        <p>Reconocimiento de materias aprobadas en otras instituciones.</p>
+                        <button class="btn-action">Consultar Requisitos</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BLOQUE C: RAM / RÉGIMEN ESTUDIANTIL -->
+            <section id="section-ram" class="content-section">
+                <div class="ram-banner">
+                    <div class="ram-texts">
+                        <span class="ram-tag">Resolución Ministerial N° 1240-E/23</span>
+                        <h2>Régimen Académico Marco (RAM)</h2>
+                        <p>Establece los lineamientos formativos, derechos, obligaciones y condiciones de regularidad de los institutos terciarios de Jujuy.</p>
+                    </div>
+                    <div class="ram-action">
+                        <a href="#" class="btn-ram-download">Descargar RAM (PDF - 4.2 MB)</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BLOQUE D: CALENDARIO DE EXÁMENES -->
+            <section id="section-calendario" class="content-section">
+                <div class="section-header">
+                    <h2>Turnos y Mesas de Exámenes Finales</h2>
+                    <p>Inscripción a través del sistema de alumnos hasta 48 horas hábiles previas.</p>
+                </div>
+
+                <div class="exam-table-wrapper">
+                    <table class="exam-table">
+                        <thead>
+                            <tr>
+                                <th>Turno / Convocatoria</th>
+                                <th>Período de Exámenes</th>
+                                <th>Cierre de Inscripción</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Turno Febrero - Marzo</strong></td>
+                                <td>15 Feb - 08 Mar</td>
+                                <td>48 hs previas</td>
+                                <td><span class="badge-status">Concluido</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Turno Julio - Agosto</strong></td>
+                                <td>07 Jul - 28 Jul</td>
+                                <td>Habilitada en Sistema</td>
+                                <td><span class="badge-status open">Inscripciones Abiertas</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Turno Noviembre - Diciembre</strong></td>
+                                <td>20 Nov - 18 Dic</td>
+                                <td>Próximamente</td>
+                                <td><span class="badge-status">Programado</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- COMPONENTE REUTILIZABLE: FOOTER            -->
+    <!-- ========================================== -->
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <span class="footer-brand-title">IES N° 11 Jujuy</span>
+                <p class="footer-text">Instituto de Educación Superior N° 11 - Formando profesionales para el desarrollo regional.</p>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Enlaces Rápidos</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="estudiante.html">Espacio Estudiantil</a></li>
+                    <li><a href="novedades.html">Novedades y Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Contacto & Sedes</h4>
+                <p class="footer-text">Alvear 1151 - San Salvador de Jujuy</p>
+                <p class="footer-text">Tel: +54 (0388) 422-1234</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025/2026 IES N° 11 Jujuy - Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Enlace al archivo de JavaScript principal -->
+    <script src="js/script.js"></script>
+</body>
+</html>

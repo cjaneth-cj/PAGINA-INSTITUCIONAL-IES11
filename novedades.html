@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novedades y Contacto - IES N° 11 Jujuy</title>
+    <!-- Google Fonts y Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Archivo CSS Principal -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="page-body">
+
+<!-- ========================================== -->
+<!-- COMPONENTE REUTILIZABLE: HEADER            -->
+<!-- ========================================== -->
+<header class="site-header">
+    <div class="header-container">
+        <div class="header-brand">
+            <img src="assets/images/logo-ies11.webp" alt="Logo IES N° 11 Jujuy" class="brand-logo">
+            <div class="brand-texts">
+                <span class="brand-title">IES N° 11 Jujuy</span>
+                <span class="brand-subtitle">Instituto de Educación Superior</span>
+            </div>
+        </div>
+
+        <div class="header-search">
+            <span class="material-symbols-outlined search-icon">search</span>
+            <input type="text" placeholder="Buscar carreras, trámites, resoluciones..." class="search-input">
+        </div>
+
+        <div class="header-actions">
+            <div class="header-phone">
+                <span class="material-symbols-outlined">call</span>
+                <span>+54 (0388) 422-1234</span>
+            </div>
+            <a href="https://superior.jujuy.edu.ar/login/index.php" target="_blank" rel="noopener noreferrer" class="btn-campus">
+                <span class="material-symbols-outlined">school</span>
+                <span>Campus Virtual</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="header-nav-bar">
+        <nav class="nav-container">
+            <a href="index.html" class="nav-link active">Inicio</a>
+            <a href="autoridades.html" class="nav-link">Autoridades</a>
+            <a href="oferta-academica.html" class="nav-link">Oferta Académica</a>
+            <a href="estudiante.html" class="nav-link">Estudiante</a>
+            <a href="novedades.html" class="nav-link">Novedades y Contacto</a>
+        </nav>
+    </div>
+</header>
+    <!-- ========================================== -->
+    <!-- SECCIÓN: NOVEDADES Y CONTACTO              -->
+    <!-- ========================================== -->
+    <main class="site-main">
+        
+        <!-- Cabecera Institucional y Breadcrumbs -->
+        <section class="news-hero-section">
+            <div class="news-container">
+                <nav class="news-breadcrumb" aria-label="Ruta de navegación">
+                    <a href="index.html"><span class="material-symbols-outlined">home</span> Inicio</a>
+                    <span>/</span>
+                    <span>Institucional</span>
+                    <span>/</span>
+                    <span class="current">Novedades y Contacto</span>
+                </nav>
+
+                <div class="news-header-box">
+                    <span class="news-badge">
+                        <span class="material-symbols-outlined">campaign</span>
+                        Prensa, Comunidad y Canales de Comunicación
+                    </span>
+                    <h1 class="news-main-title">Novedades Institucionales y Canales de Contacto</h1>
+                    <p class="news-main-desc">
+                        Mantenete informado con las últimas noticias académicas, convocatorias, resoluciones ministeriales y comunicate de forma directa con las sedes y autoridades del IES N° 11.
+                    </p>
+                </div>
+
+                <!-- Métricas rápidas -->
+                <div class="news-metrics-grid">
+                    <div class="metric-item">
+                        <div class="metric-icon"><span class="material-symbols-outlined">schedule</span></div>
+                        <div class="metric-texts">
+                            <span class="metric-label">Atención Presencial</span>
+                            <span class="metric-value">08:00 a 22:30 hs</span>
+                        </div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-icon"><span class="material-symbols-outlined">mark_email_read</span></div>
+                        <div class="metric-texts">
+                            <span class="metric-label">Respuesta Oficial</span>
+                            <span class="metric-value">24 a 48 hs hábiles</span>
+                        </div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-icon"><span class="material-symbols-outlined">domain</span></div>
+                        <div class="metric-texts">
+                            <span class="metric-label">Sede Central</span>
+                            <span class="metric-value">San Salvador de Jujuy</span>
+                        </div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-icon"><span class="material-symbols-outlined">newspaper</span></div>
+                        <div class="metric-texts">
+                            <span class="metric-label">Publicaciones</span>
+                            <span class="metric-value">Actualización Continua</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grilla de Noticias y Filtros -->
+        <section class="news-feed-section">
+            <div class="news-container">
+                <div class="news-layout">
+                    
+                    <!-- Sidebar Izquierdo: Filtros -->
+                    <aside class="news-sidebar">
+                        <div class="sidebar-card">
+                            <h3><span class="material-symbols-outlined">category</span> Categorías de Noticias</h3>
+                            <nav class="category-nav">
+                                <button class="cat-btn active">Todas las Novedades <span>28</span></button>
+                                <button class="cat-btn">Académicas y Cursado <span>8</span></button>
+                                <button class="cat-btn">Convocatorias e Ingreso <span>5</span></button>
+                                <button class="cat-btn">Resoluciones Ministeriales <span>4</span></button>
+                                <button class="cat-btn">Prácticas y Pasantías <span>4</span></button>
+                                <button class="cat-btn">Eventos y Conferencias <span>4</span></button>
+                            </nav>
+                        </div>
+                    </aside>
+
+                    <!-- Columna Derecha: Tarjetas de Noticias -->
+                    <div class="news-grid-content">
+                        <div class="news-cards-grid">
+                            <!-- Noticia 1 -->
+                            <article class="news-card">
+                                <div class="news-card-img">
+                                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600" alt="Convocatoria Docente">
+                                    <span class="news-tag">Convocatoria Docente</span>
+                                </div>
+                                <div class="news-card-body">
+                                    <span class="news-resolution">Resolución N° 458-DGES/25</span>
+                                    <h3>Apertura de Concurso Docente para Tecnicaturas Superiores</h3>
+                                    <p>Llamado público de antecedentes y oposición para cubrir espacios curriculares en las carreras de Desarrollo de Software.</p>
+                                    <a href="#" class="news-read-more">Leer más →</a>
+                                </div>
+                            </article>
+
+                            <!-- Noticia 2 -->
+                            <article class="news-card">
+                                <div class="news-card-img">
+                                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=600" alt="Mesas de Examen">
+                                    <span class="news-tag academic">Académica</span>
+                                </div>
+                                <div class="news-card-body">
+                                    <span class="news-resolution">Secretaría Académica</span>
+                                    <h3>Inicio de Inscripción a Mesas de Exámenes Turno Julio</h3>
+                                    <p>Estudiantes regulares y libres podrán formalizar su inscripción a través del sistema de autogestión estudiantil.</p>
+                                    <a href="#" class="news-read-more">Leer más →</a>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Contacto Directo y Formulario -->
+        <section class="contact-section" id="contacto">
+            <div class="news-container">
+                <div class="contact-header">
+                    <h2>Contacto y Atención a la Comunidad</h2>
+                    <p>Envianos tu consulta institucional o comunicate con nuestras secretarías.</p>
+                </div>
+
+                <div class="contact-layout">
+                    <!-- Formulario -->
+                    <div class="contact-form-box">
+                        <h3>Envianos tu Consulta</h3>
+                        <form id="contactForm" onsubmit="event.preventDefault(); alert('¡Consulta enviada con éxito!');">
+                            <div class="form-group">
+                                <label for="nombre">Nombre y Apellido</label>
+                                <input type="text" id="nombre" required placeholder="Ej. Juan Pérez">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Correo Electrónico</label>
+                                <input type="email" id="email" required placeholder="correo@ejemplo.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="mensaje">Mensaje</label>
+                                <textarea id="mensaje" rows="4" required placeholder="Escribí tu consulta..."></textarea>
+                            </div>
+                            <button type="submit" class="btn-submit">Enviar Consulta</button>
+                        </form>
+                    </div>
+
+                    <!-- Datos de Sede -->
+                    <div class="contact-info-box">
+                        <h3>Sede Central</h3>
+                        <p><span class="material-symbols-outlined">location_on</span> Alvear N° 1151 - San Salvador de Jujuy</p>
+                        <p><span class="material-symbols-outlined">call</span> +54 (0388) 422-1234</p>
+                        <p><span class="material-symbols-outlined">mail</span> contacto@ies11jujuy.edu.ar</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- COMPONENTE REUTILIZABLE: FOOTER            -->
+    <!-- ========================================== -->
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <span class="footer-brand-title">IES N° 11 Jujuy</span>
+                <p class="footer-text">Instituto de Educación Superior N° 11 - Formando profesionales para el desarrollo regional.</p>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Enlaces Rápidos</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="oferta-academica.html">Oferta Académica</a></li>
+                    <li><a href="novedades.html">Novedades y Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Contacto & Sedes</h4>
+                <p class="footer-text">Alvear 1151 - San Salvador de Jujuy</p>
+                <p class="footer-text">Tel: +54 (0388) 422-1234</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025/2026 IES N° 11 Jujuy - Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

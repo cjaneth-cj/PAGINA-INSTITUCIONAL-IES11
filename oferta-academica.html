@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oferta Académica - IES N° 11 Jujuy</title>
+    <!-- Google Fonts y Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Estilos Externos -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="page-body">
+
+<!-- ========================================== -->
+<!-- COMPONENTE REUTILIZABLE: HEADER            -->
+<!-- ========================================== -->
+<header class="site-header">
+    <div class="header-container">
+        <div class="header-brand">
+            <img src="assets/images/logo-ies11.webp" alt="Logo IES N° 11 Jujuy" class="brand-logo">
+            <div class="brand-texts">
+                <span class="brand-title">IES N° 11 Jujuy</span>
+                <span class="brand-subtitle">Instituto de Educación Superior</span>
+            </div>
+        </div>
+
+        <div class="header-search">
+            <span class="material-symbols-outlined search-icon">search</span>
+            <input type="text" placeholder="Buscar carreras, trámites, resoluciones..." class="search-input">
+        </div>
+
+        <div class="header-actions">
+            <div class="header-phone">
+                <span class="material-symbols-outlined">call</span>
+                <span>+54 (0388) 422-1234</span>
+            </div>
+            <a href="https://superior.jujuy.edu.ar/login/index.php" target="_blank" rel="noopener noreferrer" class="btn-campus">
+                <span class="material-symbols-outlined">school</span>
+                <span>Campus Virtual</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="header-nav-bar">
+        <nav class="nav-container">
+            <a href="index.html" class="nav-link active">Inicio</a>
+            <a href="autoridades.html" class="nav-link">Autoridades</a>
+            <a href="oferta-academica.html" class="nav-link">Oferta Académica</a>
+            <a href="estudiante.html" class="nav-link">Estudiante</a>
+            <a href="novedades.html" class="nav-link">Novedades y Contacto</a>
+        </nav>
+    </div>
+</header>
+    <!-- ========================================== -->
+    <!-- SECCIÓN PRINCIPAL: OFERTA ACADÉMICA        -->
+    <!-- ========================================== -->
+    <main class="site-main">
+        
+        <!-- Hero Seccional -->
+        <section class="academic-hero">
+            <div class="academic-container">
+                <nav class="academic-breadcrumb" aria-label="Migas de pan">
+                    <a href="index.html"><span class="material-symbols-outlined">home</span> Inicio</a>
+                    <span>/</span>
+                    <span class="current">Oferta Académica</span>
+                </nav>
+
+                <div class="academic-hero-content">
+                    <span class="academic-badge">
+                        <span class="material-symbols-outlined">verified</span> Títulos Oficiales de Validez Nacional
+                    </span>
+                    <h1 class="academic-title">Nuestra Oferta Académica</h1>
+                    <p class="academic-description">
+                        Formación técnica de nivel superior orientada al desarrollo socioproductivo, tecnológico, sanitario y de servicios de la Provincia de Jujuy.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Barra de Filtros Interactivos -->
+        <section class="filters-section">
+            <div class="academic-container">
+                <div class="filters-card">
+                    <div class="filter-group">
+                        <span class="filter-label">Área Vocacional:</span>
+                        <div class="filter-buttons" id="category-filter-group">
+                            <button class="filter-btn active" data-filter="all">Todas</button>
+                            <button class="filter-btn" data-filter="salud">Salud</button>
+                            <button class="filter-btn" data-filter="tecnologia">Tecnología</button>
+                            <button class="filter-btn" data-filter="administracion">Administración y Comercio</button>
+                            <button class="filter-btn" data-filter="turismo">Turismo y Servicios</button>
+                            <button class="filter-btn" data-filter="diseno">Diseño e Indumentaria</button>
+                            <button class="filter-btn" data-filter="social">Social y Comunidad</button>
+                        </div>
+                    </div>
+
+                    <div class="filter-search-row">
+                        <div class="search-box">
+                            <span class="material-symbols-outlined">search</span>
+                            <input type="text" id="keyword-filter" placeholder="Buscar carrera por nombre o palabras clave...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grilla de Carreras -->
+        <section class="careers-section">
+            <div class="academic-container">
+                <div class="careers-grid" id="courses-grid">
+
+                    <!-- 1. Desarrollo de Software -->
+                    <article class="career-card" data-category="tecnologia" data-keywords="software programacion sistemas web computacion informatica">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-desarrollo.webp" alt="Logo Desarrollo de Software">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag tecnologia">Tecnología</span>
+                            <h3>Tecnicatura Superior en Desarrollo de Software</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Vespertino</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Presencial con apoyo virtual</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 2. Enfermería Profesional -->
+                    <article class="career-card" data-category="salud" data-keywords="enfermeria salud clinica hospital primeros auxilios">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-enfermeria.webp" alt="Logo Enfermería">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag salud">Salud</span>
+                            <h3>Tecnicatura Superior en Enfermería</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Mañana / Tarde</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Prácticas Hospitalarias</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 3. Ciencia de Datos e Inteligencia Artificial -->
+                    <article class="career-card" data-category="tecnologia" data-keywords="datos inteligencia artificial python analitica big data">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-datos.webp" alt="Logo Ciencia de Datos">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag tecnologia">Tecnología</span>
+                            <h3>Tecnicatura Superior en Ciencia de Datos e IA</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Vespertino</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Presencial / Laboratorio</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 4. Mantenimiento de Equipamiento Biomédico -->
+                    <article class="career-card" data-category="salud" data-keywords="biomedico mantenimiento electromedicina salud tecnologia hospital">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-biomedico.webp" alt="Logo Equipamiento Biomédico">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag salud">Salud</span>
+                            <h3>Tecnicatura Superior en Equipamiento Biomédico</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Tarde</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Prácticas Técnicas</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 5. Administración de Servicios de Salud -->
+                    <article class="career-card" data-category="administracion" data-keywords="administracion salud gestion clinica sanatorio hospitales">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-administracion.webp" alt="Logo Administración">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag administracion">Administración</span>
+                            <h3>Tecnicatura Superior en Administración en Salud</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Vespertino</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Presencial</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 6. Higiene y Seguridad en el Trabajo -->
+                    <article class="career-card" data-category="administracion" data-keywords="higiene seguridad trabajo prevencion medio ambiente hys">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-hys.webp" alt="Logo Higiene y Seguridad">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag administracion">Administración</span>
+                            <h3>Tecnicatura Superior en Higiene y Seguridad</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Tarde / Vespertino</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Campo y Laboratorio</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 7. Energías Renovables -->
+                    <article class="career-card" data-category="tecnologia" data-keywords="energia renovable solar eolica sustentabilidad medio ambiente">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-energia.webp" alt="Logo Energías Renovables">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag tecnologia">Tecnología</span>
+                            <h3>Tecnicatura Superior en Energías Renovables</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Tarde</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Prácticas de Campo</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 8. Diseño de Indumentaria y Textil -->
+                    <article class="career-card" data-category="diseno" data-keywords="diseño indumentaria moda textil molderia confeccion">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-diseño.webp" alt="Logo Diseño de Indumentaria">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag diseno">Diseño</span>
+                            <h3>Tecnicatura Superior en Diseño e Indumentaria</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Tarde</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Taller Textil</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 9. Gestión Hotelera -->
+                    <article class="career-card" data-category="turismo" data-keywords="hotelleria turismo hospederia gastronomia servicios alojamiento">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-hoteleria.webp" alt="Logo Gestión Hotelera">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag turismo">Turismo</span>
+                            <h3>Tecnicatura Superior en Gestión Hotelera</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Mañana</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Prácticas en Hoteles</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 10. Turismo y Desarrollo Local -->
+                    <article class="career-card" data-category="turismo" data-keywords="turismo viajes patrimonio cultura desarrollo regional guiado">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-turismo.png" alt="Logo Turismo">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag turismo">Turismo</span>
+                            <h3>Tecnicatura Superior en Turismo</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Vespertino</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Salidas de Campo</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 11. Comercialización y Marketing Digital -->
+                    <article class="career-card" data-category="administracion" data-keywords="comercializacion marketing ventas publicidad digital e-commerce">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-comercializacion.webp" alt="Logo Comercialización">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag administracion">Administración</span>
+                            <h3>Tecnicatura Superior en Comercialización</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Vespertino</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Presencial con Proyectos</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 12. Acompañamiento Terapéutico -->
+                    <article class="career-card" data-category="social" data-keywords="acompañante terapeutico salud mental psicologia integracion social">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-acompañante.webp" alt="Logo Acompañamiento Terapéutico">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag social">Social</span>
+                            <h3>Tecnicatura Superior en Acompañamiento Terapéutico</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Tarde</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Prácticas Comunitarias</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 13. Agente Sanitario y Salud Comunitaria -->
+                    <article class="career-card" data-category="salud" data-keywords="agente sanitario salud comunitaria prevencion aps atencion primaria">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-agente.webp" alt="Logo Agente Sanitario">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag salud">Salud</span>
+                            <h3>Tecnicatura Superior Agente Sanitario</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Mañana</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Trabajo en Terreno</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 14. Gerontología y Atención Integral -->
+                    <article class="career-card" data-category="social" data-keywords="gerontologia adultos mayores salud cuidado tercera edad">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-gerontologia.webp" alt="Logo Gerontología">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag social">Social</span>
+                            <h3>Tecnicatura Superior en Gerontología</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Tarde</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Prácticas Institucionales</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 15. Laboratorio de Análisis Clínicos -->
+                    <article class="career-card" data-category="salud" data-keywords="laboratorio analisis clinicos muestra sangre bacteriologia salud">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-laboratorio.webp" alt="Logo Laboratorio">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag salud">Salud</span>
+                            <h3>Tecnicatura Superior en Laboratorio Clínico</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Mañana</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Prácticas de Laboratorio</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 16. Museología y Conservación del Patrimonio -->
+                    <article class="career-card" data-category="social" data-keywords="museologia museo patrimonio historia conservacion cultura">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-museologia.png" alt="Logo Museología">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag social">Social</span>
+                            <h3>Tecnicatura Superior en Museología</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Vespertino</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Prácticas en Museos</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 17. Obstetricia y Perinatología -->
+                    <article class="career-card" data-category="salud" data-keywords="obstetricia parto maternidad salud reproduccion neonatologia">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-obstetricia.png" alt="Logo Obstetricia">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag salud">Salud</span>
+                            <h3>Tecnicatura Superior en Obstetricia</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Mañana / Tarde</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Prácticas Clínicas</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 18. Auxiliar y Asistencia en Odontología -->
+                    <article class="career-card" data-category="salud" data-keywords="odontologia diente boca salud bucal clinica protesis">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-odontologia.png" alt="Logo Odontología">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag salud">Salud</span>
+                            <h3>Tecnicatura Superior en Asistencia Odontológica</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Tarde</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Prácticas en Sillón Clínico</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 19. Estadística y Registros Sanitarios -->
+                    <article class="career-card" data-category="administracion" data-keywords="estadistica datos registros epidemiologia salud informacion">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-estadistica.webp" alt="Logo Estadística">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag administracion">Administración</span>
+                            <h3>Tecnicatura Superior en Estadística en Salud</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Vespertino</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Presencial</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 20. Control de Vectores y Epidemiología -->
+                    <article class="career-card" data-category="salud" data-keywords="vectores dengue chagas epidemias salud publica sanidad brotes">
+                        <div class="career-logo-box">
+                            <img src="assets/images/careers/logo-vectores.png" alt="Logo Vectores">
+                        </div>
+                        <div class="career-content">
+                            <span class="career-tag salud">Salud</span>
+                            <h3>Tecnicatura Superior en Control de Vectores</h3>
+                            <ul class="career-specs">
+                                <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> 3 años</li>
+                                <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> Mañana</li>
+                                <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Prácticas de Campo</li>
+                            </ul>
+                            <div class="career-actions">
+                                <a href="#" class="btn-outline">Plan de Estudio</a>
+                                <a href="#" class="btn-primary">Más Información</a>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- COMPONENTE REUTILIZABLE: FOOTER            -->
+    <!-- ========================================== -->
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <span class="footer-brand-title">IES N° 11 Jujuy</span>
+                <p class="footer-text">Instituto de Educación Superior N° 11 - Formando profesionales para el desarrollo regional.</p>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Enlaces Rápidos</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="oferta-academica.html">Oferta Académica</a></li>
+                    <li><a href="estudiante.html">Espacio Estudiantil</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Contacto & Sedes</h4>
+                <p class="footer-text">Alvear 1151 - San Salvador de Jujuy</p>
+                <p class="footer-text">Tel: +54 (0388) 422-1234</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025/2026 IES N° 11 Jujuy - Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Archivo JS Centralizado -->
+    <script src="js/script.js"></script>
+</body>
+</html>
