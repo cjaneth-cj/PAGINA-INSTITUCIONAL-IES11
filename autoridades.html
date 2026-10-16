@@ -117,31 +117,93 @@
         </section>
     </main>
 
-    <!-- ========================================== -->
+ <!-- ========================================== -->
     <!-- COMPONENTE REUTILIZABLE: FOOTER            -->
     <!-- ========================================== -->
     <footer class="site-footer">
-        <div class="footer-grid">
-            <div class="footer-col">
-                <span class="footer-brand-title">IES N° 11 Jujuy</span>
-                <p class="footer-text">Instituto de Educación Superior N° 11 - Formando profesionales para el desarrollo regional.</p>
+        <div class="footer-container">
+            
+            <!-- Columna 1: Información Institucional -->
+            <div class="footer-col footer-brand-info">
+                <div class="footer-brand">
+                    <div class="brand-icon-wrapper">
+                        <span class="material-symbols-outlined">account_balance</span>
+                    </div>
+                    <span class="footer-brand-title">IES N° 11</span>
+                </div>
+                <p class="footer-description">
+                    Instituto de Educación Superior N° 11 - Formando profesionales técnicos y docentes para el desarrollo integral y productivo de Jujuy.
+                </p>
+                <div class="footer-badge">
+                    <span class="material-symbols-outlined">verified</span>
+                    <span>Validez Nacional y Provincial</span>
+                </div>
             </div>
+
+            <!-- Columna 2: Enlaces Rápidos -->
             <div class="footer-col">
                 <h4 class="footer-heading">Enlaces Rápidos</h4>
-                <ul class="footer-links">
-                    <li><a href="index.html">Inicio</a></li>
-                    <li><a href="autoridades.html">Autoridades</a></li>
-                    <li><a href="oferta-academica.html">Oferta Académica</a></li>
+                <ul class="footer-nav-list">
+                    <li><a href="index.html" class="footer-link">Inicio</a></li>
+                    <li><a href="autoridades.html" class="footer-link">Autoridades</a></li>
+                    <li><a href="oferta-academica.html" class="footer-link">Oferta Académica</a></li>
+                    <li><a href="estudiante.html" class="footer-link">Estudiante</a></li>
+                    <li><a href="novedades.html" class="footer-link">Novedades y Contacto</a></li>
+                    <li><a href="https://superior.jujuy.edu.ar/login/index.php" target="_blank" rel="noopener noreferrer" class="footer-link">Campus Virtual</a></li>
                 </ul>
             </div>
+
+            <!-- Columna 3: Contacto y Sedes -->
             <div class="footer-col">
                 <h4 class="footer-heading">Contacto & Sedes</h4>
-                <p class="footer-text">Alvear 1151 - San Salvador de Jujuy</p>
-                <p class="footer-text">Tel: +54 (0388) 422-1234</p>
+                <div class="footer-contact-list">
+                    <div class="footer-contact-item">
+                        <span class="material-symbols-outlined">location_on</span>
+                        <span>Alvear 1151 - San Salvador de Jujuy</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span class="material-symbols-outlined">call</span>
+                        <span>+54 (0388) 422-1234</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span class="material-symbols-outlined">mail</span>
+                        <span>contacto@ies11jujuy.edu.ar</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span class="material-symbols-outlined">schedule</span>
+                        <span>Lunes a Viernes: 08:00 a 22:30 hs</span>
+                    </div>
+                </div>
             </div>
+
+            <!-- Columna 4: Redes y Atención por Turnos -->
+            <div class="footer-col">
+                <h4 class="footer-heading">Redes & Atención</h4>
+                <p class="footer-description">Canales institucionales oficiales de comunicación:</p>
+                
+                <div class="footer-social-icons">
+                    <a href="#" aria-label="Facebook" class="social-icon-btn"><span class="material-symbols-outlined">public</span></a>
+                    <a href="#" aria-label="Instagram" class="social-icon-btn"><span class="material-symbols-outlined">photo_camera</span></a>
+                    <a href="#" aria-label="YouTube" class="social-icon-btn"><span class="material-symbols-outlined">smart_display</span></a>
+                    <a href="#" aria-label="Compartir" class="social-icon-btn"><span class="material-symbols-outlined">share</span></a>
+                </div>
+
+                <div class="footer-shifts-box">
+                    <span class="shifts-title">Atención de Alumnos:</span>
+                    <p>Turno Mañana: 08:30 a 12:30</p>
+                    <p>Turno Tarde: 13:00 a 18:30</p>
+                    <p>Turno Vespertino: 18:30 a 22:00</p>
+                </div>
+            </div>
+
         </div>
+
+        <!-- Barra inferior de Copyright -->
         <div class="footer-bottom">
-            <p>© 2025/2026 IES N° 11 Jujuy - Todos los derechos reservados.</p>
+            <div class="footer-bottom-container">
+                <p>© 2025/2026 IES N° 11 Jujuy - Todos los derechos reservados.</p>
+                <p>Ministerio de Educación de Jujuy • Dirección de Educación Superior</p>
+            </div>
         </div>
     </footer>
 
