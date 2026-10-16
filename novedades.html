@@ -39,6 +39,10 @@
                 <span class="material-symbols-outlined">school</span>
                 <span>Campus Virtual</span>
             </a>
+            <!-- Botón de Menú Hamburguesa para celulares -->
+            <button class="btn-menu-toggle" id="menuToggle" aria-label="Abrir menú de navegación">
+                <span class="material-symbols-outlined" id="menuIcon">menu</span>
+            </button>
         </div>
     </div>
 
@@ -49,10 +53,11 @@
                 <a href="autoridades.html" class="nav-link">Autoridades</a>
                 <a href="oferta-academica.html" class="nav-link">Oferta Académica</a>
                 <a href="estudiante.html" class="nav-link">Estudiante</a>
-                <a href="agenda.html" class="nav-link active">Agenda</a>
-                <a href="novedades.html" class="nav-link">Novedades y Contacto</a>
+                <a href="agenda.html" class="nav-link">Agenda</a>
+                <a href="novedades.html" class="nav-link active">Novedades y Contacto</a>
             </nav>
     </div>
+    <div class="nav-overlay" id="navOverlay"></div>
 </header>
     <!-- ========================================== -->
     <!-- SECCIÓN: NOVEDADES Y CONTACTO              -->
@@ -184,7 +189,17 @@
                     <!-- Formulario -->
                     <div class="contact-form-box">
                         <h3>Envianos tu Consulta</h3>
-                        <form id="contactForm" onsubmit="event.preventDefault(); alert('¡Consulta enviada con éxito!');">
+                        
+                        <!-- Mensaje de éxito oculto por defecto -->
+                        <div id="contactSuccessMsg" class="contact-alert-success" style="display: none;">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            <div>
+                                <strong>¡Consulta enviada con éxito!</strong>
+                                <p>Nos pondremos en contacto a la brevedad dentro de las 24 a 48 hs hábiles.</p>
+                            </div>
+                        </div>
+
+                        <form id="contactForm">
                             <div class="form-group">
                                 <label for="nombre">Nombre y Apellido</label>
                                 <input type="text" id="nombre" required placeholder="Ej. Juan Pérez">
@@ -194,24 +209,44 @@
                                 <input type="email" id="email" required placeholder="correo@ejemplo.com">
                             </div>
                             <div class="form-group">
-                                <label for="mensaje">Mensaje</label>
-                                <textarea id="mensaje" rows="4" required placeholder="Escribí tu consulta..."></textarea>
+                                <label for="asunto">Asunto o Carrera de Interés</label>
+                                <input type="text" id="asunto" placeholder="Ej. Inscripciones, Constancia de Alumno, Equivalencias">
                             </div>
-                            <button type="submit" class="btn-submit">Enviar Consulta</button>
+                            <div class="form-group">
+                                <label for="mensaje">Mensaje</label>
+                                <textarea id="mensaje" rows="4" required placeholder="Escribí tu consulta detallada..."></textarea>
+                            </div>
+                            <button type="submit" class="btn-submit" id="btnSubmitContact">
+                                <span class="material-symbols-outlined">send</span> Enviar Consulta
+                            </button>
                         </form>
                     </div>
 
-                    <!-- Datos de Sede -->
+                    <!-- Datos de Sede y Mapa de Google Maps -->
                     <div class="contact-info-box">
                         <h3>Sede Central</h3>
                         <p><span class="material-symbols-outlined">location_on</span> Alvear N° 1151 - San Salvador de Jujuy</p>
                         <p><span class="material-symbols-outlined">call</span> +54 (0388) 422-1234</p>
                         <p><span class="material-symbols-outlined">mail</span> contacto@ies11jujuy.edu.ar</p>
+                        <p><span class="material-symbols-outlined">schedule</span> Lunes a Viernes: 08:00 a 22:30 hs</p>
+
+                        <!-- Mapa Interactivo Embebido -->
+                        <div class="map-container">
+                            <iframe 
+                                title="Ubicación IES N° 11 Jujuy"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3640.0384752601955!2d-65.30594242491178!3d-24.180010978378546!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x941b0f5b4e3c3b0f%3A0x6b107e33527b165!2sAlvear%201151%2C%20Y4600%20San%20Salvador%20de%20Jujuy%2C%20Jujuy!5e0!3m2!1ses!2sar!4v1715000000000!5m2!1ses!2sar" 
+                                width="100%" 
+                                height="220" 
+                                style="border:0; border-radius: 8px;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-
     </main>
 
     <!-- ========================================== -->

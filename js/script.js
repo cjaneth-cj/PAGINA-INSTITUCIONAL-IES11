@@ -40,14 +40,115 @@ function initHeaderScroll() {
  * ==========================================================================
  */
 function initHeroCarousel() {
-    // Espacio reservado para conectar los botones de desplazamiento del banner principal
-    const heroSection = document.getElementById("inicio01");
+    const heroSection = document.getElementById("hero-carousel");
     if (!heroSection) return;
 
-    // Ejemplo de registro de eventos para futuros controles de carrusel
-    console.log("Módulo Hero Carousel inicializado correctamente.");
-}
+    const bgImage = document.getElementById("carousel-bg");
+    const titleElement = heroSection.querySelector(".hero-main-title");
+    const subtitleElement = heroSection.querySelector(".hero-subtitle");
+    const counterElement = document.getElementById("slide-counter");
+    const dots = heroSection.querySelectorAll(".dots-group .dot");
+    const prevBtn = heroSection.querySelector(".arrow-btn[aria-label='Anterior']");
+    const nextBtn = heroSection.querySelector(".arrow-btn[aria-label='Siguiente']");
 
+    // Datos de cada slide
+    const slides = [
+        {
+            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBq83VI5Oy4eKxIVLx_sP3XFxT7dV07-Xh7oQFw56ItZrYhtvMrrIOcAvSmAJIawjr7pWO8vPYKwAzqQBI-yDHrq60_U21UCjGxcthfAtFXucec5QtqSltZflCJY9gDhLZueI3qJDUDW2KNMjlyjGVFb9IYmG41FSCVodYxsXzDigCWVxoRcFuh0Ggr042qBLSR8cgmilcXL8gvRhDYxh4iDrWB8WPtkN0MXHxc2cQjXvzuQ4LgKd6_Ig",
+            title: "Construí tu Futuro Profesional en Jujuy",
+            subtitle: "Formación técnica y docente con excelencia académica, compromiso social y salida laboral orientada al desarrollo productivo y cultural regional."
+        },
+        {
+            image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=1400",
+            title: "Títulos Oficiales con Validez Nacional",
+            subtitle: "Más de 15 tecnicaturas superiores y profesorados pensados para responder a las demandas laborales del NOA."
+        },
+        {
+            image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1400",
+            title: "Educación Pública, Gratuita y de Calidad",
+            subtitle: "Prácticas profesionalizantes en laboratorios propios, convenios hospitalarios y vinculación directa con el sector productivo."
+        }
+    ];
+
+    let currentIndex = 0;
+    let autoPlayTimer = null;
+
+    function showSlide(index) {
+        if (index < 0) {
+            currentIndex = slides.length - 1;
+        } else if (index >= slides.length) {
+            currentIndex = 0;
+        } else {
+            currentIndex = index;
+        }
+
+        const currentSlide = slides[currentIndex];
+
+        // Efecto visual suave de transición
+        if (bgImage) {
+            bgImage.style.opacity = "0.4";
+            setTimeout(() => {
+                bgImage.style.backgroundImage = `url('${currentSlide.image}')`;
+                bgImage.style.opacity = "1";
+            }, 200);
+        }
+
+        if (titleElement) titleElement.textContent = currentSlide.title;
+        if (subtitleElement) subtitleElement.textContent = currentSlide.subtitle;
+        if (counterElement) counterElement.textContent = `0${currentIndex + 1} / 0${slides.length}`;
+
+        // Actualizar dots
+        dots.forEach((dot, i) => {
+            if (i === currentIndex) {
+                dot.classList.add("active");
+            } else {
+                dot.classList.remove("active");
+            }
+        });
+    }
+
+    function startAutoPlay() {
+        stopAutoPlay();
+        autoPlayTimer = setInterval(() => {
+            showSlide(currentIndex + 1);
+        }, 6000);
+    }
+
+    function stopAutoPlay() {
+        if (autoPlayTimer) clearInterval(autoPlayTimer);
+    }
+
+    // Eventos en botones flecha
+    if (nextBtn) {
+        nextBtn.addEventListener("click", () => {
+            showSlide(currentIndex + 1);
+            startAutoPlay();
+        });
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener("click", () => {
+            showSlide(currentIndex - 1);
+            startAutoPlay();
+        });
+    }
+
+    // Eventos en los dots
+    dots.forEach((dot, i) => {
+        dot.addEventListener("click", () => {
+            showSlide(i);
+            startAutoPlay();
+        });
+    });
+
+    // Pausar autoplay al pasar el mouse por encima
+    heroSection.addEventListener("mouseenter", stopAutoPlay);
+    heroSection.addEventListener("mouseleave", startAutoPlay);
+
+    // Inicializar slide inicial
+    showSlide(0);
+    startAutoPlay();
+}
 
 /**
  * ==========================================================================
@@ -252,4 +353,95 @@ function initAgendaCalendar() {
     }
 
     renderCalendar(currentDate);
+}
+/**
+ * ==========================================================================
+ * MÓDULO: MENÚ HAMBURGUESA RESPONSIVE
+ * ==========================================================================
+ */
+document.addEventListener("DOMContentLoaded", () => {
+    initMobileMenu();
+});
+
+function initMobileMenu() {
+    const menuBtn = document.getElementById("menuToggle");
+    const menuIcon = document.getElementById("menuIcon");
+    const navBar = document.querySelector(".header-nav-bar");
+    const overlay = document.getElementById("navOverlay");
+    const navLinks = document.querySelectorAll(".header-nav-bar .nav-link");
+
+    if (!menuBtn || !navBar) return;
+
+    function toggleMenu() {
+        const isOpen = navBar.classList.toggle("menu-open");
+        
+        if (overlay) overlay.classList.toggle("active", isOpen);
+
+        if (menuIcon) {
+            menuIcon.textContent = isOpen ? "close" : "menu";
+        }
+
+        // Bloquear el scroll de la página si el menú está abierto
+        document.body.style.overflow = isOpen ? "hidden" : "";
+    }
+
+    function closeMenu() {
+        navBar.classList.remove("menu-open");
+        if (overlay) overlay.classList.remove("active");
+        if (menuIcon) menuIcon.textContent = "menu";
+        document.body.style.overflow = "";
+    }
+
+    menuBtn.addEventListener("click", toggleMenu);
+
+    if (overlay) {
+        overlay.addEventListener("click", closeMenu);
+    }
+
+    // Cerrar el menú automáticamente al tocar cualquier enlace
+    navLinks.forEach(link => {
+        link.addEventListener("click", closeMenu);
+    });
+}
+/**
+ * ==========================================================================
+ * MÓDULO: FORMULARIO DE CONTACTO
+ * ==========================================================================
+ */
+document.addEventListener("DOMContentLoaded", () => {
+    initContactForm();
+});
+
+function initContactForm() {
+    const contactForm = document.getElementById("contactForm");
+    const successMsg = document.getElementById("contactSuccessMsg");
+    const submitBtn = document.getElementById("btnSubmitContact");
+
+    if (!contactForm || !successMsg) return;
+
+    contactForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Efecto visual de envío
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="material-symbols-outlined">hourglass_top</span> Enviando...';
+        }
+
+        setTimeout(() => {
+            // Mostrar mensaje de éxito y resetear formulario
+            successMsg.style.display = "flex";
+            contactForm.reset();
+
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span class="material-symbols-outlined">send</span> Enviar Consulta';
+            }
+
+            // Ocultar mensaje automáticamente a los 6 segundos
+            setTimeout(() => {
+                successMsg.style.display = "none";
+            }, 6000);
+        }, 600);
+    });
 }

@@ -2022,3 +2022,195 @@ body.page-body {
   color: var(--on-surface-variant);
   font-size: 12px;
 }
+/* ========================================================================== */
+/* ESTADO VACÍO: BÚSQUEDA DE CARRERAS SIN RESULTADOS                           */
+/* ========================================================================== */
+.no-results-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 24px;
+  background-color: var(--surface-container-lowest);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  border: 1px dashed rgba(197, 198, 205, 0.5);
+  margin-top: 20px;
+}
+
+.no-results-box .material-symbols-outlined {
+  font-size: 48px;
+  color: var(--secondary);
+  margin-bottom: 12px;
+}
+
+.no-results-box h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 20px;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+.no-results-box p {
+  font-size: 14px;
+  color: var(--on-surface-variant);
+  max-width: 480px;
+  line-height: 1.5;
+}
+
+.no-results-box em {
+  color: var(--secondary);
+  font-style: normal;
+  font-weight: 600;
+}
+/* ========================================================================== */
+/* MENÚ HAMBURGUESA / RESPONSIVE NAVIGATION                                   */
+/* ========================================================================== */
+
+/* Botón hamburguesa: oculto en escritorio */
+.btn-menu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.btn-menu-toggle:hover {
+  background-color: var(--surface-container-low, #f2f4f6);
+}
+
+.btn-menu-toggle .material-symbols-outlined {
+  font-size: 28px;
+}
+
+/* Fondo oscuro translúcido */
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(6, 16, 33, 0.55);
+  backdrop-filter: blur(2px);
+  z-index: 45;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.nav-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Reglas para pantallas medianas y móviles */
+@media (max-width: 850px) {
+  /* Mostrar botón hamburguesa */
+  .btn-menu-toggle {
+    display: flex;
+  }
+
+  /* Ocultar texto largo en botón Campus si queda muy apretado */
+  .btn-campus span:not(.material-symbols-outlined) {
+    display: none;
+  }
+  .btn-campus {
+    padding: 10px;
+  }
+
+  /* Transformar la barra horizontal en menú desplegable lateral */
+  .header-nav-bar {
+    position: fixed;
+    top: 80px;
+    right: -100%;
+    width: 280px;
+    height: calc(100vh - 80px);
+    background-color: var(--primary-container, #1b2537);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 48;
+    overflow-y: auto;
+  }
+
+  .header-nav-bar.menu-open {
+    right: 0;
+  }
+
+  .nav-container {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    padding: 24px 16px;
+    gap: 10px;
+    overflow-x: visible;
+  }
+
+  .nav-link {
+    font-size: 15px;
+    padding: 12px 18px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+  }
+}
+/* ========================================================================== */
+/* ESTILOS: NOTIFICACIÓN DE FORMULARIO Y MAPA                                 */
+/* ========================================================================== */
+.contact-alert-success {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #dcfce7;
+  color: #15803d;
+  padding: 16px;
+  border-radius: 8px;
+  border-left: 4px solid #16a34a;
+  margin-bottom: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.contact-alert-success .material-symbols-outlined {
+  font-size: 28px;
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+.contact-alert-success strong {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.contact-alert-success p {
+  font-size: 13px;
+  margin: 0;
+  color: #166534;
+}
+
+.btn-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.btn-submit .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.map-container {
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
