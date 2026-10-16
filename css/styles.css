@@ -214,8 +214,8 @@ body.page-body {
 }
 
 .nav-link:hover {
-  color: var(--on-primary, #ffffff);
-  background-color: var(--primary, #061021);
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .nav-link.active {
