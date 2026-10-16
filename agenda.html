@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda y Calendario Académico - IES N° 11 Jujuy</title>
+    <!-- Google Fonts y Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Archivo CSS principal -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="page-body">
+
+<!-- ========================================== -->
+<!-- HEADER COMPLETO                            -->
+<!-- ========================================== -->
+<header class="site-header">
+    <div class="header-container">
+        <div class="header-brand">
+            <img src="assets/images/logo-ies11.webp" alt="Logo IES N° 11 Jujuy" class="brand-logo">
+            <div class="brand-texts">
+                <span class="brand-title">IES N° 11 Jujuy</span>
+                <span class="brand-subtitle">Instituto de Educación Superior</span>
+            </div>
+        </div>
+
+        <div class="header-search">
+            <span class="material-symbols-outlined search-icon">search</span>
+            <input type="text" placeholder="Buscar carreras, trámites, resoluciones..." class="search-input">
+        </div>
+
+        <div class="header-actions">
+            <div class="header-phone">
+                <span class="material-symbols-outlined">call</span>
+                <span>+54 (0388) 422-1234</span>
+            </div>
+            <a href="https://superior.jujuy.edu.ar/login/index.php" target="_blank" rel="noopener noreferrer" class="btn-campus">
+                <span class="material-symbols-outlined">school</span>
+                <span>Campus Virtual</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Barra de Navegación con la nueva categoría activa -->
+    <div class="header-nav-bar">
+        <nav class="nav-container">
+            <a href="index.html" class="nav-link">Inicio</a>
+            <a href="autoridades.html" class="nav-link">Autoridades</a>
+            <a href="oferta-academica.html" class="nav-link">Oferta Académica</a>
+            <a href="estudiante.html" class="nav-link">Estudiante</a>
+            <a href="agenda.html" class="nav-link active">Agenda</a>
+            <a href="novedades.html" class="nav-link">Novedades y Contacto</a>
+        </nav>
+    </div>
+</header>
+
+<!-- ========================================== -->
+<!-- CONTENIDO PRINCIPAL: AGENDA ACADÉMICA      -->
+<!-- ========================================== -->
+<main class="site-main">
+
+    <!-- Hero de la Sección Agenda -->
+    <section class="agenda-hero-section">
+        <div class="agenda-container">
+            <nav class="agenda-breadcrumb" aria-label="Migas de pan">
+                <a href="index.html"><span class="material-symbols-outlined">home</span> Inicio</a>
+                <span>/</span>
+                <span class="current">Agenda y Calendario Académico</span>
+            </nav>
+
+            <div class="agenda-hero-content">
+                <div class="agenda-badge">
+                    <span class="dot-pulse"></span>
+                    Planificación Institucional • Ciclo Lectivo Oficial
+                </div>
+                <h1 class="agenda-title">Agenda y Calendario Académico</h1>
+                <p class="agenda-subtitle">
+                    Planificá tu año académico. Consultá los cronogramas de cursado, llamados a mesas de exámenes finales, recesos invernales, feriados y períodos de inscripción administrativa.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contenedor Principal: Calendario + Agenda de Eventos -->
+    <section class="agenda-main-section">
+        <div class="agenda-container">
+            <div class="agenda-grid-layout">
+                
+                <!-- Columna Izquierda: Calendario Interactivo -->
+                <div class="calendar-wrapper-card">
+                    <div class="calendar-nav-header">
+                        <button class="cal-btn" id="prevMonth" aria-label="Mes anterior">
+                            <span class="material-symbols-outlined">arrow_back_ios</span>
+                        </button>
+                        <h2 class="cal-month-title" id="monthYearDisplay">Marzo 2026</h2>
+                        <button class="cal-btn" id="nextMonth" aria-label="Mes siguiente">
+                            <span class="material-symbols-outlined">arrow_forward_ios</span>
+                        </button>
+                    </div>
+
+                    <!-- Días de la semana -->
+                    <div class="calendar-weekdays">
+                        <span>Dom</span>
+                        <span>Lun</span>
+                        <span>Mar</span>
+                        <span>Mié</span>
+                        <span>Jue</span>
+                        <span>Vie</span>
+                        <span>Sáb</span>
+                    </div>
+
+                    <!-- Grilla de días generada por JS -->
+                    <div class="calendar-days-grid" id="calendarDays"></div>
+
+                    <!-- Referencias / Leyenda -->
+                    <div class="calendar-legend">
+                        <div class="legend-item"><span class="dot dot-exam"></span> Mesas de Examen</div>
+                        <div class="legend-item"><span class="dot dot-inscrip"></span> Inscripciones</div>
+                        <div class="legend-item"><span class="dot dot-clases"></span> Cursado / Inicio</div>
+                        <div class="legend-item"><span class="dot dot-feriado"></span> Feriado / Receso</div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Hitos y Cronograma Detallado -->
+                <div class="agenda-events-panel">
+                    <div class="panel-header">
+                        <div class="panel-title-box">
+                            <span class="material-symbols-outlined">event_upcoming</span>
+                            <h3>Próximos Hitos y Fechas Clave</h3>
+                        </div>
+                        <span class="badge-status open">Período Vigente</span>
+                    </div>
+
+                    <div class="events-timeline">
+                        <!-- Evento 1 -->
+                        <article class="timeline-event exam">
+                            <div class="timeline-date-box">
+                                <span class="t-day">16</span>
+                                <span class="t-month">Mar</span>
+                            </div>
+                            <div class="timeline-body">
+                                <span class="event-tag exam">Mesas Extraordinarias</span>
+                                <h4>Turno Especial de Exámenes Finales</h4>
+                                <p>Habilitado para estudiantes que adeudan hasta dos materias para egresar.</p>
+                            </div>
+                        </article>
+
+                        <!-- Evento 2 -->
+                        <article class="timeline-event inscrip">
+                            <div class="timeline-date-box">
+                                <span class="t-day">23</span>
+                                <span class="t-month">Mar</span>
+                            </div>
+                            <div class="timeline-body">
+                                <span class="event-tag inscrip">Gestión de Alumnos</span>
+                                <h4>Inscripción a Cursada (1° Cuatrimestre)</h4>
+                                <p>Registro online por sistema para todas las tecnicaturas superiores.</p>
+                            </div>
+                        </article>
+
+                        <!-- Evento 3 -->
+                        <article class="timeline-event clases">
+                            <div class="timeline-date-box">
+                                <span class="t-day">30</span>
+                                <span class="t-month">Mar</span>
+                            </div>
+                            <div class="timeline-body">
+                                <span class="event-tag clases">Inicio de Ciclo</span>
+                                <h4>Inicio Efectivo de Clases Presenciales</h4>
+                                <p>Comienzo de actividades regulares y bienvenida a cohortes ingresantes.</p>
+                            </div>
+                        </article>
+
+                        <!-- Evento 4 -->
+                        <article class="timeline-event feriado">
+                            <div class="timeline-date-box">
+                                <span class="t-day">02</span>
+                                <span class="t-month">Abr</span>
+                            </div>
+                            <div class="timeline-body">
+                                <span class="event-tag feriado">Feriado Nacional</span>
+                                <h4>Día del Veterano y de los Caídos en Malvinas</h4>
+                                <p>Sin actividades académicas ni administrativas en todas las sedes.</p>
+                            </div>
+                        </article>
+                    </div>
+
+                    <!-- Descarga de Resolución -->
+                    <div class="agenda-download-banner">
+                        <div class="download-info">
+                            <span class="material-symbols-outlined">picture_as_pdf</span>
+                            <div>
+                                <strong>Resolución Calendario Académico Anual</strong>
+                                <small>Documento oficial firmado por Secretaría Académica (PDF)</small>
+                            </div>
+                        </div>
+                        <a href="#" class="btn-action">Descargar PDF</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- ========================================== -->
+<!-- FOOTER                                     -->
+<!-- ========================================== -->
+<footer class="site-footer">
+    <div class="footer-grid">
+        <div class="footer-col">
+            <span class="footer-brand-title">IES N° 11 Jujuy</span>
+            <p class="footer-text">Instituto de Educación Superior N° 11 - Formando profesionales para el desarrollo regional.</p>
+        </div>
+        <div class="footer-col">
+            <h4 class="footer-heading">Enlaces Rápidos</h4>
+            <ul class="footer-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="estudiante.html">Espacio Estudiantil</a></li>
+                <li><a href="agenda.html">Agenda Académica</a></li>
+                <li><a href="novedades.html">Novedades y Contacto</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4 class="footer-heading">Contacto & Sedes</h4>
+            <p class="footer-text">Alvear 1151 - San Salvador de Jujuy</p>
+            <p class="footer-text">Tel: +54 (0388) 422-1234</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2025/2026 IES N° 11 Jujuy - Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>

@@ -161,4 +161,95 @@ function initCareerFilters() {
             filterCareers();
         });
     }
+
+}
+/**
+ * ==========================================================================
+ * MÓDULO: AGENDA Y CALENDARIO ACADÉMICO
+ * ==========================================================================
+ */
+document.addEventListener("DOMContentLoaded", () => {
+    initAgendaCalendar();
+});
+
+function initAgendaCalendar() {
+    const calendarDays = document.getElementById("calendarDays");
+    const monthYearDisplay = document.getElementById("monthYearDisplay");
+    const prevBtn = document.getElementById("prevMonth");
+    const nextBtn = document.getElementById("nextMonth");
+
+    if (!calendarDays || !monthYearDisplay) return;
+
+    let currentDate = new Date();
+
+    // Hitos académicos del calendario (formato YYYY-MM-DD)
+    const academicEvents = {
+        "2026-03-16": "exam",
+        "2026-03-23": "inscrip",
+        "2026-03-30": "clases",
+        "2026-04-02": "feriado",
+        "2026-07-06": "exam",
+        "2026-07-13": "feriado" // Receso invernal
+    };
+
+    const monthNames = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+
+    function renderCalendar(date) {
+        calendarDays.innerHTML = "";
+        const year = date.getFullYear();
+        const month = date.getMonth();
+
+        monthYearDisplay.textContent = `${monthNames[month]} ${year}`;
+
+        const firstDayIndex = new Date(year, month, 1).getDay();
+        const lastDay = new Date(year, month + 1, 0).getDate();
+
+        // Celdas en blanco previas
+        for (let i = 0; i < firstDayIndex; i++) {
+            const emptyCell = document.createElement("div");
+            emptyCell.classList.add("cal-day-cell", "empty");
+            calendarDays.appendChild(emptyCell);
+        }
+
+        // Celdas de los días del mes
+        const today = new Date();
+        for (let day = 1; day <= lastDay; day++) {
+            const dayCell = document.createElement("div");
+            dayCell.classList.add("cal-day-cell");
+            dayCell.textContent = day;
+
+            const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+            if (
+                day === today.getDate() &&
+                month === today.getMonth() &&
+                year === today.getFullYear()
+            ) {
+                dayCell.classList.add("today");
+            }
+
+            if (academicEvents[formattedDate]) {
+                dayCell.classList.add("has-event", `event-${academicEvents[formattedDate]}`);
+            }
+
+            calendarDays.appendChild(dayCell);
+        }
+    }
+
+    if (prevBtn && nextBtn) {
+        prevBtn.addEventListener("click", () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar(currentDate);
+        });
+
+        nextBtn.addEventListener("click", () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar(currentDate);
+        });
+    }
+
+    renderCalendar(currentDate);
 }
