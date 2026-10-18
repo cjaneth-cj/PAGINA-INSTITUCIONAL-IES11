@@ -77,7 +77,7 @@
                     </div>
                     <h1 class="student-title">Espacio Estudiantil</h1>
                     <p class="student-subtitle">
-                        Encontrá toda la información administrativa, académica y reglamentaria para tu trayectoria en el IES N° 11. Gestioná certificados, consultá fechas de inscripción y accedé al Régimen Académico Marco (RAM).
+                        Encontrá toda la información administrativa, académica y reglamentaria para tu trayectoria en el IES N° 11. Gestioná certificados, consultá fechas de inscripción y accedé al Régimen Académico Provincial (RAP).
                     </p>
                 </div>
             </div>
@@ -94,7 +94,7 @@
                         <span class="material-symbols-outlined">description</span> Trámites y Certificados
                     </button>
                     <button class="tab-button" id="tabBtn-ram" onclick="switchTab('ram')">
-                        <span class="material-symbols-outlined">gavel</span> RAM / Régimen Estudiantil
+                        <span class="material-symbols-outlined">gavel</span> RAP / Régimen Estudiantil
                     </button>
                     <button class="tab-button" id="tabBtn-calendario" onclick="switchTab('calendario')">
                         <span class="material-symbols-outlined">event_available</span> Calendario de Exámenes
@@ -131,9 +131,14 @@
                         <p>Documentación obligatoria para armar tu carpeta de legajo:</p>
                         <ul class="checklist" id="checklistGroup">
                             <li onclick="toggleCheck(this)"><span class="material-symbols-outlined">check_box</span> DNI actualizado (original y copia)</li>
-                            <li onclick="toggleCheck(this)"><span class="material-symbols-outlined">check_box</span> Título Secundario o Constancia</li>
+                            <li onclick="toggleCheck(this)"><span class="material-symbols-outlined">check_box</span> Título Secundario Autenticado o Constancia de Título en trammite</li>
                             <li onclick="toggleCheck(this)"><span class="material-symbols-outlined">check_box</span> 2 Fotos carnet 4x4</li>
-                            <li onclick="toggleCheck(this)"><span class="material-symbols-outlined">check_box</span> Certificado de Aptitud Psicofísica</li>
+                            <li onclick="toggleCheck(this)"><span class="material-symbols-outlined">check_box</span> Formulario Impreso</li>
+                            <li onclick="toggleCheck(this)"><span class="material-symbols-outlined">check_box</span> Carpeta y Folio</li>
+                            <li onclick="toggleCheck(this)"><span class="material-symbols-outlined">check_box</span> Certificado de Nacimiento</li>
+                            <li onclick="toggleCheck(this)"><span class="material-symbols-outlined">check_box</span> Certificado de Residencia</li>
+                            <li onclick="toggleCheck(this)"><span class="material-symbols-outlined">check_box</span> Carnet Sanitario</li>
+
                         </ul>
                     </div>
 
@@ -177,19 +182,23 @@
                 </div>
             </section>
 
-            <!-- BLOQUE C: RAM / RÉGIMEN ESTUDIANTIL -->
-            <section id="section-ram" class="content-section">
-                <div class="ram-banner">
-                    <div class="ram-texts">
-                        <span class="ram-tag">Resolución Ministerial N° 1240-E/23</span>
-                        <h2>Régimen Académico Marco (RAM)</h2>
-                        <p>Establece los lineamientos formativos, derechos, obligaciones y condiciones de regularidad de los institutos terciarios de Jujuy.</p>
-                    </div>
-                    <div class="ram-action">
-                        <a href="#" class="btn-ram-download">Descargar RAM (PDF - 4.2 MB)</a>
-                    </div>
-                </div>
-            </section>
+           <!-- BLOQUE C: RAM / RÉGIMEN ESTUDIANTIL -->
+<section id="section-ram" class="content-section">
+    <div class="ram-banner">
+        <div class="ram-texts">
+            <span class="ram-tag">Resolución Ministerial N° 1240-E/23</span>
+            <h2>Régimen Académico Provincial (RAP)</h2>
+            <p>Establece los lineamientos formativos, derechos, obligaciones y condiciones de regularidad de los institutos superiores.</p>
+        </div>
+        <div class="ram-action">
+            <!-- Enlace actualizado apuntando al archivo PDF local -->
+            <a href="assets/docs/regimen-academico.pdf" class="btn-ram-download" target="_blank" download="Regimen-Academico-IES11.pdf">
+                <span class="material-symbols-outlined">download</span>
+                Descargar RAP (PDF - Oficial)
+            </a>
+        </div>
+    </div>
+</section>
 
             <!-- BLOQUE D: CALENDARIO DE EXÁMENES -->
             <section id="section-calendario" class="content-section">
