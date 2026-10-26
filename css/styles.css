@@ -985,6 +985,159 @@ body.page-body {
   text-decoration: underline;
 }
 
+.auth-coord-section {
+  padding: 64px 0;
+  background-color: var(--surface-container-low, #f2f4f6);
+}
+
+.coord-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.coord-card {
+  background-color: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.coord-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.coord-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.coord-badge {
+  background-color: rgba(65, 190, 253, 0.15);
+  color: var(--on-secondary-container, #004b69);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.coord-shift {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--on-surface-variant, #45474c);
+}
+
+.coord-shift .material-symbols-outlined {
+  font-size: 16px;
+  color: var(--secondary, #00658d);
+}
+
+.coord-profile {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.coord-img {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid var(--surface-container, #eceef0);
+}
+
+.coord-titles h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary, #061021);
+  margin: 0;
+}
+
+.coord-role {
+  font-size: 13px;
+  color: var(--secondary, #00658d);
+  font-weight: 500;
+  margin: 2px 0 0 0;
+}
+
+.coord-careers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.career-pill {
+  background-color: var(--surface-container-high, #e6e8ea);
+  color: var(--on-surface, #191c1e);
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.coord-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--on-surface-variant, #45474c);
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-item .material-symbols-outlined {
+  font-size: 16px;
+  color: var(--outline, #75777d);
+}
+
+.detail-item a {
+  color: var(--on-surface-variant, #45474c);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.detail-item a:hover {
+  color: var(--secondary, #00658d);
+}
+
+.btn-coord-contact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--surface-container, #eceef0);
+  color: var(--primary, #061021);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-coord-contact:hover {
+  background-color: var(--secondary-container, #41befd);
+  color: var(--on-secondary-container, #004b69);
+}
+
+.btn-coord-contact .material-symbols-outlined {
+  font-size: 16px;
+}
 /* ========================================================================== */
 /* 08. SECCIÓN: ESPACIO ESTUDIANTIL                                           */
 /* ========================================================================== */
