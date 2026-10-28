@@ -3,93 +3,261 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestión de Oferta Académica - IES 11</title>
+  <title>Gestión de Carreras - IES N° 11</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body { font-family: sans-serif; margin: 30px; background-color: #f4f6f8; color: #333; }
-    h1, h2 { color: #1e3a8a; }
-    .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 30px; }
-    .form-group { margin-bottom: 15px; }
-    label { display: block; margin-bottom: 5px; font-weight: bold; }
-    input[type="text"], textarea, input[type="file"] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-    button { background-color: #2563eb; color: white; padding: 10px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
-    button:hover { background-color: #1d4ed8; }
-    button.cancelar { background-color: #6b7280; margin-left: 10px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-    th { background-color: #f8fafc; }
-    .btn-edit { background-color: #f59e0b; margin-right: 5px; }
-    .btn-delete { background-color: #ef4444; }
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 32px 40px; min-height: 100vh; }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      background: white;
+      border: 1px solid var(--border);
+      padding: 9px 16px;
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+    .back-btn:hover { color: var(--primary); border-color: #cbd5e1; transform: translateX(-3px); }
+
+    .page-title h1 { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.5px; }
+    .page-title p { color: var(--text-muted); font-size: 0.9rem; margin-top: 2px; }
+
+    /* Layout en 2 columnas */
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .card h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+    }
+
+    /* Formulario */
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 0.82rem; font-weight: 700; color: var(--text); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      background: #fdfdfd;
+    }
+    input[type="text"]:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    /* Subida de PDF moderna */
+    .file-dropzone {
+      border: 2px dashed #cbd5e1;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      background: #f8fafc;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .file-dropzone:hover { border-color: var(--primary); background: #f0f7ff; }
+    .file-dropzone i { font-size: 1.6rem; color: #94a3b8; margin-bottom: 8px; }
+    .file-dropzone span { display: block; font-size: 0.85rem; font-weight: 600; color: #475569; }
+    .file-dropzone small { color: #94a3b8; font-size: 0.75rem; }
+    .file-dropzone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .file-selected-name { margin-top: 8px; font-size: 0.8rem; font-weight: 600; color: var(--primary); display: none; }
+
+    /* Botones de acción */
+    .form-actions { display: flex; gap: 10px; margin-top: 22px; }
+    .btn-save {
+      flex: 1;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-save:hover { background: var(--primary-hover); }
+    .btn-cancel {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 11px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+    }
+
+    /* Tabla y Cards */
+    .table-container { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
+    th { padding: 12px 14px; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+    td { padding: 16px 14px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    tr:hover td { background-color: #fbfcfe; }
+
+    .pdf-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #eff6ff;
+      color: #2563eb;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .pdf-badge:hover { background: #dbeafe; }
+    .pdf-empty { color: #94a3b8; font-size: 0.8rem; font-style: italic; }
+
+    .btn-action {
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .btn-edit-tb { background: #fef3c7; color: #b45309; margin-right: 4px; }
+    .btn-edit-tb:hover { background: #fde68a; }
+    .btn-delete-tb { background: #fee2e2; color: #dc2626; }
+    .btn-delete-tb:hover { background: #fecaca; }
+
+    @media (max-width: 950px) {
+      .admin-layout { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-<div style="margin-bottom: 20px;">
-  <a href="index.html" style="text-decoration: none; color: #2563eb; font-weight: bold;">← Volver al Panel Principal</a>
-</div>
-  <h1>Panel de Administración - Carreras</h1>
 
-  <!-- Formulario para Crear / Editar -->
-  <div class="card">
-    <h2 id="formTitulo">Agregar Nueva Carrera</h2>
-    <form id="formCarrera">
-      <input type="hidden" id="carreraId"> <!-- Guarda el ID cuando editamos -->
-
-      <div class="form-group">
-        <label for="nombre">Nombre de la Carrera:</label>
-        <input type="text" id="nombre" required placeholder="Ej: Tecnicatura Superior en Desarrollo de Software">
-      </div>
-
-      <div class="form-group">
-        <label for="descripcion">Descripción:</label>
-        <textarea id="descripcion" rows="3" placeholder="Breve resumen del perfil profesional..."></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="duracion">Duración:</label>
-        <input type="text" id="duracion" placeholder="Ej: 3 años">
-      </div>
-
-      <div class="form-group">
-        <label for="titulo">Título Otorgado:</label>
-        <input type="text" id="titulo" placeholder="Ej: Técnico Superior en...">
-      </div>
-
-      <div class="form-group">
-        <label for="pdfPlan">Plan de Estudio (PDF):</label>
-        <input type="file" id="pdfPlan" accept="application/pdf">
-        <small id="pdfActualInfo" style="display:none; color: #2563eb;"></small>
-      </div>
-
-      <button type="submit" id="btnGuardar">Guardar Carrera</button>
-      <button type="button" id="btnCancelar" class="cancelar" style="display: none;">Cancelar Edición</button>
-    </form>
+  <div class="top-bar">
+    <div class="page-title">
+      <h1>Oferta Académica</h1>
+      <p>Gestión de carreras y actualización de planes de estudio institucionales.</p>
+    </div>
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Volver al Dashboard</a>
   </div>
 
-  <!-- Listado de Carreras -->
-  <div class="card">
-    <h2>Carreras Registradas</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Duración</th>
-          <th>Título</th>
-          <th>Plan (PDF)</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="tablaCarreras">
-        <tr>
-          <td colspan="5" style="text-align: center;">Cargando carreras...</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="admin-layout">
+    <!-- Formulario Crear/Editar -->
+    <div class="card">
+      <h2 id="formTitulo"><i class="fa-solid fa-plus-circle" style="color: var(--primary);"></i> Nueva Carrera</h2>
+      <form id="formCarrera">
+        <input type="hidden" id="carreraId">
+
+        <div class="form-group">
+          <label for="nombre">Nombre de la Carrera</label>
+          <input type="text" id="nombre" required placeholder="Ej: Tec. Superior en Desarrollo de Software">
+        </div>
+
+        <div class="form-group">
+          <label for="descripcion">Descripción / Perfil</label>
+          <textarea id="descripcion" rows="3" placeholder="Resumen del campo ocupacional y objetivos..."></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label for="duracion">Duración</label>
+            <input type="text" id="duracion" placeholder="Ej: 3 años">
+          </div>
+          <div class="form-group">
+            <label for="titulo">Título</label>
+            <input type="text" id="titulo" placeholder="Ej: Técnico Sup.">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Plan de Estudio (PDF)</label>
+          <div class="file-dropzone">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <span>Arrastrá o hacé clic para subir</span>
+            <small>Formato PDF (máx. 15MB)</small>
+            <input type="file" id="pdfPlan" accept="application/pdf">
+          </div>
+          <div id="fileSelectedText" class="file-selected-name"></div>
+          <small id="pdfActualInfo" style="display:none; color: var(--primary); font-size: 0.8rem; margin-top: 6px;"></small>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" id="btnGuardar" class="btn-save">Guardar Carrera</button>
+          <button type="button" id="btnCancelar" class="btn-cancel">Cancelar</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Tabla de Carreras -->
+    <div class="card">
+      <h2><i class="fa-solid fa-list-check" style="color: var(--primary);"></i> Carreras Registradas</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Carrera</th>
+              <th>Duración</th>
+              <th>Plan</th>
+              <th style="text-align: right;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaCarreras">
+            <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Cargando carreras...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
-  <!-- CDN oficial de Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Tu archivo de conexión -->
   <script src="../assets/supabaseClient.js"></script>
-  <!-- Lógica de gestión -->
   <script src="oferta-management.js"></script>
 </body>
 </html>
