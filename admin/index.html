@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Control - IES N° 11</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-hover: #1e40af;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--bg); color: var(--text-main); display: flex; min-height: 100vh; }
+
+    /* Barra lateral */
+    aside {
+      width: 260px;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .brand {
+      padding: 24px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav-links { list-style: none; padding: 20px 0; flex: 1; }
+    .nav-links a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 24px;
+      color: #cbd5e1;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    .user-footer {
+      padding: 20px 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .btn-logout {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+    .btn-logout:hover { opacity: 0.9; }
+
+    /* Contenido Principal */
+    main { flex: 1; padding: 40px; overflow-y: auto; }
+    .top-header { margin-bottom: 30px; }
+    .top-header h1 { font-size: 1.8rem; font-weight: 700; color: var(--text-main); }
+    .top-header p { color: var(--text-muted); margin-top: 4px; }
+
+    /* Grilla de módulos */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    .module-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .module-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.08);
+      border-color: #cbd5e1;
+    }
+    .icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 16px;
+    }
+    .carreras-icon { background: #dbeafe; color: #2563eb; }
+    .noticias-icon { background: #dcfce7; color: #16a34a; }
+    .agenda-icon { background: #fef3c7; color: #d97706; }
+    .contacto-icon { background: #f3e8ff; color: #9333ea; }
+
+    .module-card h3 { font-size: 1.15rem; margin-bottom: 8px; color: var(--text-main); }
+    .module-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+    .badge {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <aside>
+    <div class="brand">
+      <i class="fa-solid fa-graduation-cap"></i>
+      <span>IES N° 11 Admin</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active"><i class="fa-solid fa-house"></i> Inicio</a></li>
+      <li><a href="oferta-management.html"><i class="fa-solid fa-book-open"></i> Carreras</a></li>
+      <li><a href="novedades-management.html"><i class="fa-solid fa-newspaper"></i> Noticias</a></li>
+      <li><a href="agenda-management.html"><i class="fa-solid fa-calendar-days"></i> Agenda</a></li>
+      <li><a href="contacto-management.html"><i class="fa-solid fa-envelope"></i> Mensajes</a></li>
+      <li><a href="../index.html" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Sitio</a></li>
+    </ul>
+    <div class="user-footer">
+      <span style="font-size: 0.85rem; color: #94a3b8;">Administrador</span>
+      <button class="btn-logout" id="btnLogout"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="top-header">
+      <h1>Panel de Control</h1>
+      <p>Bienvenida/o. Seleccioná el área institucional que deseás gestionar hoy.</p>
+    </div>
+
+    <div class="dashboard-grid">
+      <!-- Carreras -->
+      <a href="oferta-management.html" class="module-card">
+        <div class="icon-box carreras-icon"><i class="fa-solid fa-book-open"></i></div>
+        <h3>Oferta Académica</h3>
+        <p>Administrar carreras, títulos, perfiles de egreso y subir los planes de estudio en PDF.</p>
+        <span class="badge">Gestionar Carreras →</span>
+      </a>
+
+      <!-- Noticias -->
+      <a href="novedades-management.html" class="module-card">
+        <div class="icon-box noticias-icon"><i class="fa-solid fa-newspaper"></i></div>
+        <h3>Novedades y Noticias</h3>
+        <p>Crear avisos institucionales, comunicados para alumnos y publicar fotos destacadas.</p>
+        <span class="badge">Gestionar Noticias →</span>
+      </a>
+
+      <!-- Agenda -->
+      <a href="agenda-management.html" class="module-card">
+        <div class="icon-box agenda-icon"><i class="fa-solid fa-calendar-days"></i></div>
+        <h3>Agenda Institucional</h3>
+        <p>Publicar fechas clave: inscripciones, mesas de exámenes, actos y recesos académicos.</p>
+        <span class="badge">Gestionar Fechas →</span>
+      </a>
+
+      <!-- Contacto -->
+      <a href="contacto-management.html" class="module-card">
+        <div class="icon-box contacto-icon"><i class="fa-solid fa-envelope"></i></div>
+        <h3>Buzón de Consultas</h3>
+        <p>Revisar las consultas y mensajes de interesados y alumnos enviados por la web.</p>
+        <span class="badge">Ver Mensajes →</span>
+      </a>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../assets/supabaseClient.js"></script>
+  <script>
+    // Comprobar que haya sesión activa
+    supabaseClient.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
+        window.location.href = 'login.html';
+      }
+    });
+
+    // Cerrar sesión
+    document.getElementById('btnLogout').addEventListener('click', async () => {
+      await supabaseClient.auth.signOut();
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>

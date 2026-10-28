@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Oferta Académica - IES 11</title>
+  <style>
+    body { font-family: sans-serif; margin: 30px; background-color: #f4f6f8; color: #333; }
+    h1, h2 { color: #1e3a8a; }
+    .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 30px; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    input[type="text"], textarea, input[type="file"] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    button { background-color: #2563eb; color: white; padding: 10px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+    button:hover { background-color: #1d4ed8; }
+    button.cancelar { background-color: #6b7280; margin-left: 10px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+    th { background-color: #f8fafc; }
+    .btn-edit { background-color: #f59e0b; margin-right: 5px; }
+    .btn-delete { background-color: #ef4444; }
+  </style>
+</head>
+<body>
+<div style="margin-bottom: 20px;">
+  <a href="index.html" style="text-decoration: none; color: #2563eb; font-weight: bold;">← Volver al Panel Principal</a>
+</div>
+  <h1>Panel de Administración - Carreras</h1>
+
+  <!-- Formulario para Crear / Editar -->
+  <div class="card">
+    <h2 id="formTitulo">Agregar Nueva Carrera</h2>
+    <form id="formCarrera">
+      <input type="hidden" id="carreraId"> <!-- Guarda el ID cuando editamos -->
+
+      <div class="form-group">
+        <label for="nombre">Nombre de la Carrera:</label>
+        <input type="text" id="nombre" required placeholder="Ej: Tecnicatura Superior en Desarrollo de Software">
+      </div>
+
+      <div class="form-group">
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" rows="3" placeholder="Breve resumen del perfil profesional..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="duracion">Duración:</label>
+        <input type="text" id="duracion" placeholder="Ej: 3 años">
+      </div>
+
+      <div class="form-group">
+        <label for="titulo">Título Otorgado:</label>
+        <input type="text" id="titulo" placeholder="Ej: Técnico Superior en...">
+      </div>
+
+      <div class="form-group">
+        <label for="pdfPlan">Plan de Estudio (PDF):</label>
+        <input type="file" id="pdfPlan" accept="application/pdf">
+        <small id="pdfActualInfo" style="display:none; color: #2563eb;"></small>
+      </div>
+
+      <button type="submit" id="btnGuardar">Guardar Carrera</button>
+      <button type="button" id="btnCancelar" class="cancelar" style="display: none;">Cancelar Edición</button>
+    </form>
+  </div>
+
+  <!-- Listado de Carreras -->
+  <div class="card">
+    <h2>Carreras Registradas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Duración</th>
+          <th>Título</th>
+          <th>Plan (PDF)</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tablaCarreras">
+        <tr>
+          <td colspan="5" style="text-align: center;">Cargando carreras...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CDN oficial de Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Tu archivo de conexión -->
+  <script src="../assets/supabaseClient.js"></script>
+  <!-- Lógica de gestión -->
+  <script src="oferta-management.js"></script>
+</body>
+</html>
