@@ -6,189 +6,8 @@
   <title>Panel de Control - IES N° 11</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --sidebar-bg: #0f172a;
-      --sidebar-card: #1e293b;
-      --primary: #3b82f6;
-      --primary-gradient: linear-gradient(135deg, #2563eb, #1d4ed8);
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --border: #e2e8f0;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --radius: 16px;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background-color: var(--bg); color: var(--text-main); display: flex; min-height: 100vh; }
-
-    /* Barra lateral */
-    aside {
-      width: 270px;
-      background: var(--sidebar-bg);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
-      border-right: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    .brand {
-      padding: 28px 24px;
-      font-size: 1.15rem;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      letter-spacing: -0.5px;
-    }
-    .brand-icon {
-      width: 38px;
-      height: 38px;
-      background: var(--primary-gradient);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
-    }
-    .nav-links { list-style: none; padding: 0 16px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
-    .nav-links a {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 16px;
-      color: #94a3b8;
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      border-radius: 10px;
-      transition: all 0.2s ease;
-    }
-    .nav-links a:hover {
-      background: rgba(255, 255, 255, 0.05);
-      color: #f8fafc;
-      transform: translateX(4px);
-    }
-    .nav-links a.active {
-      background: rgba(59, 130, 246, 0.15);
-      color: #60a5fa;
-      font-weight: 600;
-    }
-    .user-footer {
-      padding: 20px 20px;
-      margin: 16px;
-      background: var(--sidebar-card);
-      border-radius: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .btn-logout {
-      background: rgba(239, 68, 68, 0.15);
-      color: #f87171;
-      border: 1px solid rgba(239, 68, 68, 0.2);
-      padding: 8px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-    .btn-logout:hover {
-      background: #ef4444;
-      color: white;
-    }
-
-    /* Contenido */
-    main { flex: 1; padding: 40px 48px; overflow-y: auto; }
-    .top-header { margin-bottom: 32px; display: flex; justify-content: space-between; align-items: flex-end; }
-    .top-header h1 { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.8px; color: var(--text-main); }
-    .top-header p { color: var(--text-muted); margin-top: 4px; font-size: 0.95rem; }
-    .date-badge { background: white; border: 1px solid var(--border); padding: 8px 14px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
-
-    /* Tarjetas principales */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-      margin-bottom: 36px;
-    }
-    .module-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-    }
-    .module-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 16px 24px -6px rgba(15, 23, 42, 0.08);
-      border-color: #cbd5e1;
-    }
-
-    .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
-    .icon-box {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.25rem;
-    }
-    .carreras-icon { background: #eff6ff; color: #2563eb; }
-    .noticias-icon { background: #f0fdf4; color: #16a34a; }
-    .agenda-icon { background: #fffbeb; color: #d97706; }
-    .contacto-icon { background: #faf5ff; color: #9333ea; }
-
-    .counter {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--text-main);
-    }
-
-    .module-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
-    .module-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.45; flex: 1; }
-    .card-link {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 18px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    /* Tabla de actividad reciente */
-    .recent-section {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-    }
-    .recent-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-    .recent-header h2 { font-size: 1.15rem; font-weight: 700; }
-    .recent-header a { font-size: 0.85rem; font-weight: 600; color: var(--primary); text-decoration: none; }
-    
-    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-    th { text-align: left; padding: 10px 14px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border); }
-    td { padding: 14px; border-bottom: 1px solid #f1f5f9; }
-    tr:last-child td { border-bottom: none; }
-  </style>
+  <!-- Enlace al CSS unificado del panel -->
+  <link rel="stylesheet" href="css/admin-styles.css">
 </head>
 <body>
 
@@ -201,6 +20,7 @@
     <ul class="nav-links">
       <li><a href="index.html" class="active"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
       <li><a href="oferta-management.html"><i class="fa-solid fa-book-bookmark"></i> Carreras</a></li>
+      <li><a href="estudiantes-management.html"><i class="fa-solid fa-user-graduate"></i> Estudiantes</a></li>
       <li><a href="novedades-management.html"><i class="fa-solid fa-bullhorn"></i> Noticias</a></li>
       <li><a href="agenda-management.html"><i class="fa-solid fa-calendar-check"></i> Agenda</a></li>
       <li><a href="contacto-management.html"><i class="fa-solid fa-inbox"></i> Consultas</a></li>
@@ -293,68 +113,13 @@
     </div>
   </main>
 
+  <!-- Librería de Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Cliente de Supabase compartido -->
   <script src="../assets/supabaseClient.js"></script>
-  <script>
-    // Validar sesión
-    supabaseClient.auth.getSession().then(({ data: { session } }) => {
-      if (!session) window.location.href = 'login.html';
-    });
-
-    document.getElementById('btnLogout').addEventListener('click', async () => {
-      await supabaseClient.auth.signOut();
-      window.location.href = 'login.html';
-    });
-
-    // Fecha actual formateada
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    document.getElementById('currentDate').innerText = new Date().toLocaleDateString('es-AR', options);
-
-    // Cargar métricas reales desde Supabase
-    async function cargarMetricas() {
-      // 1. Carreras
-      const { count: cCount } = await supabaseClient.from('carreras').select('*', { count: 'exact', head: true });
-      document.getElementById('countCarreras').innerText = cCount ?? 0;
-
-      // 2. Noticias
-      const { count: nCount } = await supabaseClient.from('noticias').select('*', { count: 'exact', head: true });
-      document.getElementById('countNoticias').innerText = nCount ?? 0;
-
-      // 3. Agenda
-      const { count: aCount } = await supabaseClient.from('agenda').select('*', { count: 'exact', head: true });
-      document.getElementById('countAgenda').innerText = aCount ?? 0;
-
-      // 4. Mensajes
-      const { count: mCount } = await supabaseClient.from('mensajes_contacto').select('*', { count: 'exact', head: true });
-      document.getElementById('countMensajes').innerText = mCount ?? 0;
-
-      // 5. Últimos 3 mensajes para la tabla rápida
-      const { data: ultimosMensajes } = await supabaseClient
-        .from('mensajes_contacto')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(3);
-
-      const tabla = document.getElementById('tablaRecientes');
-      if (ultimosMensajes && ultimosMensajes.length > 0) {
-        tabla.innerHTML = '';
-        ultimosMensajes.forEach(m => {
-          const f = new Date(m.created_at).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit' });
-          tabla.innerHTML += `
-            <tr>
-              <td><strong>${m.nombre}</strong></td>
-              <td>${m.asunto || 'Sin asunto'}</td>
-              <td style="color: var(--text-muted);">${f}</td>
-              <td><span style="font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; background: ${m.leido ? '#f1f5f9' : '#fee2e2'}; color: ${m.leido ? '#64748b' : '#b91c1c'}; font-weight: 700;">${m.leido ? 'Leído' : 'Nuevo'}</span></td>
-            </tr>
-          `;
-        });
-      } else {
-        tabla.innerHTML = '<tr><td colspan="4" style="color: var(--text-muted); text-align: center;">No hay mensajes registrados aún.</td></tr>';
-      }
-    }
-
-    cargarMetricas();
-  </script>
+  <!-- Script de autenticación compartido -->
+  <script src="js/admin-auth.js"></script>
+  <!-- Lógica específica del dashboard -->
+  <script src="js/index.js"></script>
 </body>
 </html>

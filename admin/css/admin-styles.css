@@ -1,0 +1,1562 @@
+/* Estilos generales para la pantalla de acceso */
+.login-body {
+  font-family: sans-serif;
+  background-color: #f1f5f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.login-card {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 360px;
+}
+
+.login-card h2 {
+  text-align: center;
+  color: #1e3a8a;
+  margin-top: 0;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.login-card button {
+  width: 100%;
+  padding: 10px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.login-card button:hover {
+  background-color: #1d4ed8;
+}
+
+.login-card button:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: 10px;
+  text-align: center;
+  display: none;
+}
+
+.back {
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  font-size: 13px;
+  color: #64748b;
+  text-decoration: none;
+}
+
+/* ========================================================================== */
+/* 1. ESTILOS GENERALES Y VARIABLES DEL PANEL DE ADMINISTRACIÓN               */
+/* ========================================================================== */
+:root {
+  --sidebar-bg: #0f172a;
+  --sidebar-card: #1e293b;
+  --primary: #3b82f6;
+  --primary-gradient: linear-gradient(135deg, #2563eb, #1d4ed8);
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --border: #e2e8f0;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-main);
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ========================================================================== */
+/* 2. BARRA LATERAL (ASIDE)                                                   */
+/* ========================================================================== */
+aside {
+  width: 270px;
+  background: var(--sidebar-bg);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.brand {
+  padding: 28px 24px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  letter-spacing: -0.5px;
+}
+
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  background: var(--primary-gradient);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.nav-links {
+  list-style: none;
+  padding: 0 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.nav-links a:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f8fafc;
+  transform: translateX(4px);
+}
+
+.nav-links a.active {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  font-weight: 600;
+}
+
+.user-footer {
+  padding: 20px 20px;
+  margin: 16px;
+  background: var(--sidebar-card);
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-logout {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-logout:hover {
+  background: #ef4444;
+  color: white;
+}
+
+/* ========================================================================== */
+/* 3. CONTENIDO PRINCIPAL DEL DASHBOARD                                       */
+/* ========================================================================== */
+main {
+  flex: 1;
+  padding: 40px 48px;
+  overflow-y: auto;
+}
+
+.top-header {
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.top-header h1 {
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  color: var(--text-main);
+}
+
+.top-header p {
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-size: 0.95rem;
+}
+
+.date-badge {
+  background: white;
+  border: 1px solid var(--border);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+/* Tarjetas de módulos principales */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-bottom: 36px;
+}
+
+.module-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.module-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 24px -6px rgba(15, 23, 42, 0.08);
+  border-color: #cbd5e1;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.carreras-icon { background: #eff6ff; color: #2563eb; }
+.noticias-icon { background: #f0fdf4; color: #16a34a; }
+.agenda-icon { background: #fffbeb; color: #d97706; }
+.contacto-icon { background: #faf5ff; color: #9333ea; }
+
+.counter {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.module-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.module-card p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  flex: 1;
+}
+
+.card-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 18px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Tabla de actividad reciente */
+.recent-section {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.recent-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.recent-header h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.recent-header a {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+th {
+  text-align: left;
+  padding: 10px 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 14px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* ========================================================================== */
+/* 4. ESTILOS PARA LA PANTALLA DE LOGIN                                       */
+/* ========================================================================== */
+.login-body {
+  font-family: sans-serif;
+  background-color: #f1f5f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.login-card {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 360px;
+}
+
+.login-card h2 {
+  text-align: center;
+  color: #1e3a8a;
+  margin-top: 0;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.login-card button {
+  width: 100%;
+  padding: 10px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.login-card button:hover {
+  background-color: #1d4ed8;
+}
+
+.login-card button:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: 10px;
+  text-align: center;
+  display: none;
+}
+
+.back {
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  font-size: 13px;
+  color: #64748b;
+  text-decoration: none;
+}
+
+/* ========================================================================== */
+/* 5. ESTILOS ESPECÍFICOS: MÓDULO DE AGENDA                                   */
+/* ========================================================================== */
+:root {
+  --agenda-primary: #d97706;
+  --agenda-primary-hover: #b45309;
+}
+
+.agenda-page-body {
+  background-color: var(--bg);
+  color: var(--text-main);
+  padding: 32px 40px;
+  min-height: 100vh;
+  display: block;
+}
+
+.agenda-page-body .top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.agenda-page-body .back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  background: white;
+  border: 1px solid var(--border);
+  padding: 9px 16px;
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+
+.agenda-page-body .back-btn:hover {
+  color: var(--agenda-primary);
+  border-color: #cbd5e1;
+  transform: translateX(-3px);
+}
+
+.agenda-page-body .page-title h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.agenda-page-body .page-title p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 2px;
+}
+
+.agenda-page-body .admin-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.agenda-page-body .card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.agenda-page-body .card h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-main);
+}
+
+.agenda-page-body .form-group {
+  margin-bottom: 16px;
+}
+
+.agenda-page-body .form-row-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.agenda-page-body label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.agenda-page-body input[type="text"],
+.agenda-page-body input[type="date"],
+.agenda-page-body input[type="time"],
+.agenda-page-body select,
+.agenda-page-body textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  background: #fdfdfd;
+}
+
+.agenda-page-body input:focus,
+.agenda-page-body select:focus,
+.agenda-page-body textarea:focus {
+  outline: none;
+  border-color: var(--agenda-primary);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.1);
+}
+
+.agenda-page-body .form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.agenda-page-body .btn-save {
+  flex: 1;
+  background: var(--agenda-primary);
+  color: white;
+  border: none;
+  padding: 11px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.agenda-page-body .btn-save:hover {
+  background: var(--agenda-primary-hover);
+}
+
+.agenda-page-body .btn-cancel {
+  background: #f1f5f9;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  padding: 11px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  display: none;
+}
+
+.agenda-page-body .table-container {
+  overflow-x: auto;
+}
+
+.agenda-page-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.agenda-page-body th {
+  padding: 12px 14px;
+  font-weight: 700;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.agenda-page-body td {
+  padding: 16px 14px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.agenda-page-body .tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fef3c7;
+}
+
+.agenda-page-body .btn-action {
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agenda-page-body .btn-edit-tb {
+  background: #fef3c7;
+  color: #b45309;
+  margin-right: 4px;
+}
+
+.agenda-page-body .btn-delete-tb {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+@media (max-width: 950px) {
+  .agenda-page-body .admin-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========================================================================== */
+/* 6. ESTILOS ESPECÍFICOS: MÓDULO DE CONTACTO / BUZÓN DE ENTRADA              */
+/* ========================================================================== */
+:root {
+  --contacto-primary: #1e3a8a;
+}
+
+.contacto-page-body {
+  background: var(--bg);
+  color: var(--text-main);
+  padding: 30px;
+  min-height: 100vh;
+  display: block;
+}
+
+.contacto-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.contacto-page-body .back-nav {
+  margin-bottom: 20px;
+}
+
+.contacto-page-body .back-nav a {
+  text-decoration: none;
+  color: var(--contacto-primary);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.contacto-page-body .card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+.contacto-page-body .header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.contacto-page-body h2 {
+  font-size: 1.4rem;
+  color: var(--contacto-primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.contacto-page-body .table-container {
+  overflow-x: auto;
+}
+
+.contacto-page-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.contacto-page-body th, 
+.contacto-page-body td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+.contacto-page-body th {
+  background: #f1f5f9;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.badge-nuevo {
+  background: #fee2e2;
+  color: #dc2626;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.badge-leido {
+  background: #e2e8f0;
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.contacto-page-body .btn-action {
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.contacto-page-body .btn-view {
+  background: #e0e7ff;
+  color: #3730a3;
+  margin-right: 5px;
+}
+
+.contacto-page-body .btn-del {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Modal de lectura */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  width: 100%;
+  max-width: 550px;
+}
+
+.modal-content h3 {
+  margin-bottom: 15px;
+  color: var(--contacto-primary);
+}
+
+.modal-content p {
+  margin-bottom: 10px;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.modal-text-box {
+  background: #f8fafc;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  white-space: pre-wrap;
+}
+
+.modal-close {
+  background: var(--contacto-primary);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  float: right;
+  margin-top: 10px;
+}
+
+/* ========================================================================== */
+/* 7. ESTILOS ESPECÍFICOS: MÓDULO DE NOVEDADES Y NOTICIAS                     */
+/* ========================================================================== */
+:root {
+  --novedades-primary: #16a34a;
+  --novedades-primary-hover: #15803d;
+}
+
+.novedades-page-body {
+  background-color: var(--bg);
+  color: var(--text-main);
+  padding: 32px 40px;
+  min-height: 100vh;
+  display: block;
+}
+
+.novedades-page-body .top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.novedades-page-body .back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  background: white;
+  border: 1px solid var(--border);
+  padding: 9px 16px;
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+
+.novedades-page-body .back-btn:hover {
+  color: var(--novedades-primary);
+  border-color: #cbd5e1;
+  transform: translateX(-3px);
+}
+
+.novedades-page-body .page-title h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.novedades-page-body .page-title p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 2px;
+}
+
+.novedades-page-body .admin-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.novedades-page-body .card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.novedades-page-body .card h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-main);
+}
+
+.novedades-page-body .form-group {
+  margin-bottom: 16px;
+}
+
+.novedades-page-body label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.novedades-page-body input[type="text"],
+.novedades-page-body input[type="date"],
+.novedades-page-body textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  background: #fdfdfd;
+}
+
+.novedades-page-body input:focus,
+.novedades-page-body textarea:focus {
+  outline: none;
+  border-color: var(--novedades-primary);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.1);
+}
+
+/* Dropzone de imagen */
+.file-dropzone {
+  border: 2px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  background: #f8fafc;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.file-dropzone:hover {
+  border-color: var(--novedades-primary);
+  background: #f0fdf4;
+}
+
+.file-dropzone i {
+  font-size: 1.6rem;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.file-dropzone span {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.file-dropzone small {
+  color: #94a3b8;
+  font-size: 0.75rem;
+}
+
+.file-dropzone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.file-selected-name {
+  margin-top: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--novedades-primary);
+  display: none;
+}
+
+.img-actual-info {
+  display: none;
+  color: var(--novedades-primary);
+  font-size: 0.8rem;
+  margin-top: 6px;
+}
+
+.novedades-page-body .form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.novedades-page-body .btn-save {
+  flex: 1;
+  background: var(--novedades-primary);
+  color: white;
+  border: none;
+  padding: 11px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.novedades-page-body .btn-save:hover {
+  background: var(--novedades-primary-hover);
+}
+
+.novedades-page-body .btn-cancel {
+  background: #f1f5f9;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  padding: 11px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  display: none;
+}
+
+/* Tabla */
+.novedades-page-body .table-container {
+  overflow-x: auto;
+}
+
+.novedades-page-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.novedades-page-body th {
+  padding: 12px 14px;
+  font-weight: 700;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.novedades-page-body td {
+  padding: 16px 14px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.thumb {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.novedades-page-body .btn-action {
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.novedades-page-body .btn-edit-tb {
+  background: #fef3c7;
+  color: #b45309;
+  margin-right: 4px;
+}
+
+.novedades-page-body .btn-delete-tb {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+@media (max-width: 950px) {
+  .novedades-page-body .admin-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========================================================================== */
+/* 8. ESTILOS ESPECÍFICOS: MÓDULO DE OFERTA ACADÉMICA Y CARRERAS              */
+/* ========================================================================== */
+:root {
+  --oferta-primary: #2563eb;
+  --oferta-primary-hover: #1d4ed8;
+}
+
+.oferta-page-body {
+  background-color: var(--bg);
+  color: var(--text-main);
+  padding: 32px 40px;
+  min-height: 100vh;
+  display: block;
+}
+
+.oferta-page-body .top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.oferta-page-body .back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  background: white;
+  border: 1px solid var(--border);
+  padding: 9px 16px;
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+
+.oferta-page-body .back-btn:hover {
+  color: var(--oferta-primary);
+  border-color: #cbd5e1;
+  transform: translateX(-3px);
+}
+
+.oferta-page-body .page-title h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.oferta-page-body .page-title p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 2px;
+}
+
+.oferta-page-body .admin-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.oferta-page-body .card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.oferta-page-body .card h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-main);
+}
+
+.oferta-page-body .form-group {
+  margin-bottom: 16px;
+}
+
+.oferta-page-body .form-row-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.oferta-page-body label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.oferta-page-body input[type="text"],
+.oferta-page-body textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  background: #fdfdfd;
+}
+
+.oferta-page-body input[type="text"]:focus,
+.oferta-page-body textarea:focus {
+  outline: none;
+  border-color: var(--oferta-primary);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.oferta-page-body .file-dropzone {
+  border: 2px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  background: #f8fafc;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.oferta-page-body .file-dropzone:hover {
+  border-color: var(--oferta-primary);
+  background: #f0f7ff;
+}
+
+.oferta-page-body .file-dropzone i {
+  font-size: 1.6rem;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.oferta-page-body .file-dropzone span {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.oferta-page-body .file-dropzone small {
+  color: #94a3b8;
+  font-size: 0.75rem;
+}
+
+.oferta-page-body .file-dropzone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.oferta-page-body .file-selected-name {
+  margin-top: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--oferta-primary);
+  display: none;
+}
+
+.oferta-page-body .pdf-actual-info {
+  display: none;
+  color: var(--oferta-primary);
+  font-size: 0.8rem;
+  margin-top: 6px;
+}
+
+.oferta-page-body .form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.oferta-page-body .btn-save {
+  flex: 1;
+  background: var(--oferta-primary);
+  color: white;
+  border: none;
+  padding: 11px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.oferta-page-body .btn-save:hover {
+  background: var(--oferta-primary-hover);
+}
+
+.oferta-page-body .btn-cancel {
+  background: #f1f5f9;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  padding: 11px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  display: none;
+}
+
+.oferta-page-body .table-container {
+  overflow-x: auto;
+}
+
+.oferta-page-body table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.88rem;
+}
+
+.oferta-page-body th {
+  padding: 12px 14px;
+  font-weight: 700;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.oferta-page-body td {
+  padding: 16px 14px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.pdf-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #eff6ff;
+  color: #2563eb;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.pdf-badge:hover {
+  background: #dbeafe;
+}
+
+.pdf-empty {
+  color: #94a3b8;
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+.oferta-page-body .btn-action {
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.oferta-page-body .btn-edit-tb {
+  background: #fef3c7;
+  color: #b45309;
+  margin-right: 4px;
+}
+
+.oferta-page-body .btn-delete-tb {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+@media (max-width: 950px) {
+  .oferta-page-body .admin-layout {
+    grid-template-columns: 1fr;
+  }
+}
+/* ========================================================================== */
+/* 9. ESTILOS ESPECÍFICOS: MÓDULO DE SOLICITUDES ESTUDIANTILES                */
+/* ========================================================================== */
+:root {
+  --estudiantes-primary: #4f46e5;
+  --estudiantes-primary-hover: #4338ca;
+}
+
+.estudiantes-page-body {
+  background-color: var(--bg);
+  color: var(--text-main);
+  padding: 32px 40px;
+  min-height: 100vh;
+  display: block;
+}
+
+.estudiantes-page-body .top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.estudiantes-page-body .top-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.estudiantes-page-body .back-btn,
+.btn-action-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  background: white;
+  border: 1px solid var(--border);
+  padding: 9px 16px;
+  border-radius: 10px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.estudiantes-page-body .back-btn:hover,
+.btn-action-top:hover {
+  color: var(--estudiantes-primary);
+  border-color: #cbd5e1;
+}
+
+.btn-action-top {
+  background: var(--estudiantes-primary);
+  color: white;
+  border: none;
+}
+
+.btn-action-top:hover {
+  background: var(--estudiantes-primary-hover);
+  color: white;
+}
+
+/* Tarjeta de filtros */
+.filters-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.filter-group {
+  flex: 1;
+}
+
+.filter-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.filter-group select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  background: #fdfdfd;
+}
+
+.estudiantes-page-body .card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.estudiantes-page-body .card h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.estudiantes-page-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.estudiantes-page-body th {
+  padding: 12px 14px;
+  font-weight: 700;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.estudiantes-page-body td {
+  padding: 16px 14px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.badge-estado {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.estado-pend { background: #fffbeb; color: #b45309; border: 1px solid #fef3c7; }
+.estado-proc { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }
+.estado-list { background: #f0fdf4; color: #15803d; border: 1px solid #dcfce7; }
+
+/* Configuración especial para impresión en papel */
+@media print {
+  aside, .top-actions, .filters-card, .no-print, .back-btn {
+    display: none !important;
+  }
+  body {
+    background: white;
+    padding: 0;
+  }
+  .card {
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+}

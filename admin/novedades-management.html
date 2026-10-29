@@ -6,65 +6,10 @@
   <title>Gestión de Novedades - IES N° 11</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #16a34a;
-      --primary-hover: #15803d;
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --border: #e2e8f0;
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --radius: 14px;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 32px 40px; min-height: 100vh; }
-
-    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
-    .back-btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text-muted); font-weight: 600; font-size: 0.9rem; background: white; border: 1px solid var(--border); padding: 9px 16px; border-radius: 10px; transition: all 0.2s; }
-    .back-btn:hover { color: var(--primary); border-color: #cbd5e1; transform: translateX(-3px); }
-
-    .page-title h1 { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.5px; }
-    .page-title p { color: var(--text-muted); font-size: 0.9rem; margin-top: 2px; }
-
-    .admin-layout { display: grid; grid-template-columns: 420px 1fr; gap: 28px; align-items: start; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
-    .card h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; color: var(--text); }
-
-    .form-group { margin-bottom: 16px; }
-    label { display: block; font-size: 0.82rem; font-weight: 700; color: var(--text); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
-    input[type="text"], input[type="date"], textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 0.9rem; transition: all 0.2s; background: #fdfdfd; }
-    input:focus, textarea:focus { outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.1); }
-
-    /* Dropzone de imagen */
-    .file-dropzone { border: 2px dashed #cbd5e1; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; background: #f8fafc; transition: all 0.2s; position: relative; }
-    .file-dropzone:hover { border-color: var(--primary); background: #f0fdf4; }
-    .file-dropzone i { font-size: 1.6rem; color: #94a3b8; margin-bottom: 8px; }
-    .file-dropzone span { display: block; font-size: 0.85rem; font-weight: 600; color: #475569; }
-    .file-dropzone small { color: #94a3b8; font-size: 0.75rem; }
-    .file-dropzone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-    .file-selected-name { margin-top: 8px; font-size: 0.8rem; font-weight: 600; color: var(--primary); display: none; }
-
-    .form-actions { display: flex; gap: 10px; margin-top: 22px; }
-    .btn-save { flex: 1; background: var(--primary); color: white; border: none; padding: 11px 18px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: background 0.2s; }
-    .btn-save:hover { background: var(--primary-hover); }
-    .btn-cancel { background: #f1f5f9; color: var(--text-muted); border: 1px solid var(--border); padding: 11px 16px; border-radius: 10px; font-weight: 600; cursor: pointer; display: none; }
-
-    /* Tabla */
-    .table-container { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-    th { padding: 12px 14px; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border); text-align: left; }
-    td { padding: 16px 14px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
-    .thumb { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
-
-    .btn-action { border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
-    .btn-edit-tb { background: #fef3c7; color: #b45309; margin-right: 4px; }
-    .btn-delete-tb { background: #fee2e2; color: #dc2626; }
-
-    @media (max-width: 950px) { .admin-layout { grid-template-columns: 1fr; } }
-  </style>
+  <!-- Enlace al archivo CSS unificado del panel -->
+  <link rel="stylesheet" href="css/admin-styles.css">
 </head>
-<body>
+<body class="novedades-page-body">
 
   <div class="top-bar">
     <div class="page-title">
@@ -77,7 +22,7 @@
   <div class="admin-layout">
     <!-- Formulario -->
     <div class="card">
-      <h2 id="formTitulo"><i class="fa-solid fa-plus-circle" style="color: var(--primary);"></i> Nueva Noticia</h2>
+      <h2 id="formTitulo"><i class="fa-solid fa-plus-circle" style="color: var(--novedades-primary, #16a34a);"></i> Nueva Noticia</h2>
       <form id="formNoticia">
         <input type="hidden" id="noticiaId">
 
@@ -105,7 +50,7 @@
             <input type="file" id="imagenNoticia" accept="image/*">
           </div>
           <div id="fileSelectedText" class="file-selected-name"></div>
-          <small id="imgActualInfo" style="display:none; color: var(--primary); font-size: 0.8rem; margin-top: 6px;"></small>
+          <small id="imgActualInfo" class="img-actual-info"></small>
         </div>
 
         <div class="form-actions">
@@ -117,7 +62,7 @@
 
     <!-- Tabla -->
     <div class="card">
-      <h2><i class="fa-solid fa-bullhorn" style="color: var(--primary);"></i> Noticias Publicadas</h2>
+      <h2><i class="fa-solid fa-bullhorn" style="color: var(--novedades-primary, #16a34a);"></i> Noticias Publicadas</h2>
       <div class="table-container">
         <table>
           <thead>
@@ -136,174 +81,13 @@
     </div>
   </div>
 
+  <!-- Librería CDN oficial de Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Cliente compartido de Supabase -->
   <script src="../assets/supabaseClient.js"></script>
-  <script>
-    // Validar sesión
-    supabaseClient.auth.getSession().then(({ data: { session } }) => {
-      if (!session) window.location.href = 'login.html';
-    });
-
-    const form = document.getElementById('formNoticia');
-    const noticiaIdInput = document.getElementById('noticiaId');
-    const tituloInput = document.getElementById('titulo');
-    const fechaInput = document.getElementById('fecha');
-    const contenidoInput = document.getElementById('contenido');
-    const imagenInput = document.getElementById('imagenNoticia');
-    const tablaNoticias = document.getElementById('tablaNoticias');
-    const formTitulo = document.getElementById('formTitulo');
-    const btnCancelar = document.getElementById('btnCancelar');
-    const btnGuardar = document.getElementById('btnGuardar');
-    const fileSelectedText = document.getElementById('fileSelectedText');
-    const imgActualInfo = document.getElementById('imgActualInfo');
-
-    let urlImagenExistente = null;
-
-    // Fecha de hoy por defecto
-    fechaInput.value = new Date().toISOString().split('T')[0];
-
-    imagenInput.addEventListener('change', () => {
-      if (imagenInput.files[0]) {
-        fileSelectedText.style.display = 'block';
-        fileSelectedText.innerHTML = `<i class="fa-solid fa-file-image"></i> Archivo: <strong>${imagenInput.files[0].name}</strong>`;
-      }
-    });
-
-    // 1. Cargar noticias
-    async function cargarNoticias() {
-      const { data: noticias, error } = await supabaseClient
-        .from('noticias')
-        .select('*')
-        .order('fecha', { ascending: false });
-
-      if (error) {
-        tablaNoticias.innerHTML = '<tr><td colspan="4" style="text-align: center;">Error al cargar noticias.</td></tr>';
-        return;
-      }
-
-      if (!noticias || noticias.length === 0) {
-        tablaNoticias.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 30px;">No hay noticias publicadas aún.</td></tr>';
-        return;
-      }
-
-      tablaNoticias.innerHTML = '';
-      noticias.forEach(n => {
-        const imgTag = n.imagen_url 
-          ? `<img src="${n.imagen_url}" class="thumb" alt="Preview">` 
-          : `<div class="thumb" style="background:#e2e8f0; display:flex; align-items:center; justify-content:center; color:#94a3b8;"><i class="fa-solid fa-image"></i></div>`;
-
-        const fila = document.createElement('tr');
-        fila.innerHTML = `
-          <td>${imgTag}</td>
-          <td><strong>${n.titulo}</strong></td>
-          <td style="color: var(--text-muted);">${n.fecha}</td>
-          <td style="text-align: right;">
-            <button class="btn-action btn-edit-tb" onclick="prepararEdicion(${n.id})"><i class="fa-solid fa-pen"></i></button>
-            <button class="btn-action btn-delete-tb" onclick="eliminarNoticia(${n.id})"><i class="fa-solid fa-trash"></i></button>
-          </td>
-        `;
-        tablaNoticias.appendChild(fila);
-      });
-    }
-
-    // 2. Guardar Noticia
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      btnGuardar.disabled = true;
-      btnGuardar.innerText = 'Guardando...';
-
-      const id = noticiaIdInput.value;
-      const titulo = tituloInput.value.trim();
-      const fecha = fechaInput.value;
-      const contenido = contenidoInput.value.trim();
-      const archivoImagen = imagenInput.files[0];
-
-      let imagen_url = urlImagenExistente;
-
-      if (archivoImagen) {
-        const ext = archivoImagen.name.split('.').pop();
-        const path = `noticias/${Date.now()}.${ext}`;
-
-        const { error: uploadError } = await supabaseClient.storage
-          .from('archivos')
-          .upload(path, archivoImagen, { upsert: true });
-
-        if (uploadError) {
-          alert('Error al subir la imagen: ' + uploadError.message);
-          btnGuardar.disabled = false;
-          btnGuardar.innerText = 'Publicar Noticia';
-          return;
-        }
-
-        const { data: publicData } = supabaseClient.storage
-          .from('archivos')
-          .getPublicUrl(path);
-
-        imagen_url = publicData.publicUrl;
-      }
-
-      const datos = { titulo, fecha, contenido, imagen_url };
-
-      if (id) {
-        const { error } = await supabaseClient.from('noticias').update(datos).eq('id', id);
-        if (error) alert('Error: ' + error.message);
-        else { limpiarFormulario(); cargarNoticias(); }
-      } else {
-        const { error } = await supabaseClient.from('noticias').insert([datos]);
-        if (error) alert('Error: ' + error.message);
-        else { limpiarFormulario(); cargarNoticias(); }
-      }
-
-      btnGuardar.disabled = false;
-      btnGuardar.innerText = 'Publicar Noticia';
-    });
-
-    // 3. Editar
-    window.prepararEdicion = async (id) => {
-      const { data: n, error } = await supabaseClient.from('noticias').select('*').eq('id', id).single();
-      if (error) return;
-
-      noticiaIdInput.value = n.id;
-      tituloInput.value = n.titulo;
-      fechaInput.value = n.fecha;
-      contenidoInput.value = n.contenido;
-      urlImagenExistente = n.imagen_url;
-
-      formTitulo.innerHTML = '<i class="fa-solid fa-pen" style="color: var(--primary);"></i> Editar Noticia';
-      btnCancelar.style.display = 'inline-block';
-
-      if (n.imagen_url) {
-        imgActualInfo.style.display = 'block';
-        imgActualInfo.innerHTML = `Foto actual: <a href="${n.imagen_url}" target="_blank">Ver imagen</a> (subí otra si querés cambiarla).`;
-      } else {
-        imgActualInfo.style.display = 'none';
-      }
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    // 4. Eliminar
-    window.eliminarNoticia = async (id) => {
-      if (!confirm('¿Seguro que querés eliminar esta noticia?')) return;
-      const { error } = await supabaseClient.from('noticias').delete().eq('id', id);
-      if (error) alert(error.message);
-      else cargarNoticias();
-    };
-
-    btnCancelar.addEventListener('click', limpiarFormulario);
-
-    function limpiarFormulario() {
-      form.reset();
-      noticiaIdInput.value = '';
-      urlImagenExistente = null;
-      fechaInput.value = new Date().toISOString().split('T')[0];
-      formTitulo.innerHTML = '<i class="fa-solid fa-plus-circle" style="color: var(--primary);"></i> Nueva Noticia';
-      btnCancelar.style.display = 'none';
-      imgActualInfo.style.display = 'none';
-      fileSelectedText.style.display = 'none';
-    }
-
-    cargarNoticias();
-  </script>
+  <!-- Control centralizado de autenticación -->
+  <script src="js/admin-auth.js"></script>
+  <!-- Lógica específica del módulo de novedades -->
+  <script src="js/novedades-management.js"></script>
 </body>
 </html>
