@@ -167,3 +167,127 @@ document.addEventListener('DOMContentLoaded', () => {
   // Carga inicial
   cargarSolicitudes();
 });
+
+// ==========================================
+// GESTIÓN DE CALENDARIO DE EXÁMENES
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+  const formExamen = document.getElementById('formExamen');
+  const examenIdInput = document.getElementById('examenId');
+  const turnoInput = document.getElementById('turno');
+  const periodoInput = document.getElementById('periodo');
+  const cierreInput = document.getElementById('cierre');
+  const estadoExamenInput = document.getElementById('estadoExamen');
+  const tablaExamenesAdmin = document.getElementById('tablaExamenesAdmin');
+  const formExamenTitulo = document.getElementById('formExamenTitulo');
+  const btnCancelarExamen = document.getElementById('btnCancelarExamen');
+  const btnGuardarExamen = document.getElementById('btnGuardarExamen');
+
+  let listaExamenes = [];
+
+  async function cargarExamenesAdmin() {
+    if (typeof supabaseClient === 'undefined') return;
+
+    const { data, error } = await supabaseClient
+      .from('calendario_examenes')
+      .select('*')
+      .order('id', { ascending: true });
+
+    if (error) {
+      console.error('Error al cargar exámenes:', error);
+      return;
+    }
+
+    listaExamenes = data || [];
+    renderizarTablaExamenes(listaExamenes);
+  }
+
+  function renderizarTablaExamenes(examenes) {
+    if (!examenes.length) {
+      tablaExamenesAdmin.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 20px;">No hay turnos cargados.</td></tr>';
+      return;
+    }
+
+    tablaExamenesAdmin.innerHTML = '';
+    examenes.forEach(ex => {
+      let badgeStyle = 'background: #f1f5f9; color: #64748b;';
+      if (ex.estado === 'Inscripciones Abiertas') badgeStyle = 'background: #dcfce7; color: #15803d;';
+      if (ex.estado === 'Concluido') badgeStyle = 'background: #fee2e2; color: #b91c1c;';
+
+      tablaExamenesAdmin.innerHTML += `
+        <tr>
+          <td><strong>${ex.turno}</strong></td>
+          <td>${ex.periodo}</td>
+          <td>${ex.cierre_inscripcion}</td>
+          <td><span style="font-size:0.75rem; padding:3px 8px; border-radius:4px; font-weight:700; ${badgeStyle}">${ex.estado}</span></td>
+          <td style="text-align: right;">
+            <button class="btn-action btn-edit-ex" data-id="${ex.id}" style="background:#fef3c7; color:#b45309; border:none; padding:6px 8px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-pen"></i></button>
+            <button class="btn-action btn-del-ex" data-id="${ex.id}" style="background:#fee2e2; color:#dc2626; border:none; padding:6px 8px; border-radius:6px; cursor:pointer; margin-left:4px;"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  formExamen.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = examenIdInput.value;
+    const datos = {
+      turno: turnoInput.value.trim(),
+      periodo: periodoInput.value.trim(),
+      cierre_inscripcion: cierreInput.value.trim(),
+      estado: estadoExamenInput.value
+    };
+
+    if (id) {
+      const { error } = await supabaseClient.from('calendario_examenes').update(datos).eq('id', id);
+      if (error) alert('Error al actualizar: ' + error.message);
+      else { limpiarFormExamen(); cargarExamenesAdmin(); }
+    } else {
+      const { error } = await supabaseClient.from('calendario_examenes').insert([datos]);
+      if (error) alert('Error al crear: ' + error.message);
+      else { limpiarFormExamen(); cargarExamenesAdmin(); }
+    }
+  });
+
+  tablaExamenesAdmin.addEventListener('click', async (e) => {
+    const btnEdit = e.target.closest('.btn-edit-ex');
+    const btnDel = e.target.closest('.btn-del-ex');
+
+    if (btnEdit) {
+      const id = btnEdit.getAttribute('data-id');
+      const ex = listaExamenes.find(item => item.id == id);
+      if (!ex) return;
+
+      examenIdInput.value = ex.id;
+      turnoInput.value = ex.turno;
+      periodoInput.value = ex.periodo;
+      cierreInput.value = ex.cierre_inscripcion;
+      estadoExamenInput.value = ex.estado;
+
+      formExamenTitulo.innerText = 'Editar Turno de Examen';
+      btnCancelarExamen.style.display = 'block';
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    if (btnDel) {
+      const id = btnDel.getAttribute('data-id');
+      if (!confirm('¿Eliminar este turno del calendario?')) return;
+
+      const { error } = await supabaseClient.from('calendario_examenes').delete().eq('id', id);
+      if (error) alert('Error al eliminar: ' + error.message);
+      else cargarExamenesAdmin();
+    }
+  });
+
+  btnCancelarExamen.addEventListener('click', limpiarFormExamen);
+
+  function limpiarFormExamen() {
+    formExamen.reset();
+    examenIdInput.value = '';
+    formExamenTitulo.innerText = 'Nuevo Turno de Examen';
+    btnCancelarExamen.style.display = 'none';
+  }
+
+  cargarExamenesAdmin();
+});

@@ -1560,3 +1560,69 @@ tr:last-child td {
     padding: 0;
   }
 }
+
+/* ========================================================================== */
+/* 10. ESTILOS ESPECÍFICOS: CALENDARIO DE EXÁMENES (ADMIN)                    */
+/* ========================================================================== */
+.admin-layout-exams {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+#formExamen {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+#formExamen h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text-main);
+}
+
+#formExamen .form-group {
+  margin-bottom: 14px;
+}
+
+#formExamen label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+#formExamen input[type="text"],
+#formExamen select {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: #fdfdfd;
+  transition: all 0.2s;
+}
+
+#formExamen input[type="text"]:focus,
+#formExamen select:focus {
+  outline: none;
+  border-color: var(--estudiantes-primary, #4f46e5);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+#tablaExamenesAdmin td {
+  vertical-align: middle;
+}
+
+@media (max-width: 950px) {
+  .admin-layout-exams {
+    grid-template-columns: 1fr;
+  }
+}

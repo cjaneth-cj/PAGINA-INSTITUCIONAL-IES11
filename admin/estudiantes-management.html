@@ -65,6 +65,66 @@
     </div>
   </div>
 
+  <!-- Sección de Gestión de Turnos y Mesas de Examen -->
+  <div class="card" style="margin-top: 32px;">
+    <h2><i class="fa-solid fa-calendar-days" style="color: var(--estudiantes-primary, #4f46e5);"></i> Calendario de Mesas de Examen</h2>
+    
+    <div class="admin-layout-exams" style="display: grid; grid-template-columns: 380px 1fr; gap: 24px; align-items: start;">
+      <!-- Formulario Exámenes -->
+      <form id="formExamen" style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
+        <input type="hidden" id="examenId">
+        <h3 id="formExamenTitulo" style="font-size: 1rem; font-weight: 700; margin-bottom: 16px; color: var(--text-main);">Nuevo Turno de Examen</h3>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label for="turno" style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px; text-transform:uppercase;">Turno / Convocatoria</label>
+          <input type="text" id="turno" required placeholder="Ej: Turno Julio - Agosto" style="width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:8px;">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label for="periodo" style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px; text-transform:uppercase;">Período de Exámenes</label>
+          <input type="text" id="periodo" required placeholder="Ej: 07 Jul - 28 Jul" style="width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:8px;">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label for="cierre" style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px; text-transform:uppercase;">Cierre de Inscripción</label>
+          <input type="text" id="cierre" required placeholder="Ej: 48 hs previas" style="width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:8px;">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label for="estadoExamen" style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px; text-transform:uppercase;">Estado</label>
+          <select id="estadoExamen" style="width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:8px; background:white;">
+            <option value="Programado">Programado</option>
+            <option value="Inscripciones Abiertas">Inscripciones Abiertas</option>
+            <option value="Concluido">Concluido</option>
+          </select>
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: 18px;">
+          <button type="submit" id="btnGuardarExamen" class="btn-action-top" style="flex:1; justify-content:center;">Guardar Turno</button>
+          <button type="button" id="btnCancelarExamen" style="display:none; padding:9px 14px; background:#e2e8f0; border:none; border-radius:8px; font-weight:600; cursor:pointer;">Cancelar</button>
+        </div>
+      </form>
+
+      <!-- Tabla Exámenes -->
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Turno</th>
+              <th>Período</th>
+              <th>Cierre</th>
+              <th>Estado</th>
+              <th style="text-align: right;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaExamenesAdmin">
+            <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 20px;">Cargando turnos...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <!-- Librería CDN oficial de Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- Cliente compartido de Supabase -->
