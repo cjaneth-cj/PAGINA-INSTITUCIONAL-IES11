@@ -819,32 +819,11 @@ body.page-body {
 .auth-container {
   max-width: 1280px;
   margin: 0 auto;
-}
-
-.auth-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--on-surface-variant);
-  margin-bottom: 20px;
-}
-
-.auth-breadcrumb a {
-  color: inherit;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.auth-breadcrumb .current {
-  color: var(--secondary);
-  font-weight: 600;
+  margin-top: 15px;
 }
 
 .auth-badge {
-  display: inline-block;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
   background-color: rgba(0, 101, 141, 0.1);
@@ -867,8 +846,7 @@ body.page-body {
 .auth-subtitle {
   font-size: 16px;
   color: var(--on-surface-variant);
-  max-width: 800px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .auth-board-section {
@@ -1150,28 +1128,20 @@ body.page-body {
 .student-container {
   max-width: 1280px;
   margin: 0 auto;
+  margin-top: 15px;
 }
 
-.student-breadcrumb {
-  display: flex;
+.student-badge {
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--on-surface-variant);
-  margin-bottom: 16px;
-}
-
-.student-breadcrumb a {
-  color: inherit;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.student-breadcrumb .current {
+  gap: 6px;
+  background-color: rgba(0, 101, 141, 0.1);
   color: var(--secondary);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
   font-weight: 600;
+  margin-bottom: 14px;
 }
 
 .student-title {
@@ -1185,7 +1155,6 @@ body.page-body {
 .student-subtitle {
   font-size: 16px;
   color: var(--on-surface-variant);
-  max-width: 850px;
   line-height: 1.6;
 }
 
@@ -1423,28 +1392,20 @@ body.page-body {
 .academic-container {
   max-width: 1280px;
   margin: 0 auto;
+  margin-top: 15px;
 }
 
-.academic-breadcrumb {
-  display: flex;
+.academic-badge {
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--on-surface-variant);
-  margin-bottom: 20px;
-}
-
-.academic-breadcrumb a {
-  color: inherit;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.academic-breadcrumb .current {
+  gap: 6px;
+  background-color: rgba(0, 101, 141, 0.1);
   color: var(--secondary);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
   font-weight: 600;
+  margin-bottom: 14px;
 }
 
 .academic-title {
@@ -1453,12 +1414,13 @@ body.page-body {
   font-weight: 700;
   color: var(--primary);
   margin-bottom: 12px;
+
 }
 
 .academic-description {
   font-size: 16px;
   color: var(--on-surface-variant);
-  max-width: 800px;
+  line-height: 1.6;
 }
 
 /* Filtros */
@@ -1660,41 +1622,20 @@ body.page-body {
 .agenda-container {
   max-width: 1280px;
   margin: 0 auto;
-}
-
-.agenda-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--on-surface-variant);
-  margin-bottom: 16px;
-}
-
-.agenda-breadcrumb a {
-  color: inherit;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.agenda-breadcrumb .current {
-  color: var(--secondary);
-  font-weight: 600;
+  margin-top: 15px;
 }
 
 .agenda-badge {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   background-color: rgba(0, 101, 141, 0.1);
   color: var(--secondary);
-  padding: 4px 12px;
+  padding: 6px 14px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .agenda-title {
@@ -1708,7 +1649,6 @@ body.page-body {
 .agenda-subtitle {
   font-size: 16px;
   color: var(--on-surface-variant);
-  max-width: 850px;
   line-height: 1.6;
 }
 
@@ -2064,28 +2004,7 @@ body.page-body {
 .news-container {
   max-width: 1280px;
   margin: 0 auto;
-}
-
-.news-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--on-surface-variant);
-  margin-bottom: 20px;
-}
-
-.news-breadcrumb a {
-  color: inherit;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.news-breadcrumb .current {
-  color: var(--secondary);
-  font-weight: 600;
+  margin-top: 15px;
 }
 
 .news-header-box {
