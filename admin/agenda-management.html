@@ -6,99 +6,97 @@
   <title>Gestión de Agenda - IES N° 11</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Enlace al archivo CSS unificado del panel -->
   <link rel="stylesheet" href="css/admin-styles.css">
 </head>
 <body class="agenda-page-body">
 
-  <div class="top-bar">
-    <div class="page-title">
-      <h1>Agenda Institucional</h1>
-      <p>Programación de exámenes, inscripciones, actos y recesos.</p>
-    </div>
-    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Volver al Dashboard</a>
-  </div>
-
-  <div class="admin-layout">
-    <!-- Formulario -->
-    <div class="card">
-      <h2 id="formTitle"><i class="fa-solid fa-calendar-plus" style="color: var(--agenda-primary, #d97706);"></i> Nuevo Evento</h2>
-      <form id="formAgenda">
-        <input type="hidden" id="eventoId">
-
-        <div class="form-group">
-          <label for="titulo">Título del Evento / Trámite</label>
-          <input type="text" id="titulo" required placeholder="Ej: Mesas de Exámenes Turno Diciembre">
-        </div>
-
-        <div class="form-row-grid">
-          <div class="form-group">
-            <label for="fecha">Fecha</label>
-            <input type="date" id="fecha" required>
-          </div>
-          <div class="form-group">
-            <label for="hora">Hora (Opcional)</label>
-            <input type="time" id="hora">
-          </div>
-        </div>
-
-        <div class="form-row-grid">
-          <div class="form-group">
-            <label for="categoria">Categoría</label>
-            <select id="categoria">
-              <option value="Exámenes">Exámenes</option>
-              <option value="Inscripciones">Inscripciones</option>
-              <option value="Acto Institucional">Acto</option>
-              <option value="Receso">Feriado / Receso</option>
-              <option value="General" selected>General</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="lugar">Lugar / Sede</label>
-            <input type="text" id="lugar" placeholder="Ej: Sede Central">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="descripcion">Indicaciones Adicionales</label>
-          <textarea id="descripcion" rows="3" placeholder="Requisitos o indicaciones para los alumnos..."></textarea>
-        </div>
-
-        <div class="form-actions">
-          <button type="submit" id="btnGuardar" class="btn-save">Guardar Evento</button>
-          <button type="button" id="btnCancelar" class="btn-cancel">Cancelar</button>
-        </div>
-      </form>
-    </div>
-
-    <!-- Tabla -->
-    <div class="card">
-      <h2><i class="fa-solid fa-calendar-check" style="color: var(--agenda-primary, #d97706);"></i> Eventos Registrados</h2>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Evento</th>
-              <th>Categoría</th>
-              <th style="text-align: right;">Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="tablaAgenda">
-            <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Cargando eventos...</td></tr>
-          </tbody>
-        </table>
+  <main class="admin-main-content">
+    <div class="top-bar">
+      <div class="page-title">
+        <h1>Agenda Institucional</h1>
+        <p>Programación de exámenes, inscripciones, actos y recesos.</p>
       </div>
     </div>
-  </div>
 
-  <!-- Librería CDN oficial de Supabase -->
+    <div class="admin-layout">
+      <!-- Formulario Nuevo/Editar Evento -->
+      <div class="card">
+        <h2 id="formTitle"><i class="fa-solid fa-calendar-plus" style="color: var(--primary);"></i> Nuevo Evento</h2>
+        <form id="formAgenda">
+          <input type="hidden" id="eventoId">
+
+          <div class="form-group">
+            <label for="titulo">Título del Evento / Trámite</label>
+            <input type="text" id="titulo" required placeholder="Ej: Mesas de Exámenes Turno Diciembre">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label for="fecha">Fecha</label>
+              <input type="date" id="fecha" required>
+            </div>
+            <div class="form-group">
+              <label for="hora">Hora (Opcional)</label>
+              <input type="time" id="hora">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label for="categoria">Categoría</label>
+              <select id="categoria">
+                <option value="Exámenes">Exámenes</option>
+                <option value="Inscripciones">Inscripciones</option>
+                <option value="Acto Institucional">Acto</option>
+                <option value="Receso">Feriado / Receso</option>
+                <option value="General" selected>General</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="lugar">Lugar / Sede</label>
+              <input type="text" id="lugar" placeholder="Ej: Sede Central">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="descripcion">Indicaciones Adicionales</label>
+            <textarea id="descripcion" rows="3" placeholder="Requisitos o indicaciones para los alumnos..."></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="btnGuardar" class="btn-save">Guardar Evento</button>
+            <button type="button" id="btnCancelar" class="btn-cancel">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tabla de Eventos Registrados -->
+      <div class="card">
+        <h2><i class="fa-solid fa-calendar-check" style="color: var(--primary);"></i> Eventos Registrados</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Evento</th>
+                <th>Categoría</th>
+                <th style="text-align: right;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaAgenda">
+              <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Cargando eventos...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Cliente compartido de Supabase -->
   <script src="../assets/supabaseClient.js"></script>
-  <!-- Control centralizado de autenticación -->
   <script src="js/admin-auth.js"></script>
-  <!-- Lógica específica del módulo de agenda -->
+  <script src="js/sidebar.js"></script>
   <script src="js/agenda-management.js"></script>
 </body>
 </html>

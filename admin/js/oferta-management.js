@@ -1,121 +1,154 @@
-// admin/js/oferta-management.js
-// Lógica para la gestión de Oferta Académica y Carreras conectada a Supabase
+// Elementos del DOM
+const form = document.getElementById('formCarrera');
+const carreraIdInput = document.getElementById('carreraId');
+const nombreInput = document.getElementById('nombre');
+const descripcionInput = document.getElementById('descripcion');
+const duracionInput = document.getElementById('duracion');
+const tituloInput = document.getElementById('titulo');
+const categoriaInput = document.getElementById('categoria'); // <-- Toma el selector de categoría
+const logoCarreraInput = document.getElementById('logoCarrera');
+const pdfPlanInput = document.getElementById('pdfPlan');
+const tablaCarreras = document.getElementById('tablaCarreras');
+const formTitulo = document.getElementById('formTitulo');
+const btnCancelar = document.getElementById('btnCancelar');
+const btnGuardar = document.getElementById('btnGuardar');
 
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('formCarrera');
-  const carreraIdInput = document.getElementById('carreraId');
-  const nombreInput = document.getElementById('nombre');
-  const descripcionInput = document.getElementById('descripcion');
-  const duracionInput = document.getElementById('duracion');
-  const tituloInput = document.getElementById('titulo');
-  const pdfPlanInput = document.getElementById('pdfPlan');
-  const tablaCarreras = document.getElementById('tablaCarreras');
-  const formTitulo = document.getElementById('formTitulo');
-  const btnCancelar = document.getElementById('btnCancelar');
-  const pdfActualInfo = document.getElementById('pdfActualInfo');
-  const fileSelectedText = document.getElementById('fileSelectedText');
+// Feedbacks visuales
+const fileSelectedLogoText = document.getElementById('fileSelectedLogoText');
+const fileSelectedPdfText = document.getElementById('fileSelectedPdfText');
+const logoActualInfo = document.getElementById('logoActualInfo');
+const pdfActualInfo = document.getElementById('pdfActualInfo');
 
-  let urlPdfExistente = null;
+let urlLogoExistente = null;
+let urlPdfExistente = null;
 
-  // Mostrar nombre del PDF seleccionado
-  pdfPlanInput.addEventListener('change', () => {
-    if (pdfPlanInput.files[0]) {
-      fileSelectedText.style.display = 'block';
-      fileSelectedText.innerHTML = `<i class="fa-solid fa-file-pdf"></i> Archivo: <strong>${pdfPlanInput.files[0].name}</strong>`;
+// Aviso al seleccionar logo
+if (logoCarreraInput) {
+  logoCarreraInput.addEventListener('change', () => {
+    if (logoCarreraInput.files[0] && fileSelectedLogoText) {
+      fileSelectedLogoText.style.display = 'block';
+      fileSelectedLogoText.innerHTML = `<i class="fa-solid fa-file-image"></i> Logo: <strong>${logoCarreraInput.files[0].name}</strong>`;
     }
   });
+}
 
-  // 1. Cargar las carreras de Supabase
-  async function cargarCarreras() {
-    if (typeof supabaseClient === 'undefined') {
-      console.error('Supabase no está disponible.');
-      return;
+// Aviso al seleccionar PDF
+if (pdfPlanInput) {
+  pdfPlanInput.addEventListener('change', () => {
+    if (pdfPlanInput.files[0] && fileSelectedPdfText) {
+      fileSelectedPdfText.style.display = 'block';
+      fileSelectedPdfText.innerHTML = `<i class="fa-solid fa-file-pdf"></i> Plan: <strong>${pdfPlanInput.files[0].name}</strong>`;
     }
+  });
+}
 
-    const { data: carreras, error } = await supabaseClient
-      .from('carreras')
-      .select('*')
-      .order('created_at', { ascending: false });
+// 1. Cargar carreras de Supabase
+async function cargarCarreras() {
+  if (!tablaCarreras) return;
 
-    if (error) {
-      console.error('Error al traer carreras:', error);
-      tablaCarreras.innerHTML = '<tr><td colspan="4" style="text-align: center;">Error al cargar datos.</td></tr>';
-      return;
-    }
+  const { data: carreras, error } = await supabaseClient
+    .from('carreras')
+    .select('*')
+    .order('created_at', { ascending: false });
 
-    if (!carreras || carreras.length === 0) {
-      tablaCarreras.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 30px;">No hay carreras registradas todavía.</td></tr>';
-      return;
-    }
-
-    tablaCarreras.innerHTML = '';
-    carreras.forEach(c => {
-      const enlacePdf = c.plan_estudio_url 
-        ? `<a href="${c.plan_estudio_url}" target="_blank" class="pdf-badge"><i class="fa-solid fa-file-pdf"></i> Ver PDF</a>` 
-        : '<span class="pdf-empty">Sin archivo</span>';
-
-      const fila = document.createElement('tr');
-      fila.innerHTML = `
-        <td><strong>${c.nombre}</strong></td>
-        <td>${c.duracion || '-'}</td>
-        <td>${enlacePdf}</td>
-        <td style="text-align: right;">
-          <button class="btn-action btn-edit-tb" data-id="${c.id}"><i class="fa-solid fa-pen"></i></button>
-          <button class="btn-action btn-delete-tb" data-id="${c.id}"><i class="fa-solid fa-trash"></i></button>
-        </td>
-      `;
-      tablaCarreras.appendChild(fila);
-    });
+  if (error) {
+    tablaCarreras.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">Error al cargar carreras.</td></tr>';
+    return;
   }
 
-  // Delegación de eventos para la tabla
-  tablaCarreras.addEventListener('click', async (e) => {
-    const btnEdit = e.target.closest('.btn-edit-tb');
-    const btnDel = e.target.closest('.btn-delete-tb');
+  if (!carreras || carreras.length === 0) {
+    tablaCarreras.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px;">No hay carreras registradas todavía.</td></tr>';
+    return;
+  }
 
-    if (btnEdit) {
-      const id = parseInt(btnEdit.getAttribute('data-id'));
-      await prepararEdicion(id);
-    }
+  tablaCarreras.innerHTML = '';
+  carreras.forEach(c => {
+    const enlacePdf = c.plan_estudio_url 
+      ? `<a href="${c.plan_estudio_url}" target="_blank" class="pdf-badge" style="display:inline-flex; align-items:center; gap:6px; background:#eff6ff; color:#2563eb; padding:4px 10px; border-radius:6px; font-size:0.8rem; font-weight:700; text-decoration:none;"><i class="fa-solid fa-file-pdf"></i> Ver Plan</a>` 
+      : '<span style="color:var(--text-muted); font-size:0.8rem; font-style:italic;">Sin PDF</span>';
 
-    if (btnDel) {
-      const id = parseInt(btnDel.getAttribute('data-id'));
-      await eliminarCarrera(id);
-    }
+    const logoImg = c.logo_url
+      ? `<img src="${c.logo_url}" class="thumb-carrera" alt="Logo">`
+      : `<div class="thumb-carrera" style="display:flex; align-items:center; justify-content:center; color:#94a3b8;"><i class="fa-solid fa-graduation-cap"></i></div>`;
+
+    const fila = document.createElement('tr');
+    fila.innerHTML = `
+      <td>${logoImg}</td>
+      <td>
+        <strong>${c.nombre}</strong>
+        ${c.categoria ? `<br><small style="color: var(--primary); text-transform: capitalize; font-weight: 600;">${c.categoria}</small>` : ''}
+      </td>
+      <td>${c.duracion || '-'}</td>
+      <td>${enlacePdf}</td>
+      <td style="text-align: right;">
+        <button class="btn-action btn-edit-tb" onclick="prepararEdicion(${c.id})" title="Editar"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn-action btn-delete-tb" onclick="eliminarCarrera(${c.id})" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+      </td>
+    `;
+    tablaCarreras.appendChild(fila);
   });
+}
 
-  // 2. Guardar (Crear nueva o Editar existente)
+// 2. Guardar (Crear o Editar)
+if (form) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    btnGuardar.disabled = true;
+    btnGuardar.innerText = 'Guardando...';
+
     const id = carreraIdInput.value;
     const nombre = nombreInput.value.trim();
-    const descripcion = descripcionInput.value.trim();
-    const duracion = duracionInput.value.trim();
-    const titulo_otorgado = tituloInput.value.trim();
-    const archivoPdf = pdfPlanInput.files[0];
+    const descripcion = descripcionInput ? descripcionInput.value.trim() : '';
+    const duracion = duracionInput ? duracionInput.value.trim() : '';
+    const titulo_otorgado = tituloInput ? tituloInput.value.trim() : '';
+    const categoria = categoriaInput ? categoriaInput.value : ''; // <-- Lee la categoría elegida
+    const archivoLogo = logoCarreraInput ? logoCarreraInput.files[0] : null;
+    const archivoPdf = pdfPlanInput ? pdfPlanInput.files[0] : null;
 
+    let logo_url = urlLogoExistente;
     let plan_estudio_url = urlPdfExistente;
 
-    if (archivoPdf) {
-      const extension = archivoPdf.name.split('.').pop();
-      const nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/g, '-');
-      const path = `planes/${Date.now()}-${nombreLimpio}.${extension}`;
+    const nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
-      const { error: uploadError } = await supabaseClient.storage
+    // Subir Logo si se seleccionó uno nuevo
+    if (archivoLogo) {
+      const extLogo = archivoLogo.name.split('.').pop();
+      const pathLogo = `logos/${Date.now()}-${nombreLimpio}.${extLogo}`;
+
+      const { error: errLogo } = await supabaseClient.storage
         .from('archivos')
-        .upload(path, archivoPdf, { upsert: true });
+        .upload(pathLogo, archivoLogo, { upsert: true });
 
-      if (uploadError) {
-        alert('Error al subir el archivo PDF: ' + uploadError.message);
+      if (errLogo) {
+        alert('Error al subir el logo: ' + errLogo.message);
+        btnGuardar.disabled = false;
+        btnGuardar.innerText = 'Guardar Carrera';
         return;
       }
 
-      const { data: publicData } = supabaseClient.storage
-        .from('archivos')
-        .getPublicUrl(path);
+      const { data: pubLogo } = supabaseClient.storage.from('archivos').getPublicUrl(pathLogo);
+      logo_url = pubLogo.publicUrl;
+    }
 
-      plan_estudio_url = publicData.publicUrl;
+    // Subir PDF si se seleccionó uno nuevo
+    if (archivoPdf) {
+      const extPdf = archivoPdf.name.split('.').pop();
+      const pathPdf = `planes/${Date.now()}-${nombreLimpio}.${extPdf}`;
+
+      const { error: errPdf } = await supabaseClient.storage
+        .from('archivos')
+        .upload(pathPdf, archivoPdf, { upsert: true });
+
+      if (errPdf) {
+        alert('Error al subir el plan PDF: ' + errPdf.message);
+        btnGuardar.disabled = false;
+        btnGuardar.innerText = 'Guardar Carrera';
+        return;
+      }
+
+      const { data: pubPdf } = supabaseClient.storage.from('archivos').getPublicUrl(pathPdf);
+      plan_estudio_url = pubPdf.publicUrl;
     }
 
     const datosCarrera = {
@@ -123,98 +156,90 @@ document.addEventListener('DOMContentLoaded', () => {
       descripcion,
       duracion,
       titulo_otorgado,
+      categoria, // <-- Se envía a Supabase
+      logo_url,
       plan_estudio_url
     };
 
     if (id) {
-      const { error } = await supabaseClient
-        .from('carreras')
-        .update(datosCarrera)
-        .eq('id', id);
-
-      if (error) {
-        alert('Error al actualizar: ' + error.message);
-      } else {
+      const { error } = await supabaseClient.from('carreras').update(datosCarrera).eq('id', id);
+      if (error) alert('Error al actualizar: ' + error.message);
+      else {
         limpiarFormulario();
         cargarCarreras();
       }
     } else {
-      const { error } = await supabaseClient
-        .from('carreras')
-        .insert([datosCarrera]);
-
-      if (error) {
-        alert('Error al crear: ' + error.message);
-      } else {
+      const { error } = await supabaseClient.from('carreras').insert([datosCarrera]);
+      if (error) alert('Error al guardar: ' + error.message);
+      else {
         limpiarFormulario();
         cargarCarreras();
       }
     }
+
+    btnGuardar.disabled = false;
+    btnGuardar.innerText = 'Guardar Carrera';
   });
+}
 
-  // 3. Preparar formulario para Editar
-  async function prepararEdicion(id) {
-    const { data: c, error } = await supabaseClient
-      .from('carreras')
-      .select('*')
-      .eq('id', id)
-      .single();
+// 3. Preparar edición
+window.prepararEdicion = async (id) => {
+  const { data: c, error } = await supabaseClient.from('carreras').select('*').eq('id', id).single();
+  if (error) return;
 
-    if (error) {
-      alert('No se pudieron obtener los datos de la carrera.');
-      return;
-    }
+  carreraIdInput.value = c.id;
+  nombreInput.value = c.nombre;
+  if (descripcionInput) descripcionInput.value = c.descripcion || '';
+  if (duracionInput) duracionInput.value = c.duracion || '';
+  if (tituloInput) tituloInput.value = c.titulo_otorgado || '';
+  if (categoriaInput) categoriaInput.value = c.categoria || ''; // <-- Pone la categoría que ya tenía cargada
+  urlLogoExistente = c.logo_url;
+  urlPdfExistente = c.plan_estudio_url;
 
-    carreraIdInput.value = c.id;
-    nombreInput.value = c.nombre;
-    descripcionInput.value = c.descripcion || '';
-    duracionInput.value = c.duracion || '';
-    tituloInput.value = c.titulo_otorgado || '';
-    urlPdfExistente = c.plan_estudio_url;
+  if (formTitulo) formTitulo.innerHTML = '<i class="fa-solid fa-pen" style="color: var(--primary);"></i> Editar Carrera';
+  if (btnCancelar) btnCancelar.style.display = 'inline-block';
 
-    formTitulo.innerHTML = '<i class="fa-solid fa-pen" style="color: var(--oferta-primary, #2563eb);"></i> Editar Carrera';
-    btnCancelar.style.display = 'inline-block';
-
-    if (c.plan_estudio_url) {
-      pdfActualInfo.style.display = 'block';
-      pdfActualInfo.innerHTML = `Plan actual: <a href="${c.plan_estudio_url}" target="_blank">Ver archivo cargado</a> (seleccioná otro si querés reemplazarlo).`;
-    } else {
-      pdfActualInfo.style.display = 'none';
-    }
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (c.logo_url && logoActualInfo) {
+    logoActualInfo.style.display = 'block';
+    logoActualInfo.innerHTML = `Logo actual: <a href="${c.logo_url}" target="_blank" style="color:var(--primary); font-weight:600;">Ver imagen</a> (subí otra solo si querés cambiarla).`;
+  } else if (logoActualInfo) {
+    logoActualInfo.style.display = 'none';
   }
 
-  // 4. Eliminar Carrera
-  async function eliminarCarrera(id) {
-    const confirmar = confirm('¿Estás seguro de que querés eliminar esta carrera?');
-    if (!confirmar) return;
-
-    const { error } = await supabaseClient
-      .from('carreras')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      alert('Error al eliminar: ' + error.message);
-    } else {
-      cargarCarreras();
-    }
-  }
-
-  // 5. Cancelar edición y limpiar formulario
-  btnCancelar.addEventListener('click', limpiarFormulario);
-
-  function limpiarFormulario() {
-    form.reset();
-    carreraIdInput.value = '';
-    urlPdfExistente = null;
-    formTitulo.innerHTML = '<i class="fa-solid fa-plus-circle" style="color: var(--oferta-primary, #2563eb);"></i> Nueva Carrera';
-    btnCancelar.style.display = 'none';
+  if (c.plan_estudio_url && pdfActualInfo) {
+    pdfActualInfo.style.display = 'block';
+    pdfActualInfo.innerHTML = `Plan actual: <a href="${c.plan_estudio_url}" target="_blank" style="color:var(--primary); font-weight:600;">Ver PDF</a> (subí otro solo si querés cambiarlo).`;
+  } else if (pdfActualInfo) {
     pdfActualInfo.style.display = 'none';
-    fileSelectedText.style.display = 'none';
   }
 
-  // Iniciar cargando la lista al abrir la página
-  cargarCarreras();
-});
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// 4. Eliminar carrera
+window.eliminarCarrera = async (id) => {
+  if (!confirm('¿Seguro que querés eliminar esta carrera?')) return;
+  const { error } = await supabaseClient.from('carreras').delete().eq('id', id);
+  if (error) alert('Error al eliminar: ' + error.message);
+  else cargarCarreras();
+};
+
+if (btnCancelar) {
+  btnCancelar.addEventListener('click', limpiarFormulario);
+}
+
+function limpiarFormulario() {
+  if (form) form.reset();
+  carreraIdInput.value = '';
+  if (categoriaInput) categoriaInput.value = '';
+  urlLogoExistente = null;
+  urlPdfExistente = null;
+  if (formTitulo) formTitulo.innerHTML = '<i class="fa-solid fa-plus-circle" style="color: var(--primary);"></i> Nueva Carrera';
+  if (btnCancelar) btnCancelar.style.display = 'none';
+  if (logoActualInfo) logoActualInfo.style.display = 'none';
+  if (pdfActualInfo) pdfActualInfo.style.display = 'none';
+  if (fileSelectedLogoText) fileSelectedLogoText.style.display = 'none';
+  if (fileSelectedPdfText) fileSelectedPdfText.style.display = 'none';
+}
+
+cargarCarreras();

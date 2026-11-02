@@ -3,135 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestión de Solicitudes Estudiantiles - IES N° 11</title>
+  <title>Gestión de Estudiantes - IES N° 11</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Enlace al archivo CSS unificado del panel -->
   <link rel="stylesheet" href="css/admin-styles.css">
 </head>
-<body class="estudiantes-page-body">
+<body>
 
-  <div class="top-bar">
-    <div class="page-title">
-      <h1>Solicitudes Estudiantiles</h1>
-      <p>Revisión, filtrado y gestión de trámites y certificados solicitados por alumnos.</p>
+  <main class="admin-main-content">
+    <div class="top-bar">
+      <div class="page-title">
+        <h1>Solicitudes y Trámites Estudiantiles</h1>
+        <p>Revisión, filtrado y gestión de trámites y certificados solicitados por alumnos.</p>
+      </div>
+      <button class="btn-cancel" onclick="window.print()" style="display: inline-flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-print"></i> Imprimir Listado
+      </button>
     </div>
-    <div class="top-actions">
-      <button id="btnImprimir" class="btn-action-top"><i class="fa-solid fa-print"></i> Imprimir Listado</button>
-      <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Volver al Dashboard</a>
-    </div>
-  </div>
 
-  <!-- Barra de Filtros -->
-  <div class="filters-card">
-    <div class="filter-group">
-      <label for="filtroPreceptor"><i class="fa-solid fa-filter"></i> Filtrar por Preceptor:</label>
-      <select id="filtroPreceptor">
-        <option value="">Todos los preceptores</option>
-        <!-- Se cargará dinámicamente o por opciones estándar -->
-      </select>
-    </div>
-    <div class="filter-group">
-      <label for="filtroEstado"><i class="fa-solid fa-check-circle"></i> Estado del Trámite:</label>
-      <select id="filtroEstado">
-        <option value="">Todos los estados</option>
-        <option value="Pendiente">Pendiente</option>
-        <option value="En Proceso">En Proceso</option>
-        <option value="Listo para retirar">Listo para retirar</option>
-      </select>
-    </div>
-  </div>
-
-  <!-- Tabla de Solicitudes -->
-  <div class="card">
-    <h2><i class="fa-solid fa-address-card" style="color: var(--estudiantes-primary, #4f46e5);"></i> Bandeja de Trámites</h2>
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>Estudiante / DNI</th>
-            <th>Carrera / Año</th>
-            <th>Trámite</th>
-            <th>Preceptor</th>
-            <th>Estado</th>
-            <th style="text-align: right;" class="no-print">Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="tablaSolicitudes">
-          <tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 30px;">Cargando solicitudes...</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Sección de Gestión de Turnos y Mesas de Examen -->
-  <div class="card" style="margin-top: 32px;">
-    <h2><i class="fa-solid fa-calendar-days" style="color: var(--estudiantes-primary, #4f46e5);"></i> Calendario de Mesas de Examen</h2>
-    
-    <div class="admin-layout-exams" style="display: grid; grid-template-columns: 380px 1fr; gap: 24px; align-items: start;">
-      <!-- Formulario Exámenes -->
-      <form id="formExamen" style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
-        <input type="hidden" id="examenId">
-        <h3 id="formExamenTitulo" style="font-size: 1rem; font-weight: 700; margin-bottom: 16px; color: var(--text-main);">Nuevo Turno de Examen</h3>
-
-        <div class="form-group" style="margin-bottom: 14px;">
-          <label for="turno" style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px; text-transform:uppercase;">Turno / Convocatoria</label>
-          <input type="text" id="turno" required placeholder="Ej: Turno Julio - Agosto" style="width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:8px;">
+    <div class="admin-layout" style="grid-template-columns: 1fr 380px;">
+      <!-- Bandeja de Trámites Principal (Izquierda) -->
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+          <h2><i class="fa-solid fa-folder-open" style="color: var(--primary);"></i> Bandeja de Trámites</h2>
+          
+          <div style="display: flex; gap: 10px;">
+            <select id="filtroPreceptor" style="padding: 6px 12px; border-radius: 8px; border: 1.5px solid var(--border); font-size: 0.85rem;">
+              <option value="">Todos los Preceptores</option>
+            </select>
+            <select id="filtroEstado" style="padding: 6px 12px; border-radius: 8px; border: 1.5px solid var(--border); font-size: 0.85rem;">
+              <option value="">Todos los Estados</option>
+              <option value="Pendiente">Pendiente</option>
+              <option value="En Proceso">En Proceso</option>
+              <option value="Completado">Completado</option>
+            </select>
+          </div>
         </div>
 
-        <div class="form-group" style="margin-bottom: 14px;">
-          <label for="periodo" style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px; text-transform:uppercase;">Período de Exámenes</label>
-          <input type="text" id="periodo" required placeholder="Ej: 07 Jul - 28 Jul" style="width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:8px;">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Estudiante / DNI</th>
+                <th>Carrera</th>
+                <th>Trámite</th>
+                <th>Estado</th>
+                <th style="text-align: right;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaTramites">
+              <tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 30px;">Cargando trámites...</td></tr>
+            </tbody>
+          </table>
         </div>
+      </div>
 
-        <div class="form-group" style="margin-bottom: 14px;">
-          <label for="cierre" style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px; text-transform:uppercase;">Cierre de Inscripción</label>
-          <input type="text" id="cierre" required placeholder="Ej: 48 hs previas" style="width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:8px;">
-        </div>
+      <!-- Calendario / Turnos (Derecha) -->
+      <div class="card">
+        <h2><i class="fa-solid fa-calendar-days" style="color: var(--primary);"></i> Mesas de Examen</h2>
+        <form id="formTurnoExamen">
+          <div class="form-group">
+            <label for="turnoConvocatoria">Turno / Convocatoria</label>
+            <input type="text" id="turnoConvocatoria" placeholder="Ej: Turno Julio - Agosto" required>
+          </div>
 
-        <div class="form-group" style="margin-bottom: 14px;">
-          <label for="estadoExamen" style="display:block; font-size:0.78rem; font-weight:700; margin-bottom:4px; text-transform:uppercase;">Estado</label>
-          <select id="estadoExamen" style="width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:8px; background:white;">
-            <option value="Programado">Programado</option>
-            <option value="Inscripciones Abiertas">Inscripciones Abiertas</option>
-            <option value="Concluido">Concluido</option>
-          </select>
-        </div>
+          <div class="form-group">
+            <label for="periodoExamenes">Período de Exámenes</label>
+            <input type="text" id="periodoExamenes" placeholder="Ej: 07 Jul - 28 Jul" required>
+          </div>
 
-        <div style="display: flex; gap: 8px; margin-top: 18px;">
-          <button type="submit" id="btnGuardarExamen" class="btn-action-top" style="flex:1; justify-content:center;">Guardar Turno</button>
-          <button type="button" id="btnCancelarExamen" style="display:none; padding:9px 14px; background:#e2e8f0; border:none; border-radius:8px; font-weight:600; cursor:pointer;">Cancelar</button>
-        </div>
-      </form>
+          <div class="form-group">
+            <label for="cierreInscripcion">Cierre de Inscripción</label>
+            <input type="text" id="cierreInscripcion" placeholder="Ej: 48 hs previas">
+          </div>
 
-      <!-- Tabla Exámenes -->
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Turno</th>
-              <th>Período</th>
-              <th>Cierre</th>
-              <th>Estado</th>
-              <th style="text-align: right;">Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="tablaExamenesAdmin">
-            <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 20px;">Cargando turnos...</td></tr>
-          </tbody>
-        </table>
+          <div class="form-group">
+            <label for="estadoTurno">Estado</label>
+            <select id="estadoTurno">
+              <option value="Programado">Programado</option>
+              <option value="Abierto">Inscripción Abierta</option>
+              <option value="Finalizado">Finalizado</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-save" style="width: 100%; margin-top: 10px;">Guardar Turno</button>
+        </form>
       </div>
     </div>
-  </div>
+  </main>
 
-  <!-- Librería CDN oficial de Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Cliente compartido de Supabase -->
   <script src="../assets/supabaseClient.js"></script>
-  <!-- Control centralizado de autenticación -->
   <script src="js/admin-auth.js"></script>
-  <!-- Lógica específica del módulo de estudiantes -->
+  <script src="js/sidebar.js"></script>
   <script src="js/estudiantes-management.js"></script>
 </body>
 </html>

@@ -4,22 +4,59 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buzón de Consultas - IES N° 11</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Enlace al archivo CSS unificado del panel -->
   <link rel="stylesheet" href="css/admin-styles.css">
+  <style>
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6);
+      display: none; align-items: center; justify-content: center; z-index: 9999;
+    }
+    .modal-card {
+      background: white; border-radius: 16px; padding: 28px; width: 90%; max-width: 560px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .modal-close { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #64748b; }
+    .badge-status { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
+    .badge-nuevo { background: #fee2e2; color: #dc2626; }
+    .badge-leido { background: #f1f5f9; color: #64748b; }
+  </style>
 </head>
-<body class="contacto-page-body">
+<body>
 
-  <div class="contacto-container">
-    <div class="back-nav">
-      <a href="index.html"><i class="fa-solid fa-arrow-left"></i> Volver al Panel Principal</a>
+  <main class="admin-main-content">
+    <div class="top-bar">
+      <div class="page-title">
+        <h1>Buzón de Consultas</h1>
+        <p>Mensajes y dudas enviadas por aspirantes y alumnos desde la web pública.</p>
+      </div>
     </div>
 
-    <div class="card">
-      <div class="header-row">
-        <h2><i class="fa-solid fa-inbox"></i> Consultas Recibidas</h2>
-        <button id="btnActualizar" class="btn-action btn-view"><i class="fa-solid fa-rotate-right"></i> Actualizar</button>
+    <!-- Métricas del buzón requeridas por contacto-management.js -->
+    <div style="display: flex; gap: 16px; margin-bottom: 24px;">
+      <div class="card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px;">
+        <i class="fa-solid fa-inbox fa-2x" style="color: #2563eb;"></i>
+        <div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Total de Mensajes</div>
+          <div id="cantTotal" style="font-size: 1.3rem; font-weight: 800;">-</div>
+        </div>
+      </div>
+      <div class="card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px;">
+        <i class="fa-solid fa-envelope-open-text fa-2x" style="color: #dc2626;"></i>
+        <div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Sin Leer</div>
+          <div id="cantNuevos" style="font-size: 1.3rem; font-weight: 800; color: #dc2626;">-</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="width: 100%;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2><i class="fa-solid fa-inbox" style="color: #2563eb;"></i> Consultas Recibidas</h2>
+        <button id="btnActualizar" class="btn-cancel" style="display: inline-flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-arrows-rotate"></i> Actualizar
+        </button>
       </div>
 
       <div class="table-container">
@@ -34,35 +71,33 @@
               <th style="text-align: right;">Acciones</th>
             </tr>
           </thead>
-          <tbody id="tablaMensajes">
-            <tr><td colspan="6" style="text-align: center;">Cargando mensajes...</td></tr>
+          <tbody id="tablaConsultas">
+            <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Cargando consultas...</td></tr>
           </tbody>
         </table>
       </div>
     </div>
-  </div>
+  </main>
 
-  <!-- Modal para leer el mensaje completo -->
-  <div id="modalLectura" class="modal">
-    <div class="modal-content">
-      <h3 id="modalAsunto"></h3>
-      <p><strong>De:</strong> <span id="modalDe"></span></p>
-      <p><strong>Email:</strong> <span id="modalEmail"></span></p>
-      <p><strong>Teléfono:</strong> <span id="modalTel"></span></p>
-      <hr style="border: 0; border-top: 1px solid var(--border); margin: 15px 0;">
-      <p><strong>Mensaje:</strong></p>
-      <p id="modalTexto" class="modal-text-box"></p>
-      <button class="modal-close" id="btnCerrarModal">Cerrar</button>
+  <!-- Modal para leer mensajes -->
+  <div id="modalMensaje" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalAsunto" style="margin: 0; font-size: 1.15rem;">Detalle del Mensaje</h3>
+        <button id="btnCerrarModal" class="modal-close">&times;</button>
+      </div>
+      <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;" id="modalMeta"></div>
+      <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 0.9rem; line-height: 1.5; white-space: pre-wrap;" id="modalCuerpo"></div>
+      <div style="margin-top: 20px; text-align: right;">
+        <button id="btnMarcarLeido" class="btn-save" style="padding: 8px 16px;">Entendido</button>
+      </div>
     </div>
   </div>
 
-  <!-- Librería CDN oficial de Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Cliente compartido de Supabase -->
   <script src="../assets/supabaseClient.js"></script>
-  <!-- Control centralizado de autenticación -->
   <script src="js/admin-auth.js"></script>
-  <!-- Lógica específica del módulo de contactos -->
+  <script src="js/sidebar.js"></script>
   <script src="js/contacto-management.js"></script>
 </body>
 </html>

@@ -6,88 +6,85 @@
   <title>Gestión de Novedades - IES N° 11</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Enlace al archivo CSS unificado del panel -->
   <link rel="stylesheet" href="css/admin-styles.css">
 </head>
-<body class="novedades-page-body">
+<body>
 
-  <div class="top-bar">
-    <div class="page-title">
-      <h1>Novedades y Noticias</h1>
-      <p>Creación y publicación de artículos institucionales y comunicados.</p>
-    </div>
-    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Volver al Dashboard</a>
-  </div>
-
-  <div class="admin-layout">
-    <!-- Formulario -->
-    <div class="card">
-      <h2 id="formTitulo"><i class="fa-solid fa-plus-circle" style="color: var(--novedades-primary, #16a34a);"></i> Nueva Noticia</h2>
-      <form id="formNoticia">
-        <input type="hidden" id="noticiaId">
-
-        <div class="form-group">
-          <label for="titulo">Título de la Noticia</label>
-          <input type="text" id="titulo" required placeholder="Ej: Inscripciones Abiertas Ciclo Lectivo">
-        </div>
-
-        <div class="form-group">
-          <label for="fecha">Fecha de Publicación</label>
-          <input type="date" id="fecha" required>
-        </div>
-
-        <div class="form-group">
-          <label for="contenido">Cuerpo del Comunicado</label>
-          <textarea id="contenido" rows="4" required placeholder="Escribí los detalles de la noticia..."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>Imagen Destacada (Opcional)</label>
-          <div class="file-dropzone">
-            <i class="fa-solid fa-image"></i>
-            <span>Arrastrá o hacé clic para subir foto</span>
-            <small>JPG, PNG o WEBP</small>
-            <input type="file" id="imagenNoticia" accept="image/*">
-          </div>
-          <div id="fileSelectedText" class="file-selected-name"></div>
-          <small id="imgActualInfo" class="img-actual-info"></small>
-        </div>
-
-        <div class="form-actions">
-          <button type="submit" id="btnGuardar" class="btn-save">Publicar Noticia</button>
-          <button type="button" id="btnCancelar" class="btn-cancel">Cancelar</button>
-        </div>
-      </form>
-    </div>
-
-    <!-- Tabla -->
-    <div class="card">
-      <h2><i class="fa-solid fa-bullhorn" style="color: var(--novedades-primary, #16a34a);"></i> Noticias Publicadas</h2>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Imagen</th>
-              <th>Título</th>
-              <th>Fecha</th>
-              <th style="text-align: right;">Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="tablaNoticias">
-            <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Cargando noticias...</td></tr>
-          </tbody>
-        </table>
+  <main class="admin-main-content">
+    <div class="top-bar">
+      <div class="page-title">
+        <h1>Novedades y Noticias</h1>
+        <p>Creación y publicación de artículos institucionales y comunicados.</p>
       </div>
     </div>
-  </div>
 
-  <!-- Librería CDN oficial de Supabase -->
+    <div class="admin-layout">
+      <!-- Formulario Izquierda -->
+      <div class="card">
+        <h2 id="formTitulo"><i class="fa-solid fa-plus-circle" style="color: var(--primary);"></i> Nueva Noticia</h2>
+        <form id="formNoticia">
+          <input type="hidden" id="noticiaId">
+
+          <div class="form-group">
+            <label for="titulo">Título de la Noticia</label>
+            <input type="text" id="titulo" required placeholder="Ej: Inscripciones Abiertas Ciclo Lectivo">
+          </div>
+
+          <div class="form-group">
+            <label for="fecha">Fecha de Publicación</label>
+            <input type="date" id="fecha" required>
+          </div>
+
+          <div class="form-group">
+            <label for="contenido">Cuerpo del Comunicado</label>
+            <textarea id="contenido" rows="4" required placeholder="Escribí los detalles de la noticia..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Imagen Destacada (Opcional)</label>
+            <div class="file-dropzone">
+              <i class="fa-solid fa-image"></i>
+              <span>Arrastrá o hacé clic para subir foto</span>
+              <small>JPG, PNG o WEBP</small>
+              <input type="file" id="imagenNoticia" accept="image/*">
+            </div>
+            <div id="fileSelectedText" class="file-selected-name"></div>
+            <small id="imgActualInfo" style="display:none; color: var(--primary); font-size: 0.8rem; margin-top: 6px;"></small>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="btnGuardar" class="btn-save">Publicar Noticia</button>
+            <button type="button" id="btnCancelar" class="btn-cancel">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tabla Derecha -->
+      <div class="card">
+        <h2><i class="fa-solid fa-bullhorn" style="color: var(--primary);"></i> Noticias Publicadas</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Imagen</th>
+                <th>Título</th>
+                <th>Fecha</th>
+                <th style="text-align: right;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaNoticias">
+              <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Cargando noticias...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Cliente compartido de Supabase -->
   <script src="../assets/supabaseClient.js"></script>
-  <!-- Control centralizado de autenticación -->
   <script src="js/admin-auth.js"></script>
-  <!-- Lógica específica del módulo de novedades -->
+  <script src="js/sidebar.js"></script>
   <script src="js/novedades-management.js"></script>
 </body>
 </html>

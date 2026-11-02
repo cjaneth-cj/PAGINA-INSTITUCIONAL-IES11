@@ -6,94 +6,129 @@
   <title>Gestión de Carreras - IES N° 11</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Enlace al archivo CSS unificado del panel -->
   <link rel="stylesheet" href="css/admin-styles.css">
+  <style>
+    .thumb-carrera {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+    }
+  </style>
 </head>
-<body class="oferta-page-body">
+<body>
 
-  <div class="top-bar">
-    <div class="page-title">
-      <h1>Oferta Académica</h1>
-      <p>Gestión de carreras y actualización de planes de estudio institucionales.</p>
-    </div>
-    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Volver al Dashboard</a>
-  </div>
-
-  <div class="admin-layout">
-    <!-- Formulario Crear/Editar -->
-    <div class="card">
-      <h2 id="formTitulo"><i class="fa-solid fa-plus-circle" style="color: var(--oferta-primary, #2563eb);"></i> Nueva Carrera</h2>
-      <form id="formCarrera">
-        <input type="hidden" id="carreraId">
-
-        <div class="form-group">
-          <label for="nombre">Nombre de la Carrera</label>
-          <input type="text" id="nombre" required placeholder="Ej: Tec. Superior en Desarrollo de Software">
-        </div>
-
-        <div class="form-group">
-          <label for="descripcion">Descripción / Perfil</label>
-          <textarea id="descripcion" rows="3" placeholder="Resumen del campo ocupacional y objetivos..."></textarea>
-        </div>
-
-        <div class="form-row-grid">
-          <div class="form-group">
-            <label for="duracion">Duración</label>
-            <input type="text" id="duracion" placeholder="Ej: 3 años">
-          </div>
-          <div class="form-group">
-            <label for="titulo">Título</label>
-            <input type="text" id="titulo" placeholder="Ej: Técnico Sup.">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Plan de Estudio (PDF)</label>
-          <div class="file-dropzone">
-            <i class="fa-solid fa-cloud-arrow-up"></i>
-            <span>Arrastrá o hacé clic para subir</span>
-            <small>Formato PDF (máx. 15MB)</small>
-            <input type="file" id="pdfPlan" accept="application/pdf">
-          </div>
-          <div id="fileSelectedText" class="file-selected-name"></div>
-          <small id="pdfActualInfo" class="pdf-actual-info"></small>
-        </div>
-
-        <div class="form-actions">
-          <button type="submit" id="btnGuardar" class="btn-save">Guardar Carrera</button>
-          <button type="button" id="btnCancelar" class="btn-cancel">Cancelar</button>
-        </div>
-      </form>
-    </div>
-
-    <!-- Tabla de Carreras -->
-    <div class="card">
-      <h2><i class="fa-solid fa-list-check" style="color: var(--oferta-primary, #2563eb);"></i> Carreras Registradas</h2>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Carrera</th>
-              <th>Duración</th>
-              <th>Plan</th>
-              <th style="text-align: right;">Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="tablaCarreras">
-            <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Cargando carreras...</td></tr>
-          </tbody>
-        </table>
+  <main class="admin-main-content">
+    <div class="top-bar">
+      <div class="page-title">
+        <h1>Oferta Académica</h1>
+        <p>Gestión de carreras y actualización de planes de estudio institucionales.</p>
       </div>
     </div>
-  </div>
 
-  <!-- Librería CDN oficial de Supabase -->
+    <div class="admin-layout">
+      <!-- Formulario Crear/Editar -->
+      <div class="card">
+        <h2 id="formTitulo"><i class="fa-solid fa-plus-circle" style="color: var(--primary);"></i> Nueva Carrera</h2>
+        <form id="formCarrera">
+          <input type="hidden" id="carreraId">
+          <div class="form-group">
+            <label for="categoria">Área Vocacional / Categoría</label>
+            <select id="categoria" required>
+              <option value="" disabled selected>Seleccioná un área...</option>
+              <option value="salud">Salud</option>
+              <option value="tecnologia">Tecnología</option>
+              <option value="administracion">Administración y Comercio</option>
+              <option value="turismo">Turismo y Servicios</option>
+              <option value="diseno">Diseño e Indumentaria</option>
+              <option value="social">Social y Comunidad</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="nombre">Nombre de la Carrera</label>
+            <input type="text" id="nombre" required placeholder="Ej: Tec. Superior en Desarrollo de Software">
+          </div>
+
+          <div class="form-group">
+            <label for="descripcion">Descripción / Perfil</label>
+            <textarea id="descripcion" rows="3" placeholder="Resumen del campo ocupacional y objetivos..."></textarea>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label for="duracion">Duración</label>
+              <input type="text" id="duracion" placeholder="Ej: 3 años">
+            </div>
+            <div class="form-group">
+              <label for="titulo">Título</label>
+              <input type="text" id="titulo" placeholder="Ej: Técnico Sup.">
+            </div>
+          </div>
+
+          <!-- Logo / Ícono de la Carrera -->
+          <div class="form-group">
+            <label>Logo / Imagen Ilustrativa (Opcional)</label>
+            <div class="file-dropzone">
+              <i class="fa-solid fa-image"></i>
+              <span>Arrastrá o hacé clic para subir logo</span>
+              <small>Formatos: WEBP, PNG o JPG</small>
+              <input type="file" id="logoCarrera" accept="image/*">
+            </div>
+            <div id="fileSelectedLogoText" class="file-selected-name" style="margin-top: 6px; font-size: 0.8rem; color: var(--primary); font-weight: 600; display: none;"></div>
+            <small id="logoActualInfo" style="display:none; color: var(--primary); font-size: 0.8rem; margin-top: 6px;"></small>
+          </div>
+
+          <!-- Plan de Estudio PDF -->
+          <div class="form-group">
+            <label>Plan de Estudio (PDF)</label>
+            <div class="file-dropzone">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <span>Arrastrá o hacé clic para subir</span>
+              <small>Formato PDF (máx. 15MB)</small>
+              <input type="file" id="pdfPlan" accept="application/pdf">
+            </div>
+            <div id="fileSelectedPdfText" class="file-selected-name" style="margin-top: 6px; font-size: 0.8rem; color: var(--primary); font-weight: 600; display: none;"></div>
+            <small id="pdfActualInfo" style="display:none; color: var(--primary); font-size: 0.8rem; margin-top: 6px;"></small>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="btnGuardar" class="btn-save">Guardar Carrera</button>
+            <button type="button" id="btnCancelar" class="btn-cancel">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tabla de Carreras -->
+      <div class="card">
+        <h2><i class="fa-solid fa-list-check" style="color: var(--primary);"></i> Carreras Registradas</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Logo</th>
+                <th>Carrera</th>
+                <th>Duración</th>
+                <th>Plan</th>
+                <th style="text-align: right;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaCarreras">
+              <tr><td colspan="5" style="text-align: center; color: var(--text-muted);">Cargando carreras...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Cliente compartido de Supabase -->
   <script src="../assets/supabaseClient.js"></script>
-  <!-- Control centralizado de autenticación -->
   <script src="js/admin-auth.js"></script>
-  <!-- Lógica específica del módulo de oferta académica -->
+  <script src="js/sidebar.js"></script>
   <script src="js/oferta-management.js"></script>
 </body>
 </html>

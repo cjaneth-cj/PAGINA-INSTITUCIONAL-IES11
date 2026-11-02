@@ -1626,3 +1626,355 @@ tr:last-child td {
     grid-template-columns: 1fr;
   }
 }
+/* Layout general para todas las vistas admin */
+body {
+  display: flex !important;
+  min-height: 100vh;
+  margin: 0;
+  background-color: #f8fafc;
+  color: #0f172a;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Sidebar persistente */
+.admin-sidebar {
+  width: 270px;
+  background: #0f172a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  min-height: 100vh;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-brand {
+  padding: 28px 24px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-brand-icon {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.sidebar-nav-links {
+  list-style: none;
+  padding: 0 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sidebar-nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.sidebar-nav-links a:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f8fafc;
+  transform: translateX(4px);
+}
+
+/* Estado activo según la página actual */
+.sidebar-nav-links a.active {
+  background: rgba(59, 130, 246, 0.15) !important;
+  color: #60a5fa !important;
+  font-weight: 700 !important;
+}
+
+.sidebar-user-footer {
+  padding: 16px 20px;
+  margin: 16px;
+  background: #1e293b;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-btn-logout {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.sidebar-btn-logout:hover {
+  background: #ef4444;
+  color: white;
+}
+
+/* El contenido principal toma el resto de la pantalla */
+.admin-main-content, main {
+  flex: 1;
+  padding: 32px 40px;
+  overflow-y: auto;
+  max-width: calc(100vw - 270px);
+}
+/* 1. Eliminar cualquier margen exterior de la ventana */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  display: flex !important;
+  background-color: #f8fafc;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* 2. Fijar el sidebar al borde izquierdo exacto sin separación */
+.admin-sidebar {
+  width: 260px;
+  min-width: 260px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  left: 0;
+  margin: 0 !important;
+  border-radius: 0 !important; /* Quita esquinas redondeadas externas */
+  box-shadow: none !important;
+  background: #0f172a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* 3. Área de contenido principal bien alineada */
+.admin-main-content {
+  flex: 1;
+  padding: 32px 48px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+/* Variables y base */
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --border: #e2e8f0;
+  --surface: #ffffff;
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --radius: 14px;
+}
+
+/* Grilla en 2 columnas */
+.admin-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tarjetas blancas con sombra */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+}
+
+.card h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+}
+
+/* Formularios dentro de tarjetas */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="time"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  background: #fdfdfd;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+/* Dropzone de subida de archivos */
+.file-dropzone {
+  border: 2px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  background: #f8fafc;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.file-dropzone:hover {
+  border-color: var(--primary);
+  background: #f0f7ff;
+}
+
+.file-dropzone i {
+  font-size: 1.6rem;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.file-dropzone span {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.file-dropzone small {
+  color: #94a3b8;
+  font-size: 0.75rem;
+}
+
+.file-dropzone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Botones con estilo moderno */
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.btn-save {
+  flex: 1;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 11px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-save:hover {
+  background: var(--primary-hover);
+}
+
+.btn-cancel {
+  background: #f1f5f9;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  padding: 11px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Tablas */
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+th {
+  padding: 12px 14px;
+  font-weight: 700;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+td {
+  padding: 14px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.btn-action {
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-edit-tb { background: #fef3c7; color: #b45309; margin-right: 4px; }
+.btn-delete-tb { background: #fee2e2; color: #dc2626; }
