@@ -50,6 +50,7 @@ function initHeroCarousel() {
     const dots = heroSection.querySelectorAll(".dots-group .dot");
     const prevBtn = heroSection.querySelector(".arrow-btn[aria-label='Anterior']");
     const nextBtn = heroSection.querySelector(".arrow-btn[aria-label='Siguiente']");
+    const autoplayBtn = heroSection.querySelector(".carousel-autoplay-toggle");
 
     // Datos de cada slide
     const slides = [
@@ -72,6 +73,8 @@ function initHeroCarousel() {
 
     let currentIndex = 0;
     let autoPlayTimer = null;
+    let autoPlayPaused = false;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     function showSlide(index) {
         if (index < 0) {
@@ -99,6 +102,7 @@ function initHeroCarousel() {
 
         // Actualizar dots
         dots.forEach((dot, i) => {
+            dot.setAttribute("aria-pressed", String(i === currentIndex));
             if (i === currentIndex) {
                 dot.classList.add("active");
             } else {
@@ -107,8 +111,10 @@ function initHeroCarousel() {
         });
     }
 
-    function startAutoPlay() {
+    function startAutoPlay(force = false) {
         stopAutoPlay();
+        const userIsInteracting = heroSection.matches(":hover") || heroSection.contains(document.activeElement);
+        if (reducedMotion.matches || document.hidden || autoPlayPaused || (userIsInteracting && !force)) return;
         autoPlayTimer = setInterval(() => {
             showSlide(currentIndex + 1);
         }, 6000);
@@ -133,6 +139,18 @@ function initHeroCarousel() {
         });
     }
 
+    if (autoplayBtn) {
+        autoplayBtn.addEventListener("click", () => {
+            autoPlayPaused = !autoPlayPaused;
+            autoplayBtn.setAttribute("aria-pressed", String(autoPlayPaused));
+            autoplayBtn.setAttribute("aria-label", autoPlayPaused ? "Reanudar reproducción automática" : "Pausar reproducción automática");
+            const icon = autoplayBtn.querySelector(".material-symbols-outlined");
+            if (icon) icon.textContent = autoPlayPaused ? "play_arrow" : "pause";
+            if (autoPlayPaused) stopAutoPlay();
+            else startAutoPlay(true);
+        });
+    }
+
     // Eventos en los dots
     dots.forEach((dot, i) => {
         dot.addEventListener("click", () => {
@@ -144,6 +162,18 @@ function initHeroCarousel() {
     // Pausar autoplay al pasar el mouse por encima
     heroSection.addEventListener("mouseenter", stopAutoPlay);
     heroSection.addEventListener("mouseleave", startAutoPlay);
+    heroSection.addEventListener("focusin", stopAutoPlay);
+    heroSection.addEventListener("focusout", (event) => {
+        if (!heroSection.contains(event.relatedTarget)) startAutoPlay();
+    });
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) stopAutoPlay();
+        else startAutoPlay();
+    });
+    reducedMotion.addEventListener?.("change", () => {
+        if (reducedMotion.matches) stopAutoPlay();
+        else startAutoPlay();
+    });
 
     // Inicializar slide inicial
     showSlide(0);
@@ -380,6 +410,7 @@ function initMobileMenu() {
         if (menuIcon) {
             menuIcon.textContent = isOpen ? "close" : "menu";
         }
+        menuBtn.setAttribute("aria-expanded", String(isOpen));
 
         // Bloquear el scroll de la página si el menú está abierto
         document.body.style.overflow = isOpen ? "hidden" : "";
@@ -389,10 +420,18 @@ function initMobileMenu() {
         navBar.classList.remove("menu-open");
         if (overlay) overlay.classList.remove("active");
         if (menuIcon) menuIcon.textContent = "menu";
+        menuBtn.setAttribute("aria-expanded", "false");
         document.body.style.overflow = "";
     }
 
     menuBtn.addEventListener("click", toggleMenu);
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && navBar.classList.contains("menu-open")) {
+            closeMenu();
+            menuBtn.focus();
+        }
+    });
 
     if (overlay) {
         overlay.addEventListener("click", closeMenu);
@@ -419,7 +458,7 @@ function initContactForm() {
 
     if (!contactForm || !successMsg) return;
 
-    contactForm.addEventListener("submit", (e) => {
+    contactForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         // Efecto visual de envío
@@ -428,20 +467,39 @@ function initContactForm() {
             submitBtn.innerHTML = '<span class="material-symbols-outlined">hourglass_top</span> Enviando...';
         }
 
-        setTimeout(() => {
-            // Mostrar mensaje de éxito y resetear formulario
-            successMsg.style.display = "flex";
-            contactForm.reset();
+        successMsg.style.display = "none";
+        const originalButtonContent = '<span class="material-symbols-outlined">send</span> Enviar Consulta';
 
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<span class="material-symbols-outlined">send</span> Enviar Consulta';
+        try {
+            if (typeof supabaseClient === "undefined") {
+                throw new Error("El servicio de consultas no está disponible en este momento.");
             }
 
-            // Ocultar mensaje automáticamente a los 6 segundos
-            setTimeout(() => {
-                successMsg.style.display = "none";
-            }, 6000);
-        }, 600);
+            const formData = new FormData(contactForm);
+            const { error } = await supabaseClient.from("mensajes_contacto").insert({
+                nombre: String(formData.get("nombre") || "").trim(),
+                email: String(formData.get("email") || "").trim(),
+                asunto: String(formData.get("asunto") || "").trim(),
+                mensaje: String(formData.get("mensaje") || "").trim(),
+                leido: false
+            });
+            if (error) throw error;
+
+            successMsg.style.removeProperty("background-color");
+            successMsg.style.removeProperty("color");
+            successMsg.innerHTML = '<span class="material-symbols-outlined">check_circle</span><div><strong>¡Consulta enviada con éxito!</strong><p>Nos pondremos en contacto dentro de las 24 a 48 hs hábiles.</p></div>';
+            contactForm.reset();
+        } catch (error) {
+            console.error("Error al enviar la consulta:", error);
+            successMsg.innerHTML = '<span class="material-symbols-outlined">error</span><div><strong>No pudimos enviar tu consulta.</strong><p>Probá nuevamente más tarde o escribinos a contacto@ies11jujuy.edu.ar.</p></div>';
+            successMsg.style.backgroundColor = "#fef2f2";
+            successMsg.style.color = "#b91c1c";
+        } finally {
+            successMsg.style.display = "flex";
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalButtonContent || '<span class="material-symbols-outlined">send</span> Enviar Consulta';
+            }
+        }
     });
 }

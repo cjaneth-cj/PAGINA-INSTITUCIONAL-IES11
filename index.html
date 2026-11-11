@@ -13,6 +13,8 @@
 </head>
 <body class="page-body">
 
+<a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+
 <!-- ========================================== -->
 <!-- COMPONENTE REUTILIZABLE: HEADER            -->
 <!-- ========================================== -->
@@ -26,10 +28,10 @@
             </div>
         </div>
 
-        <div class="header-search">
+        <form class="header-search" role="search" action="oferta-academica.html" method="get">
             <span class="material-symbols-outlined search-icon">search</span>
-            <input type="text" placeholder="Buscar carreras, trámites, resoluciones..." class="search-input">
-        </div>
+            <input type="search" name="q" aria-label="Buscar carreras" placeholder="Buscar carreras..." class="search-input">
+        </form>
 
         <div class="header-actions">
             <div class="header-phone">
@@ -41,15 +43,15 @@
                 <span>Campus Moodle Superior</span>
             </a>
             <!-- Botón de Menú Hamburguesa para celulares -->
-            <button class="btn-menu-toggle" id="menuToggle" aria-label="Abrir menú de navegación">
+            <button class="btn-menu-toggle" id="menuToggle" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="site-navigation">
                 <span class="material-symbols-outlined" id="menuIcon">menu</span>
             </button>
         </div>
     </div>
 
-    <div class="header-nav-bar">
-       <nav class="nav-container">
-     <a href="index.html" class="nav-link active">Inicio</a>
+    <div class="header-nav-bar" id="site-navigation">
+       <nav class="nav-container" aria-label="Navegación principal">
+     <a href="index.html" class="nav-link active" aria-current="page">Inicio</a>
      <a href="autoridades.html" class="nav-link">Autoridades</a>
      <a href="oferta-academica.html" class="nav-link">Oferta Académica</a>
      <a href="estudiante.html" class="nav-link">Estudiante</a>
@@ -64,7 +66,7 @@
     <!-- ========================================== -->
     <!-- CONTENIDO PRINCIPAL: INDEX                 -->
     <!-- ========================================== -->
-    <main class="site-main">
+    <main class="site-main" id="main-content" tabindex="-1">
 
         <!-- 1. HERO CAROUSEL SECTION -->
         <section class="hero-carousel-section" id="hero-carousel">
@@ -108,6 +110,9 @@
                             </div>
                         </div>
                         <div class="arrow-buttons">
+                            <button aria-label="Pausar reproducción automática" aria-pressed="false" class="arrow-btn carousel-autoplay-toggle" type="button">
+                                <span class="material-symbols-outlined">pause</span>
+                            </button>
                             <button aria-label="Anterior" class="arrow-btn" type="button">
                                 <span class="material-symbols-outlined">arrow_back</span>
                             </button>
@@ -271,8 +276,8 @@
                 <p class="footer-description">Canales institucionales oficiales de comunicación:</p>
                 
                 <div class="footer-social-icons">
-                    <a href="#" aria-label="Facebook" class="social-icon-btn"><span class="material-symbols-outlined">public</span></a>
-                    <a href="#" aria-label="Instagram" class="social-icon-btn"><span class="material-symbols-outlined">photo_camera</span></a>
+                    <a href="https://www.facebook.com/profile.php?id=100066551990089&amp;locale=es_LA" aria-label="Facebook" class="social-icon-btn"><span class="material-symbols-outlined">public</span></a>
+                    <a href="https://www.instagram.com/ies11jujuy/" aria-label="Instagram" class="social-icon-btn"><span class="material-symbols-outlined">photo_camera</span></a>
                     <a href="#" aria-label="YouTube" class="social-icon-btn"><span class="material-symbols-outlined">smart_display</span></a>
                     <a href="#" aria-label="Compartir" class="social-icon-btn"><span class="material-symbols-outlined">share</span></a>
                 </div>

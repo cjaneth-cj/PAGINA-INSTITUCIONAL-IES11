@@ -13,6 +13,8 @@
 </head>
 <body class="page-body">
 
+<a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+
 <!-- ========================================== -->
 <!-- HEADER COMPLETO                            -->
 <!-- ========================================== -->
@@ -26,10 +28,10 @@
             </div>
         </div>
 
-        <div class="header-search">
+        <form class="header-search" role="search" action="oferta-academica.html" method="get">
             <span class="material-symbols-outlined search-icon">search</span>
-            <input type="text" placeholder="Buscar carreras, trámites, resoluciones..." class="search-input">
-        </div>
+            <input type="search" name="q" aria-label="Buscar carreras" placeholder="Buscar carreras..." class="search-input">
+        </form>
 
        <div class="header-actions">
             <div class="header-phone">
@@ -38,23 +40,23 @@
             </div>
             <a href="https://superior.jujuy.edu.ar/login/index.php" target="_blank" rel="noopener noreferrer" class="btn-campus">
                 <span class="material-symbols-outlined">school</span>
-                <span>Campus Moodel Superior</span>
+                <span>Campus Moodle Superior</span>
             </a>
             <!-- Botón de Menú Hamburguesa para celulares -->
-            <button class="btn-menu-toggle" id="menuToggle" aria-label="Abrir menú de navegación">
+            <button class="btn-menu-toggle" id="menuToggle" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="site-navigation">
                 <span class="material-symbols-outlined" id="menuIcon">menu</span>
             </button>
         </div>
     </div>
 
     <!-- Barra de Navegación con la nueva categoría activa -->
-    <div class="header-nav-bar">
-        <nav class="nav-container">
+    <div class="header-nav-bar" id="site-navigation">
+        <nav class="nav-container" aria-label="Navegación principal">
             <a href="index.html" class="nav-link">Inicio</a>
             <a href="autoridades.html" class="nav-link">Autoridades</a>
             <a href="oferta-academica.html" class="nav-link">Oferta Académica</a>
             <a href="estudiante.html" class="nav-link">Estudiante</a>
-            <a href="agenda.html" class="nav-link active">Agenda</a>
+            <a href="agenda.html" class="nav-link active" aria-current="page">Agenda</a>
             <a href="novedades.html" class="nav-link">Noticias</a>
             <a href="contacto.html" class="nav-link">Contacto</a>
         </nav>
@@ -65,7 +67,7 @@
 <!-- ========================================== -->
 <!-- CONTENIDO PRINCIPAL: AGENDA ACADÉMICA      -->
 <!-- ========================================== -->
-<main class="site-main">
+<main class="site-main" id="main-content" tabindex="-1">
 
     <!-- Hero de la Sección Agenda -->
     <section class="agenda-hero-section">
@@ -273,8 +275,8 @@
             <p class="footer-description">Canales institucionales oficiales de comunicación:</p>
             
             <div class="footer-social-icons">
-                <a href="#" aria-label="Facebook" class="social-icon-btn"><span class="material-symbols-outlined">public</span></a>
-                <a href="#" aria-label="Instagram" class="social-icon-btn"><span class="material-symbols-outlined">photo_camera</span></a>
+                <a href="https://www.facebook.com/profile.php?id=100066551990089&amp;locale=es_LA" aria-label="Facebook" class="social-icon-btn"><span class="material-symbols-outlined">public</span></a>
+                <a href="https://www.instagram.com/ies11jujuy/" aria-label="Instagram" class="social-icon-btn"><span class="material-symbols-outlined">photo_camera</span></a>
                 <a href="#" aria-label="YouTube" class="social-icon-btn"><span class="material-symbols-outlined">smart_display</span></a>
                 <a href="#" aria-label="Compartir" class="social-icon-btn"><span class="material-symbols-outlined">share</span></a>
             </div>
@@ -307,6 +309,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <!-- 2. Tu archivo con las credenciales -->
-<script src="../assets/supabaseClient.js"></script>
+<script src="assets/supabaseClient.js"></script>
 </body>
 </html>
