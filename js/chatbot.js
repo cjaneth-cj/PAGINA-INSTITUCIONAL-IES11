@@ -7,7 +7,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. CONFIGURACIÓN PRINCIPAL (Pega aquí tu API Key de Google AI Studio)
-    const GEMINI_API_KEY = 'AQ.Ab8RN6JrJ7lfyvQ12g4uZhvRRNNJA4T6XEvnoYgtC-aDod9zvA';
+    const GEMINI_API_KEY = '';
     const GEMINI_MODEL = 'gemini-3.8-flash';
 
     // 2. INYECTAR LA INTERFAZ HTML EN LA PÁGINA
