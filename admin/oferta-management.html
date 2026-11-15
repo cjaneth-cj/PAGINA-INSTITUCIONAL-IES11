@@ -68,6 +68,23 @@
             </div>
           </div>
 
+          <!-- OFE-04: Turno de cursado -->
+          <div class="form-group">
+            <label for="turno">Turno</label>
+            <select id="turno">
+              <option value="">A confirmar</option>
+              <option value="Mañana">Mañana</option>
+              <option value="Tarde">Tarde</option>
+              <option value="Vespertino / Noche">Vespertino / Noche</option>
+              <option value="Mañana y Tarde">Mañana y Tarde</option>
+              <option value="Tarde y Vespertino">Tarde y Vespertino</option>
+              <option value="Mañana, Tarde y Vespertino">Mañana, Tarde y Vespertino</option>
+            </select>
+            <small style="color: var(--text-muted); font-size: 0.78rem;">
+              Se muestra en la oferta académica pública como «Turno: …».
+            </small>
+          </div>
+
           <!-- Logo / Ícono de la Carrera -->
           <div class="form-group">
             <label>Logo / Imagen Ilustrativa (Opcional)</label>
@@ -111,12 +128,13 @@
                 <th>Logo</th>
                 <th>Carrera</th>
                 <th>Duración</th>
+                <th>Turno</th>
                 <th>Plan</th>
                 <th style="text-align: right;">Acciones</th>
               </tr>
             </thead>
             <tbody id="tablaCarreras">
-              <tr><td colspan="5" style="text-align: center; color: var(--text-muted);">Cargando carreras...</td></tr>
+              <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Cargando carreras...</td></tr>
             </tbody>
           </table>
         </div>

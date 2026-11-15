@@ -208,28 +208,17 @@
                                 <th>Estado</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <!-- EST-03: filas y estados generados por js/examenes.js -->
+                        <tbody id="tablaTurnosExamen">
                             <tr>
-                                <td><strong>Turno Febrero - Marzo</strong></td>
-                                <td>15 Feb - 08 Mar</td>
-                                <td>48 hs previas</td>
-                                <td><span class="badge-status">Concluido</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Turno Julio - Agosto</strong></td>
-                                <td>07 Jul - 28 Jul</td>
-                                <td>Habilitada en Sistema</td>
-                                <td><span class="badge-status open">Inscripciones Abiertas</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Turno Noviembre - Diciembre</strong></td>
-                                <td>20 Nov - 18 Dic</td>
-                                <td>Próximamente</td>
-                                <td><span class="badge-status">Programado</span></td>
+                                <td colspan="4" style="text-align: center; color: #64748b;">
+                                    Cargando turnos de examen...
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                <p id="notaEstadoExamenes" style="margin-top: 12px; font-size: 13px; color: #64748b;"></p>
             </section>
 
         </div>
@@ -302,8 +291,8 @@
                 <p class="footer-description">Canales institucionales oficiales de comunicación:</p>
                 
                 <div class="footer-social-icons">
-                    <a href="https://www.facebook.com/profile.php?id=100066551990089&amp;locale=es_LA" aria-label="Facebook" class="social-icon-btn"><span class="material-symbols-outlined">public</span></a>
-                    <a href="https://www.instagram.com/ies11jujuy/" aria-label="Instagram" class="social-icon-btn"><span class="material-symbols-outlined">photo_camera</span></a>
+                    <a href="https://www.facebook.com/profile.php?id=100066551990089&amp;locale=es_LA" aria-label="Facebook" target="_blank" rel="noopener noreferrer" class="social-icon-btn"><span class="material-symbols-outlined">public</span></a>
+                    <a href="https://www.instagram.com/ies11jujuy/" aria-label="Instagram" target="_blank" rel="noopener noreferrer" class="social-icon-btn"><span class="material-symbols-outlined">photo_camera</span></a>
                     <a href="#" aria-label="YouTube" class="social-icon-btn"><span class="material-symbols-outlined">smart_display</span></a>
                     <a href="#" aria-label="Compartir" class="social-icon-btn"><span class="material-symbols-outlined">share</span></a>
                 </div>
@@ -324,7 +313,7 @@
         <!-- Barra inferior de Copyright -->
         <div class="footer-bottom">
             <div class="footer-bottom-container">
-                <p>© 2025/2026 IES N° 11 Jujuy - Todos los derechos reservados.</p>
+                <p>© <span data-anio-actual>2026</span> IES N° 11 Jujuy - Todos los derechos reservados.</p>
                 <p>Ministerio de Educación de Jujuy • Dirección de Educación Superior</p>
             </div>
         </div>
@@ -333,6 +322,8 @@
 
     <!-- Enlace al archivo de JavaScript principal -->
     <script src="js/script.js"></script>
+    <!-- EST-03: estados dinámicos del calendario de exámenes -->
+    <script src="js/examenes.js"></script>
     <!-- 1. La librería oficial de Supabase desde CDN -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 

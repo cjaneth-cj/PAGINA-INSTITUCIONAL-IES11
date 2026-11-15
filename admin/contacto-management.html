@@ -18,9 +18,32 @@
     }
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .modal-close { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #64748b; }
-    .badge-status { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
+    .badge-status { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
     .badge-nuevo { background: #fee2e2; color: #dc2626; }
     .badge-leido { background: #f1f5f9; color: #64748b; }
+    /* DASH-02: estados del ciclo de atención */
+    .badge-pendiente { background: #fef3c7; color: #b45309; }
+    .badge-respondido { background: #dbeafe; color: #1d4ed8; }
+    .badge-finalizado { background: #dcfce7; color: #15803d; }
+    /* DASH-02: acciones nuevas del buzón */
+    .btn-mail { background: #dbeafe; color: #1d4ed8; margin-right: 4px; }
+    .btn-close-tb { background: #dcfce7; color: #15803d; margin-right: 4px; }
+    .btn-action:disabled, .modal-actions button:disabled {
+      opacity: 0.5; cursor: not-allowed;
+    }
+    .aviso-migracion {
+      background: #fffbeb; border: 1px solid #fcd34d; color: #92400e;
+      padding: 12px 16px; border-radius: 10px; font-size: 0.85rem;
+      margin-bottom: 20px; line-height: 1.45;
+    }
+    .modal-field { margin-top: 16px; }
+    .modal-field label { display: block; font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 6px; }
+    .modal-field select, .modal-field textarea {
+      width: 100%; padding: 9px 11px; border: 1px solid var(--border, #e2e8f0);
+      border-radius: 8px; font-size: 0.9rem; font-family: inherit; background: #fff;
+    }
+    .modal-actions { margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+    .modal-actions .btn-save, .modal-actions .btn-cancel { text-decoration: none; }
   </style>
 </head>
 <body>
@@ -33,8 +56,8 @@
       </div>
     </div>
 
-    <!-- Métricas del buzón requeridas por contacto-management.js -->
-    <div style="display: flex; gap: 16px; margin-bottom: 24px;">
+    <!-- DASH-02: métricas del ciclo de atención -->
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
       <div class="card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px;">
         <i class="fa-solid fa-inbox fa-2x" style="color: #2563eb;"></i>
         <div>
@@ -43,20 +66,49 @@
         </div>
       </div>
       <div class="card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px;">
-        <i class="fa-solid fa-envelope-open-text fa-2x" style="color: #dc2626;"></i>
+        <i class="fa-solid fa-envelope fa-2x" style="color: #dc2626;"></i>
         <div>
-          <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Sin Leer</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Nuevos</div>
           <div id="cantNuevos" style="font-size: 1.3rem; font-weight: 800; color: #dc2626;">-</div>
+        </div>
+      </div>
+      <div class="card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px;">
+        <i class="fa-solid fa-hourglass-half fa-2x" style="color: #b45309;"></i>
+        <div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Pendientes de respuesta</div>
+          <div id="cantPendientes" style="font-size: 1.3rem; font-weight: 800; color: #b45309;">-</div>
+        </div>
+      </div>
+      <div class="card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px;">
+        <i class="fa-solid fa-circle-check fa-2x" style="color: #15803d;"></i>
+        <div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Finalizadas</div>
+          <div id="cantFinalizados" style="font-size: 1.3rem; font-weight: 800; color: #15803d;">-</div>
         </div>
       </div>
     </div>
 
+    <!-- Se muestra solo si falta aplicar la migración de estados -->
+    <div id="avisoEstados" class="aviso-migracion" hidden></div>
+
     <div class="card" style="width: 100%;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h2><i class="fa-solid fa-inbox" style="color: #2563eb;"></i> Consultas Recibidas</h2>
-        <button id="btnActualizar" class="btn-cancel" style="display: inline-flex; align-items: center; gap: 8px;">
-          <i class="fa-solid fa-arrows-rotate"></i> Actualizar
-        </button>
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <label for="filtroEstado" style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">Filtrar:</label>
+          <select id="filtroEstado" style="padding: 8px 10px; border: 1px solid var(--border, #e2e8f0); border-radius: 8px; font-size: 0.85rem;">
+            <option value="">Todas</option>
+            <option value="Activas">Solo activas</option>
+            <option value="Nuevo">Nuevo</option>
+            <option value="Leído">Leído</option>
+            <option value="Pendiente de respuesta">Pendiente de respuesta</option>
+            <option value="Respondido">Respondido</option>
+            <option value="Finalizado">Finalizado</option>
+          </select>
+          <button id="btnActualizar" class="btn-cancel" style="display: inline-flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-arrows-rotate"></i> Actualizar
+          </button>
+        </div>
       </div>
 
       <div class="table-container">
@@ -68,28 +120,49 @@
               <th>Remitente</th>
               <th>Contacto</th>
               <th>Asunto</th>
+              <th>Responsable</th>
               <th style="text-align: right;">Acciones</th>
             </tr>
           </thead>
           <tbody id="tablaConsultas">
-            <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Cargando consultas...</td></tr>
+            <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Cargando consultas...</td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </main>
 
-  <!-- Modal para leer mensajes -->
+  <!-- DASH-02: detalle y seguimiento de la consulta -->
   <div id="modalMensaje" class="modal-overlay">
-    <div class="modal-card">
+    <div class="modal-card" style="max-width: 620px; max-height: 90vh; overflow-y: auto;">
       <div class="modal-header">
         <h3 id="modalAsunto" style="margin: 0; font-size: 1.15rem;">Detalle del Mensaje</h3>
-        <button id="btnCerrarModal" class="modal-close">&times;</button>
+        <button id="btnCerrarModal" class="modal-close" aria-label="Cerrar">&times;</button>
       </div>
       <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;" id="modalMeta"></div>
       <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 0.9rem; line-height: 1.5; white-space: pre-wrap;" id="modalCuerpo"></div>
-      <div style="margin-top: 20px; text-align: right;">
-        <button id="btnMarcarLeido" class="btn-save" style="padding: 8px 16px;">Entendido</button>
+
+      <div class="modal-field">
+        <label for="modalEstado">Estado de la consulta</label>
+        <select id="modalEstado"></select>
+      </div>
+
+      <div id="modalResponsable" style="margin-top: 10px; font-size: 0.82rem; color: var(--text-muted);">
+        Sin responsable asignado
+      </div>
+
+      <div class="modal-field">
+        <label for="modalRespuesta">Respuesta registrada en el buzón</label>
+        <textarea id="modalRespuesta" rows="4" placeholder="Escribí un resumen de la respuesta enviada al remitente..."></textarea>
+        <small style="display: block; margin-top: 6px; color: var(--text-muted); font-size: 0.75rem;">
+          El envío del correo se realiza con el botón «Abrir en correo». Acá queda el registro interno.
+        </small>
+      </div>
+
+      <div class="modal-actions">
+        <a id="btnAbrirCorreo" class="btn-cancel" href="#">Abrir en correo</a>
+        <button id="btnGuardarRespuesta" class="btn-save">Registrar respuesta</button>
+        <button id="btnFinalizar" class="btn-save" style="background: #16a34a;">Finalizar</button>
       </div>
     </div>
   </div>

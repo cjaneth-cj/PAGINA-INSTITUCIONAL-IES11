@@ -10,7 +10,23 @@ document.addEventListener("DOMContentLoaded", () => {
     initHeaderScroll();
     initHeroCarousel();
     initComboActions();
+    initAnioActual();
 });
+
+
+/**
+ * ==========================================================================
+ * INI-05 / INI-06: AÑO CALENDARIO DINÁMICO
+ * Actualiza cualquier elemento con [data-anio-actual] para no tener que
+ * editar el HTML cada 1 de enero (ciclo lectivo y copyright).
+ * ==========================================================================
+ */
+function initAnioActual() {
+    const anio = new Date().getFullYear();
+    document.querySelectorAll("[data-anio-actual]").forEach((el) => {
+        el.textContent = anio;
+    });
+}
 
 
 /**
