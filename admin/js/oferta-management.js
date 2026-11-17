@@ -6,6 +6,7 @@ const descripcionInput = document.getElementById('descripcion');
 const duracionInput = document.getElementById('duracion');
 const tituloInput = document.getElementById('titulo');
 const categoriaInput = document.getElementById('categoria'); // <-- Toma el selector de categoría
+const turnoInput = document.getElementById('turno'); // OFE-04
 const logoCarreraInput = document.getElementById('logoCarrera');
 const pdfPlanInput = document.getElementById('pdfPlan');
 const tablaCarreras = document.getElementById('tablaCarreras');
@@ -21,6 +22,22 @@ const pdfActualInfo = document.getElementById('pdfActualInfo');
 
 let urlLogoExistente = null;
 let urlPdfExistente = null;
+
+// OFE-04: la columna "turno" puede no existir todavía en Supabase.
+// Se detecta al iniciar para no romper el alta/edición de carreras.
+let columnaTurnoDisponible = false;
+
+(async function detectarColumnaTurno() {
+  try {
+    const { error } = await supabaseClient.from('carreras').select('turno').limit(1);
+    columnaTurnoDisponible = !error;
+    if (!columnaTurnoDisponible && turnoInput) {
+      turnoInput.title = 'Falta la columna "turno" en la tabla carreras. Ejecutá qa/sql/migracion-tickets.sql.';
+    }
+  } catch (e) {
+    columnaTurnoDisponible = false;
+  }
+})();
 
 // Aviso al seleccionar logo
 if (logoCarreraInput) {
@@ -52,12 +69,12 @@ async function cargarCarreras() {
     .order('created_at', { ascending: false });
 
   if (error) {
-    tablaCarreras.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">Error al cargar carreras.</td></tr>';
+    tablaCarreras.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Error al cargar carreras.</td></tr>';
     return;
   }
 
   if (!carreras || carreras.length === 0) {
-    tablaCarreras.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px;">No hay carreras registradas todavía.</td></tr>';
+    tablaCarreras.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 30px;">No hay carreras registradas todavía.</td></tr>';
     return;
   }
 
@@ -79,6 +96,7 @@ async function cargarCarreras() {
         ${c.categoria ? `<br><small style="color: var(--primary); text-transform: capitalize; font-weight: 600;">${c.categoria}</small>` : ''}
       </td>
       <td>${c.duracion || '-'}</td>
+      <td>${c.turno ? c.turno : '<span style="color:var(--text-muted); font-style:italic;">A confirmar</span>'}</td>
       <td>${enlacePdf}</td>
       <td style="text-align: right;">
         <button class="btn-action btn-edit-tb" onclick="prepararEdicion(${c.id})" title="Editar"><i class="fa-solid fa-pen"></i></button>
@@ -103,6 +121,7 @@ if (form) {
     const duracion = duracionInput ? duracionInput.value.trim() : '';
     const titulo_otorgado = tituloInput ? tituloInput.value.trim() : '';
     const categoria = categoriaInput ? categoriaInput.value : ''; // <-- Lee la categoría elegida
+    const turno = turnoInput ? turnoInput.value.trim() : ''; // OFE-04
     const archivoLogo = logoCarreraInput ? logoCarreraInput.files[0] : null;
     const archivoPdf = pdfPlanInput ? pdfPlanInput.files[0] : null;
 
@@ -161,20 +180,24 @@ if (form) {
       plan_estudio_url
     };
 
-    if (id) {
-      const { error } = await supabaseClient.from('carreras').update(datosCarrera).eq('id', id);
-      if (error) alert('Error al actualizar: ' + error.message);
-      else {
-        limpiarFormulario();
-        cargarCarreras();
-      }
+    // Solo se envía "turno" si la columna ya existe; así el formulario
+    // sigue funcionando en bases que todavía no aplicaron la migración.
+    if (columnaTurnoDisponible) {
+      datosCarrera.turno = turno || null;
+    }
+
+    const { error } = id
+      ? await supabaseClient.from('carreras').update(datosCarrera).eq('id', id)
+      : await supabaseClient.from('carreras').insert([datosCarrera]);
+
+    if (error) {
+      alert((id ? 'Error al actualizar: ' : 'Error al guardar: ') + error.message);
     } else {
-      const { error } = await supabaseClient.from('carreras').insert([datosCarrera]);
-      if (error) alert('Error al guardar: ' + error.message);
-      else {
-        limpiarFormulario();
-        cargarCarreras();
+      if (!columnaTurnoDisponible && turno) {
+        alert('La carrera se guardó, pero el turno no se almacenó porque falta la columna "turno" en la tabla carreras.\n\nEjecutá qa/sql/migracion-tickets.sql y volvé a intentar.');
       }
+      limpiarFormulario();
+      cargarCarreras();
     }
 
     btnGuardar.disabled = false;
@@ -193,6 +216,7 @@ window.prepararEdicion = async (id) => {
   if (duracionInput) duracionInput.value = c.duracion || '';
   if (tituloInput) tituloInput.value = c.titulo_otorgado || '';
   if (categoriaInput) categoriaInput.value = c.categoria || ''; // <-- Pone la categoría que ya tenía cargada
+  if (turnoInput) turnoInput.value = c.turno || ''; // OFE-04
   urlLogoExistente = c.logo_url;
   urlPdfExistente = c.plan_estudio_url;
 

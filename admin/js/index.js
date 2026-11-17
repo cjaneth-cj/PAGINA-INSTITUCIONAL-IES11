@@ -65,22 +65,45 @@ async function cargarMetricasDashboard() {
 
     const tablaRecientes = document.getElementById('tablaRecientes');
     if (tablaRecientes && !errUltimos) {
+      // DASH-02: refleja el estado real del ciclo de atención cuando existe.
+      const estilosEstado = {
+        'Nuevo': ['#fee2e2', '#b91c1c'],
+        'Leído': ['#f1f5f9', '#64748b'],
+        'Pendiente de respuesta': ['#fef3c7', '#b45309'],
+        'Respondido': ['#dbeafe', '#1d4ed8'],
+        'Finalizado': ['#dcfce7', '#15803d']
+      };
+
+      tablaRecientes.textContent = '';
+
       if (ultimosMensajes && ultimosMensajes.length > 0) {
-        tablaRecientes.innerHTML = '';
         ultimosMensajes.forEach(m => {
+          const estado = m.estado || (m.leido ? 'Leído' : 'Nuevo');
+          const [fondo, color] = estilosEstado[estado] || estilosEstado['Leído'];
           const fechaFormateada = new Date(m.created_at).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit' });
-          tablaRecientes.innerHTML += `
-            <tr>
-              <td><strong>${m.nombre}</strong></td>
-              <td>${m.asunto || 'Sin asunto'}</td>
-              <td style="color: var(--text-muted);">${fechaFormateada}</td>
-              <td>
-                <span style="font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; background: ${m.leido ? '#f1f5f9' : '#fee2e2'}; color: ${m.leido ? '#64748b' : '#b91c1c'}; font-weight: 700;">
-                  ${m.leido ? 'Leído' : 'Nuevo'}
-                </span>
-              </td>
-            </tr>
-          `;
+
+          const fila = document.createElement('tr');
+
+          const tdNombre = document.createElement('td');
+          const nombre = document.createElement('strong');
+          nombre.textContent = m.nombre || 'Anónimo';
+          tdNombre.appendChild(nombre);
+
+          const tdAsunto = document.createElement('td');
+          tdAsunto.textContent = m.asunto || 'Sin asunto';
+
+          const tdFecha = document.createElement('td');
+          tdFecha.style.color = 'var(--text-muted)';
+          tdFecha.textContent = fechaFormateada;
+
+          const tdEstado = document.createElement('td');
+          const badge = document.createElement('span');
+          badge.style.cssText = `font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; font-weight: 700; background: ${fondo}; color: ${color};`;
+          badge.textContent = estado;
+          tdEstado.appendChild(badge);
+
+          fila.append(tdNombre, tdAsunto, tdFecha, tdEstado);
+          tablaRecientes.appendChild(fila);
         });
       } else {
         tablaRecientes.innerHTML = '<tr><td colspan="4" style="color: var(--text-muted); text-align: center;">No hay mensajes registrados aún.</td></tr>';

@@ -485,11 +485,13 @@ body.page-body {
 }
 
 /* 2. Sección Métricas Flotantes */
+/* INI-01: se elimina el solapamiento negativo con el hero; las tarjetas
+   quedan separadas por un margen vertical propio. */
 .metrics-overlap-section {
   position: relative;
   z-index: 30;
   max-width: 1280px;
-  margin: -40px auto 0 auto;
+  margin: 40px auto 0 auto;
   padding: 0 24px;
 }
 
@@ -550,6 +552,16 @@ body.page-body {
   padding: 96px 24px;
   max-width: 1280px;
   margin: 0 auto;
+  /* INI-02: al navegar con "Conocé el instituto" (#quienes-somos) se deja
+     aire suficiente debajo del header fijo (80px en móvil, 128px con la
+     barra de navegación visible). */
+  scroll-margin-top: 160px;
+}
+
+@media (max-width: 850px) {
+  .about-section {
+    scroll-margin-top: 110px;
+  }
 }
 
 .about-grid {
@@ -1440,6 +1452,17 @@ body.page-body {
   color: var(--primary);
 }
 
+/* EST-03: estados calculados dinámicamente */
+.badge-status.closed {
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+.badge-status.scheduled {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
 /* ========================================================================== */
 /* 09. SECCIÓN: OFERTA ACADÉMICA (COMPLETA)                                  */
 /* ========================================================================== */
@@ -1560,12 +1583,27 @@ body.page-body {
   padding: 40px 24px 80px 24px;
 }
 
-/* Evita que una tarjeta sola se estire a lo ancho de toda la pantalla */
+/* OFE-01: grilla de carreras centrada. Se usa flex para que las filas
+   incompletas también queden centradas y el conjunto no se vea desplazado
+   hacia la izquierda. */
 .careers-grid {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 380px)) !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
     gap: 28px !important;
-    justify-content: start !important; /* O 'center' si preferís que quede centrada */
+    justify-content: center !important;
+}
+
+.careers-grid > .career-card {
+    flex: 0 1 380px;
+}
+
+/* Mensajes de "cargando" / "sin carreras" a todo el ancho de la grilla */
+.careers-grid-full {
+    flex: 1 1 100% !important;
+    max-width: none !important;
+    text-align: center;
+    color: #64748b;
+    padding: 40px 0;
 }
 
 .career-card {

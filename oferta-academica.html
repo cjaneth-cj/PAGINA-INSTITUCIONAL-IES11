@@ -39,17 +39,8 @@
     <!-- Estilos Externos -->
     <link rel="stylesheet" href="css/styles.css">
     <style>
-        /* Ajuste para que las tarjetas mantengan su tamaño compacto proporcional */
-        .careers-grid {
-            display: grid !important;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 380px)) !important;
-            gap: 28px !important;
-            justify-content: start !important;
-        }
-        .career-card {
-            max-width: 380px !important;
-            width: 100% !important;
-        }
+        /* Las reglas de .careers-grid y .career-card viven en css/styles.css.
+           Acá solo quedan ajustes propios de esta página. */
         .career-logo-box img {
             max-height: 140px;
             max-width: 85%;
@@ -166,7 +157,7 @@
         <section class="careers-section">
             <div class="academic-container">
                 <div class="careers-grid" id="courses-grid">
-                    <div style="grid-column: 1 / -1; text-align: center; color: #64748b; padding: 40px 0;">
+                    <div class="careers-grid-full">
                         <span class="material-symbols-outlined" style="font-size: 2.5rem; animation: spin 1s linear infinite;">sync</span>
                         <p style="margin-top: 10px; font-weight: 500;">Cargando carreras...</p>
                     </div>
@@ -239,8 +230,8 @@
                 <p class="footer-description">Canales institucionales oficiales de comunicación:</p>
                 
                 <div class="footer-social-icons">
-                    <a href="https://www.facebook.com/profile.php?id=100066551990089&amp;locale=es_LA" aria-label="Facebook" class="social-icon-btn"><span class="material-symbols-outlined">public</span></a>
-                    <a href="https://www.instagram.com/ies11jujuy/" aria-label="Instagram" class="social-icon-btn"><span class="material-symbols-outlined">photo_camera</span></a>
+                    <a href="https://www.facebook.com/profile.php?id=100066551990089&amp;locale=es_LA" aria-label="Facebook" target="_blank" rel="noopener noreferrer" class="social-icon-btn"><span class="material-symbols-outlined">public</span></a>
+                    <a href="https://www.instagram.com/ies11jujuy/" aria-label="Instagram" target="_blank" rel="noopener noreferrer" class="social-icon-btn"><span class="material-symbols-outlined">photo_camera</span></a>
                     <a href="#" aria-label="YouTube" class="social-icon-btn"><span class="material-symbols-outlined">smart_display</span></a>
                     <a href="#" aria-label="Compartir" class="social-icon-btn"><span class="material-symbols-outlined">share</span></a>
                 </div>
@@ -257,7 +248,7 @@
         
         <div class="footer-bottom">
             <div class="footer-bottom-container">
-                <p>© <span id="currentYear">2026</span> IES N° 11 Jujuy - Todos los derechos reservados.</p>
+                <p>© <span data-anio-actual>2026</span> IES N° 11 Jujuy - Todos los derechos reservados.</p>
                 <p>Ministerio de Educación de Jujuy • Dirección de Educación Superior</p>
             </div>
         </div>
@@ -303,7 +294,7 @@
           if (error) throw error;
 
           if (!carreras || carreras.length === 0) {
-            grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #64748b; padding: 40px 0;"><p>No hay carreras publicadas por el momento.</p></div>';
+            grid.innerHTML = '<div class="careers-grid-full"><p>No hay carreras publicadas por el momento.</p></div>';
             return;
           }
 
@@ -321,6 +312,10 @@
               ? `<a href="${c.plan_estudio_url}" target="_blank" rel="noopener noreferrer" class="btn-outline">Plan de Estudio</a>`
               : `<a href="#" class="btn-outline" style="opacity: 0.5; pointer-events: none;">Sin Plan</a>`;
 
+            // OFE-04: "Modalidad" (siempre Presencial) se reemplaza por "Turno".
+            // Si la institución todavía no cargó el turno, se informa "A confirmar".
+            const turno = (c.turno || '').toString().trim() || 'A confirmar';
+
             const card = document.createElement('article');
             card.className = 'career-card';
             card.dataset.category = catClave;
@@ -336,7 +331,7 @@
                 <ul class="career-specs">
                   <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> ${c.duracion || '3 años'}</li>
                   <li><span class="material-symbols-outlined">schedule</span> <strong>Título:</strong> ${c.titulo_otorgado || 'Técnico Superior'}</li>
-                  <li><span class="material-symbols-outlined">school</span> <strong>Modalidad:</strong> Presencial</li>
+                  <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> ${turno}</li>
                 </ul>
                 <div class="career-actions">
                   ${btnPlan}

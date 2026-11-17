@@ -11,9 +11,24 @@ document.addEventListener("DOMContentLoaded", () => {
     initHeroCarousel();
     initComboActions();
     initMetrics();
-    initCurrentYear();
+    initAnioActual();
     initIconosDecorativos();
 });
+
+
+/**
+ * ==========================================================================
+ * INI-05 / INI-06: AÑO CALENDARIO DINÁMICO
+ * Actualiza cualquier elemento con [data-anio-actual] para no tener que
+ * editar el HTML cada 1 de enero (ciclo lectivo y copyright).
+ * ==========================================================================
+ */
+function initAnioActual() {
+    const anio = new Date().getFullYear();
+    document.querySelectorAll("[data-anio-actual]").forEach((el) => {
+        el.textContent = anio;
+    });
+}
 
 
 /**
@@ -578,17 +593,6 @@ function initContactForm() {
                 submitBtn.innerHTML = originalButtonContent || '<span class="material-symbols-outlined">send</span> Enviar Consulta';
             }
         }
-    });
-}
-/**
- * ==========================================================================
- * AÑO DE COPYRIGHT
- * Evita que el pie de página quede con un año vencido el 1 de enero.
- * ==========================================================================
- */
-function initCurrentYear() {
-    document.querySelectorAll("#currentYear").forEach((el) => {
-        el.textContent = new Date().getFullYear();
     });
 }
 /**
