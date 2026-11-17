@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <form class="ies-chat-input-area" id="iesChatForm">
-                <input type="text" class="ies-chat-input" id="iesChatInput" placeholder="Escribí tu consulta..." autocomplete="off" required>
+                <input type="text" class="ies-chat-input" id="iesChatInput" placeholder="Escribí tu consulta..." aria-label="Escribí tu consulta para el asistente" autocomplete="off" required>
                 <button type="submit" class="ies-chat-send" id="iesChatSend" aria-label="Enviar mensaje">
                     <span class="material-symbols-outlined">send</span>
                 </button>

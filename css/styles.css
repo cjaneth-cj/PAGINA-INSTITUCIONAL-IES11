@@ -2,14 +2,34 @@
 /* 01. ESTILOS GLOBALES Y CONFIGURACIÓN BASE                                  */
 /* ========================================================================== */
 :root {
+  /* --- Colores base de marca --- */
   --primary: #061021;
   --primary-container: #1b2537;
   --secondary: #00658d;
   --secondary-container: #41befd;
+
+  /* --- Superficies, de la más clara a la más contrastada --- */
   --surface: #f7f9fb;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f2f4f6;
+  --surface-container: #eceef0;
+  --surface-container-high: #e6e8ea;
+
+  /* --- Texto e iconografía --- */
   --on-surface: #191c1e;
   --on-surface-variant: #45474c;
-  --surface-container-lowest: #ffffff;
+  --on-primary: #ffffff;
+  --on-primary-container: #a9b2c4;
+  --on-secondary: #ffffff;
+  --on-secondary-container: #004b69;
+  --outline: #5f6166; 
+
+  /* --- Acentos fijos (sobre fondos oscuros) --- */
+  --secondary-fixed: #c6e7ff;
+  --secondary-fixed-dim: #81cfff;
+
+  /* --- Tipografía --- */
+  --font-headline-sm: 'Outfit', sans-serif;
 }
 
 /* Accesibilidad: mantener el estilo del sitio y hacer visibles los controles al usar teclado. */
@@ -279,7 +299,7 @@ body.page-body {
 .hero-slide-container {
   position: relative;
   width: 100%;
-  min-height: 640px;
+  min-height: 680px;
   display: flex;
   align-items: center;
 }
@@ -393,7 +413,7 @@ body.page-body {
 /* Capa de Controles del Carrusel */
 .hero-controls-layer {
   position: absolute;
-  bottom: 24px;
+  bottom: 64px;
   left: 0;
   right: 0;
   z-index: 20;
@@ -589,7 +609,7 @@ body.page-body {
   font-weight: bold;
 }
 
-.bullet-item h4 {
+.bullet-item h3 {
   font-size: 15px;
   color: var(--primary);
   margin-bottom: 4px;
@@ -2476,3 +2496,269 @@ body.page-body {
     align-items: center;
   }
 }
+/* ========================================================================== */
+/* HERO DINÁMICO                                                              */
+/* ========================================================================== */
+
+/* --- Fundido completo entre slides (antes bajaba solo a 0.4 y se notaba) --- */
+.hero-bg-image {
+  transition: opacity 0.45s ease-in-out;
+  transform-origin: center;
+}
+
+/* --- Zoom lento Ken Burns: el fondo respira mientras se lee el texto --- */
+.hero-bg-image.kenburns {
+  animation: heroKenBurns 7.5s ease-out forwards;
+}
+
+@keyframes heroKenBurns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.07); }
+}
+
+/* --- El texto entra escalonado en cada cambio de slide --- */
+.hero-text-box.slide-in .hero-main-title {
+  animation: heroTextUp 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.hero-text-box.slide-in .hero-subtitle {
+  animation: heroTextUp 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) 0.08s both;
+}
+
+@keyframes heroTextUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* --- Barra de progreso dentro del punto activo --- */
+/* Los 6s tienen que coincidir con el setInterval de startAutoPlay() */
+.dots-group .dot {
+  position: relative;
+  overflow: hidden;
+}
+
+.dots-group .dot.active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  background-color: rgba(255, 255, 255, 0.85);
+  animation: dotProgress 6s linear forwards;
+}
+
+@keyframes dotProgress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* La barra se frena junto con el autoplay */
+#hero-carousel.autoplay-paused .dots-group .dot.active::after {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dots-group .dot.active::after { animation: none; transform: scaleX(1); }
+}
+/* ========================================================================== */
+/* MÉTRICAS DINÁMICAS                                                         */
+/* ========================================================================== */
+
+/* Entrada escalonada: cada tarjeta entra 110ms después de la anterior */
+.metrics-animated .metric-card {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.6s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition-delay: calc(var(--orden, 0) * 110ms);
+}
+
+.metrics-animated.is-visible .metric-card {
+  opacity: 1;
+  transform: none;
+}
+
+/* Evita que el número "salte" de ancho mientras cuenta */
+.metric-number {
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(6, 16, 33, 0.16);
+}
+
+.metric-icon-box {
+  transition: transform 0.25s ease, background-color 0.25s ease;
+}
+
+.metric-card:hover .metric-icon-box {
+  transform: scale(1.08) rotate(-4deg);
+  background-color: var(--secondary-container, #41befd);
+}
+
+/* ========================================================================== */
+/* A2 — HEADER Y GRILLAS EN PANTALLAS CHICAS                                  */
+/* ========================================================================== */
+
+/* El panel lateral usaba right:-100%, que depende del ancho de la ventana y
+   sumaba scroll horizontal en pantallas angostas. Con un valor fijo mayor
+   que su ancho (280px) queda siempre fuera de cuadro. */
+@media (max-width: 850px) {
+  .header-nav-bar { right: -300px; }
+}
+
+/* Debajo de 560px el buscador ya quedaba reducido a 56px: ocupa lugar y no
+   se puede usar. Al ocultarlo, el nombre del instituto entra en una línea. */
+@media (max-width: 560px) {
+  .header-container { padding: 0 16px; gap: 12px; }
+  .header-search { display: none; }
+  .header-brand { gap: 10px; min-width: 0; }
+  .brand-logo { width: 40px; height: 40px; }
+  .brand-texts { min-width: 0; }
+  .brand-title { font-size: 16px; white-space: nowrap; }
+  .brand-subtitle { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .header-actions { gap: 8px; flex-shrink: 0; }
+}
+
+/* Las grillas piden columnas de 260 a 320px; a 320px de pantalla quedan 272px
+   útiles. minmax(0, 1fr) permite que la columna baje de su min-content, que
+   es lo que 1fr por sí solo no hace. */
+@media (max-width: 400px) {
+  .metrics-grid,
+  .mission-grid,
+  .board-grid,
+  .coord-grid,
+  .cards-grid-3,
+  .cards-grid-4,
+  .news-metrics-grid,
+  .news-cards-grid,
+  .contact-layout { grid-template-columns: minmax(0, 1fr) !important; }
+
+  /* oferta-academica.html tiene un <style> propio en el <head> que redeclara
+     .careers-grid con !important; se necesita más especificidad para ganarle. */
+  .academic-container .careers-grid { grid-template-columns: minmax(0, 1fr) !important; }
+}
+
+@media (max-width: 360px) {
+  .brand-title { font-size: 15px; }
+  .brand-subtitle { display: none; }
+}
+/* ========================================================================== */
+/* B3 — FONDO DEL HERO Y PANEL INSTITUCIONAL                                  */
+/* El lenguaje visual sale del logo: anillos concéntricos en cian sobre navy. */
+/* Para volver a una fotografía más adelante: cargarla en assets/images/,     */
+/* poner su ruta en el array "slides" de js/script.js y quitar la clase       */
+/* .hero-bg-rings del div #carousel-bg en index.html.                         */
+/* ========================================================================== */
+.hero-bg-rings {
+  background-color: #061021;
+  background-image:
+    /* anillos concéntricos: el mismo motivo del logo */
+    repeating-radial-gradient(circle at 76% 50%, rgba(129, 207, 255, 0.16) 0 2px, rgba(0, 0, 0, 0) 2px 78px),
+    /* halo de luz en el centro de los anillos */
+    radial-gradient(circle at 76% 50%, rgba(65, 190, 253, 0.30) 0%, rgba(65, 190, 253, 0) 40%),
+    /* forma azul difusa arriba a la izquierda, como en el logo */
+    radial-gradient(circle at 6% 10%, rgba(66, 133, 212, 0.34) 0%, rgba(66, 133, 212, 0) 46%),
+    linear-gradient(140deg, #061021 0%, #101f38 60%, #1b2537 100%);
+}
+
+/* El velo estaba calibrado para oscurecer una foto. Sin foto hay que
+   aclararlo o el diseño no se ve; el texto vive sobre la mitad izquierda,
+   que es donde el velo sigue siendo opaco. */
+.hero-bg-rings + .hero-overlay {
+  background: linear-gradient(90deg, rgba(6, 16, 33, 0.80) 0%, rgba(6, 16, 33, 0.42) 48%, rgba(6, 16, 33, 0.06) 100%);
+}
+
+@media (max-width: 640px) {
+  .hero-bg-rings {
+    background-image:
+      repeating-radial-gradient(circle at 50% 78%, rgba(129, 207, 255, 0.14) 0 2px, rgba(0, 0, 0, 0) 2px 58px),
+      radial-gradient(circle at 50% 78%, rgba(65, 190, 253, 0.26) 0%, rgba(65, 190, 253, 0) 42%),
+      linear-gradient(160deg, #061021 0%, #101f38 60%, #1b2537 100%);
+  }
+  .hero-bg-rings + .hero-overlay {
+    background: linear-gradient(180deg, rgba(6, 16, 33, 0.45) 0%, rgba(6, 16, 33, 0.72) 55%, rgba(6, 16, 33, 0.88) 100%);
+  }
+}
+
+/* --- Panel de datos institucionales (reemplaza la foto de "¿Quiénes Somos?") --- */
+.facts-panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  padding: 36px 32px;
+  background-color: #061021;
+  background-image:
+    repeating-radial-gradient(circle at 84% 22%, rgba(129, 207, 255, 0.14) 0 2px, rgba(0, 0, 0, 0) 2px 64px),
+    radial-gradient(circle at 84% 22%, rgba(65, 190, 253, 0.26) 0%, rgba(65, 190, 253, 0) 42%),
+    linear-gradient(145deg, #061021 0%, #101f38 60%, #1b2537 100%);
+  box-shadow: 0 18px 40px rgba(6, 16, 33, 0.22);
+}
+
+.facts-panel h3 {
+  font-family: var(--font-headline-sm);
+  font-size: 18px;
+  color: #ffffff;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.facts-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.fact {
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.fact:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.fact dt {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #81cfff;
+  margin-bottom: 4px;
+}
+
+.fact dd {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #e8edf5;
+}
+
+@media (max-width: 640px) {
+  .facts-panel { padding: 28px 22px; }
+}
+
+/* --- Tipografía del hero en celular (no estaba cubierta por A2) --- */
+@media (max-width: 640px) {
+  .hero-slide-container { min-height: 560px; }
+  /* El padding inferior deja libre la franja de los controles del carrusel,
+     que ocupan desde bottom:56px hasta bottom:100px. */
+  .hero-content-wrapper { padding: 48px 20px 116px 20px; }
+  .hero-badge { font-size: 11.5px; padding: 6px 12px; margin-bottom: 16px; line-height: 1.35; }
+  .hero-main-title { font-size: 30px; line-height: 1.2; }
+  .hero-subtitle { font-size: 15.5px; margin-bottom: 24px; }
+  .hero-buttons { flex-direction: column; align-items: stretch; gap: 12px; }
+  .btn-primary-hero,
+  .btn-outline-hero { justify-content: center; padding: 14px 20px; }
+  .hero-controls-layer { bottom: 56px; }
+  .slide-counter { display: none; }
+  .metrics-overlap-section { margin-top: -24px; }
+}
+
+@media (max-width: 380px) {
+  .hero-main-title { font-size: 26px; }
+}
+.contact-form-box h2 { font-size: 1.17em; }

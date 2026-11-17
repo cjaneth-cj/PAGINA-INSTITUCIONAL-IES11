@@ -10,6 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
     initHeaderScroll();
     initHeroCarousel();
     initComboActions();
+    initMetrics();
+    initCurrentYear();
+    initIconosDecorativos();
 });
 
 
@@ -51,26 +54,31 @@ function initHeroCarousel() {
     const prevBtn = heroSection.querySelector(".arrow-btn[aria-label='Anterior']");
     const nextBtn = heroSection.querySelector(".arrow-btn[aria-label='Siguiente']");
     const autoplayBtn = heroSection.querySelector(".carousel-autoplay-toggle");
+    const textBox = heroSection.querySelector(".hero-text-box");
 
     // Datos de cada slide
+    // Sin imagen: el hero usa el fondo diseñado por CSS (.hero-bg-rings).
+    // Para volver a fotos, poner la ruta en "image" (ej. "assets/images/hero-1.jpg")
+    // y quitar la clase .hero-bg-rings del div #carousel-bg en index.html.
     const slides = [
         {
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBq83VI5Oy4eKxIVLx_sP3XFxT7dV07-Xh7oQFw56ItZrYhtvMrrIOcAvSmAJIawjr7pWO8vPYKwAzqQBI-yDHrq60_U21UCjGxcthfAtFXucec5QtqSltZflCJY9gDhLZueI3qJDUDW2KNMjlyjGVFb9IYmG41FSCVodYxsXzDigCWVxoRcFuh0Ggr042qBLSR8cgmilcXL8gvRhDYxh4iDrWB8WPtkN0MXHxc2cQjXvzuQ4LgKd6_Ig",
+            image: "",
             title: "Construí tu Futuro Profesional en Jujuy",
             subtitle: "Formación técnica y docente con excelencia académica, compromiso social y salida laboral orientada al desarrollo productivo y cultural regional."
         },
         {
-            image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=1400",
+            image: "",
             title: "Títulos Oficiales con Validez Nacional",
-            subtitle: "Más de 15 tecnicaturas superiores y profesorados pensados para responder a las demandas laborales del NOA."
+            subtitle: "Tecnicaturas superiores y profesorados pensados para responder a las demandas laborales del NOA."
         },
         {
-            image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1400",
+            image: "",
             title: "Educación Pública, Gratuita y de Calidad",
-            subtitle: "Prácticas profesionalizantes en laboratorios propios, convenios hospitalarios y vinculación directa con el sector productivo."
+            subtitle: "Prácticas profesionalizantes, vinculación con el sector productivo y acompañamiento académico durante toda la cursada."
         }
     ];
-
+        // Precarga: evita el parpadeo en blanco al cambiar de slide
+    slides.forEach((s) => { const img = new Image(); img.src = s.image; });
     let currentIndex = 0;
     let autoPlayTimer = null;
     let autoPlayPaused = false;
@@ -88,12 +96,25 @@ function initHeroCarousel() {
         const currentSlide = slides[currentIndex];
 
         // Efecto visual suave de transición
-        if (bgImage) {
-            bgImage.style.opacity = "0.4";
+        // Fundido completo + reinicio del zoom Ken Burns
+        if (bgImage && currentSlide.image) {
+            bgImage.classList.remove("hero-bg-rings");
+            bgImage.style.opacity = "0";
+            bgImage.classList.remove("kenburns");
             setTimeout(() => {
                 bgImage.style.backgroundImage = `url('${currentSlide.image}')`;
                 bgImage.style.opacity = "1";
-            }, 200);
+                if (!reducedMotion.matches) {
+                    void bgImage.offsetWidth;   // fuerza el reinicio de la animación
+                    bgImage.classList.add("kenburns");
+                }
+            }, 450);
+        }
+
+        if (textBox && !reducedMotion.matches) {
+            textBox.classList.remove("slide-in");
+            void textBox.offsetWidth;
+            textBox.classList.add("slide-in");
         }
 
         if (titleElement) titleElement.textContent = currentSlide.title;
@@ -118,10 +139,13 @@ function initHeroCarousel() {
         autoPlayTimer = setInterval(() => {
             showSlide(currentIndex + 1);
         }, 6000);
+        heroSection.classList.remove("autoplay-paused");
     }
 
     function stopAutoPlay() {
         if (autoPlayTimer) clearInterval(autoPlayTimer);
+        autoPlayTimer = null;
+        heroSection.classList.add("autoplay-paused");
     }
 
     // Eventos en botones flecha
@@ -197,6 +221,59 @@ function initComboActions() {
             alert(`Pronto descargaremos el plan de estudio oficial para: ${careerName}`);
         });
     });
+}
+/**
+ * ==========================================================================
+ * MÉTRICAS: contador animado + entrada escalonada
+ * ==========================================================================
+ */
+function initMetrics() {
+    const seccion = document.querySelector(".metrics-overlap-section");
+    if (!seccion) return;
+
+    const tarjetas = seccion.querySelectorAll(".metric-card");
+    const numeros  = seccion.querySelectorAll(".metric-number");
+    if (!tarjetas.length) return;
+
+    const sinMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (sinMovimiento || !("IntersectionObserver" in window)) return;
+
+    seccion.classList.add("metrics-animated");
+    tarjetas.forEach((t, i) => t.style.setProperty("--orden", i));
+
+    function contar(el) {
+        const textoOriginal = el.textContent.trim();
+        const m = textoOriginal.match(/^(\D*)([\d.,]+)(\D*)$/);
+        if (!m) return;
+
+        const [, prefijo, crudo, sufijo] = m;
+        const objetivo = parseInt(crudo.replace(/[.,]/g, ""), 10);
+        if (!Number.isFinite(objetivo) || objetivo <= 0) return;
+
+        const duracion = 1400;
+        const inicio = performance.now();
+
+        function paso(ahora) {
+            const t = Math.min((ahora - inicio) / duracion, 1);
+            const suave = 1 - Math.pow(1 - t, 3);   // easeOutCubic
+            el.textContent = prefijo + Math.round(objetivo * suave).toLocaleString("es-AR") + sufijo;
+            if (t < 1) requestAnimationFrame(paso);
+            else el.textContent = textoOriginal;    // restituye el formato exacto
+        }
+
+        requestAnimationFrame(paso);
+    }
+
+    const obs = new IntersectionObserver((entradas) => {
+        entradas.forEach((e) => {
+            if (!e.isIntersecting) return;
+            seccion.classList.add("is-visible");
+            numeros.forEach(contar);
+            obs.disconnect();   // se anima una sola vez
+        });
+    }, { threshold: 0.35 });
+
+    obs.observe(seccion);
 }
 
 /**
@@ -471,7 +548,7 @@ function initContactForm() {
         const originalButtonContent = '<span class="material-symbols-outlined">send</span> Enviar Consulta';
 
         try {
-            if (typeof supabaseClient === "undefined") {
+            if (typeof supabaseClient === "undefined" || !supabaseClient) {
                 throw new Error("El servicio de consultas no está disponible en este momento.");
             }
 
@@ -502,4 +579,51 @@ function initContactForm() {
             }
         }
     });
+}
+/**
+ * ==========================================================================
+ * AÑO DE COPYRIGHT
+ * Evita que el pie de página quede con un año vencido el 1 de enero.
+ * ==========================================================================
+ */
+function initCurrentYear() {
+    document.querySelectorAll("#currentYear").forEach((el) => {
+        el.textContent = new Date().getFullYear();
+    });
+}
+/**
+ * ==========================================================================
+ * ICONOS DECORATIVOS
+ * Material Symbols dibuja los íconos con ligaduras: el texto del elemento es
+ * literalmente "search" o "arrow_forward". Sin aria-hidden, un lector de
+ * pantalla los lee en voz alta como palabras sueltas intercaladas en el
+ * contenido. translate="no" evita que Google Translate los traduzca y rompa
+ * la ligadura (un problema conocido de esta familia tipográfica).
+ * El observador cubre los íconos que el JS inserta después (carreras, agenda).
+ * ==========================================================================
+ */
+function initIconosDecorativos() {
+    const marcar = (raiz) => {
+        const iconos = raiz.querySelectorAll ? raiz.querySelectorAll(".material-symbols-outlined") : [];
+        iconos.forEach((el) => {
+            el.setAttribute("aria-hidden", "true");
+            el.setAttribute("translate", "no");
+        });
+    };
+
+    marcar(document);
+
+    if (!("MutationObserver" in window)) return;
+    new MutationObserver((mutaciones) => {
+        mutaciones.forEach((m) => {
+            m.addedNodes.forEach((n) => {
+                if (n.nodeType !== 1) return;
+                if (n.classList && n.classList.contains("material-symbols-outlined")) {
+                    n.setAttribute("aria-hidden", "true");
+                    n.setAttribute("translate", "no");
+                }
+                marcar(n);
+            });
+        });
+    }).observe(document.body, { childList: true, subtree: true });
 }

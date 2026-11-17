@@ -3,6 +3,34 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- ====================== SEO ====================== -->
+    <meta name="description" content="Tecnicaturas superiores y profesorados del IES N° 11, orientados al desarrollo socioproductivo, tecnológico, sanitario y de servicios de Jujuy.">
+    <meta name="author" content="IES N° 11 - Ministerio de Educación de Jujuy">
+    <meta name="theme-color" content="#061021">
+
+    <!-- PENDIENTE: reemplazar https://DOMINIO-DEL-SITIO por el dominio real
+         cuando el sitio esté publicado. Aparece 4 veces en este archivo. -->
+    <link rel="canonical" href="https://DOMINIO-DEL-SITIO/oferta-academica.html">  
+
+    <!-- Open Graph: así se ve el link al compartirlo por WhatsApp o Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="IES N° 11 Jujuy">
+    <meta property="og:locale" content="es_AR">
+    <meta property="og:title" content="Oferta Académica - IES N° 11 Jujuy">   
+    <meta property="og:description" content="Tecnicaturas superiores y profesorados del IES N° 11, orientados al desarrollo socioproductivo, tecnológico, sanitario y de servicios de Jujuy.">                        
+    <meta property="og:url" content="https://DOMINIO-DEL-SITIO/oferta-academica.html">  
+    <meta property="og:image" content="https://DOMINIO-DEL-SITIO/assets/images/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Instituto de Educación Superior N° 11, San Salvador de Jujuy">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Oferta Académica - IES N° 11 Jujuy">                         
+    <meta name="twitter:description" content="Tecnicaturas superiores y profesorados del IES N° 11, orientados al desarrollo socioproductivo, tecnológico, sanitario y de servicios de Jujuy.">               
+    <meta name="twitter:image" content="https://DOMINIO-DEL-SITIO/assets/images/og-image.jpg">
+
     <title>Oferta Académica - IES N° 11 Jujuy</title>
     <link rel="icon" href="favicon.ico">
     <!-- Google Fonts y Icons -->
@@ -171,7 +199,7 @@
             </div>
 
             <div class="footer-col">
-                <h4 class="footer-heading">Enlaces Rápidos</h4>
+                <h2 class="footer-heading">Enlaces Rápidos</h2>
                 <ul class="footer-nav-list">
                     <li><a href="index.html" class="footer-link">Inicio</a></li>
                     <li><a href="autoridades.html" class="footer-link">Autoridades</a></li>
@@ -185,7 +213,7 @@
             </div>
 
             <div class="footer-col">
-                <h4 class="footer-heading">Contacto & Sedes</h4>
+                <h2 class="footer-heading">Contacto & Sedes</h2>
                 <div class="footer-contact-list">
                     <div class="footer-contact-item">
                         <span class="material-symbols-outlined">location_on</span>
@@ -207,7 +235,7 @@
             </div>
 
             <div class="footer-col">
-                <h4 class="footer-heading">Redes & Atención</h4>
+                <h2 class="footer-heading">Redes & Atención</h2>
                 <p class="footer-description">Canales institucionales oficiales de comunicación:</p>
                 
                 <div class="footer-social-icons">
@@ -226,14 +254,10 @@
             </div>
 
         </div>
-
-        <div style="text-align: center; margin-top: 15px; font-size: 13px;">
-            <a href="admin/login.html" style="color: #64748b; text-decoration: none;">Acceso Administración</a>
-        </div>
-
+        
         <div class="footer-bottom">
             <div class="footer-bottom-container">
-                <p>© 2025/2026 IES N° 11 Jujuy - Todos los derechos reservados.</p>
+                <p>© <span id="currentYear">2026</span> IES N° 11 Jujuy - Todos los derechos reservados.</p>
                 <p>Ministerio de Educación de Jujuy • Dirección de Educación Superior</p>
             </div>
         </div>
@@ -260,6 +284,15 @@
           diseno: 'Diseño',
           social: 'Social'
         };
+                // Sin conexión a Supabase no hay carreras que mostrar: se avisa en vez de
+        // dejar la grilla vacía sin explicación.
+        if (!supabaseClient) {
+          grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #64748b; padding: 40px 0;">'
+            + '<p><strong>No pudimos cargar la oferta académica.</strong></p>'
+            + '<p>Revisá tu conexión y volvé a intentar. Si el problema sigue, escribinos a contacto@ies11jujuy.edu.ar.</p>'
+            + '</div>';
+          return;
+        }
 
         try {
           const { data: carreras, error } = await supabaseClient

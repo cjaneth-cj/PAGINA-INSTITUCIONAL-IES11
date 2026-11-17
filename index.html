@@ -1,8 +1,75 @@
 <!DOCTYPE html>
 <html lang="es">
+        <!-- Datos estructurados: permiten que Google muestre la ficha del instituto
+         con dirección, teléfono y horarios en los resultados de búsqueda. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollegeOrUniversity",
+      "name": "Instituto de Educación Superior N° 11",
+      "alternateName": "IES N° 11 Jujuy",
+      "description": "Instituto de Educación Superior público y gratuito de la provincia de Jujuy, dedicado a la formación técnico-profesional y docente.",
+      "url": "https://DOMINIO-DEL-SITIO/",
+      "logo": "https://DOMINIO-DEL-SITIO/assets/images/logo-ies11.webp",
+      "image": "https://DOMINIO-DEL-SITIO/assets/images/og-image.jpg",
+      "telephone": "+543886014588",
+      "email": "contacto@ies11jujuy.edu.ar",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Alvear 1151",
+        "addressLocality": "San Salvador de Jujuy",
+        "addressRegion": "Jujuy",
+        "postalCode": "4600",
+        "addressCountry": "AR"
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+        "opens": "08:00",
+        "closes": "22:30"
+      },
+      "parentOrganization": {
+        "@type": "GovernmentOrganization",
+        "name": "Ministerio de Educación de Jujuy - Dirección de Educación Superior"
+      },
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=100066551990089",
+        "https://www.instagram.com/ies11jujuy/"
+      ]
+    }
+    </script>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- ====================== SEO ====================== -->
+    <meta name="description" content="Instituto de Educación Superior N° 11 de Jujuy. Formación técnica y docente pública y gratuita, con títulos de validez nacional.">                      
+    <meta name="theme-color" content="#061021">
+    <meta name="robots" content="index, follow">
+
+    <!-- PENDIENTE: reemplazar https://DOMINIO-DEL-SITIO por el dominio real
+         cuando el sitio esté publicado. Aparece 4 veces en este archivo. -->
+    <link rel="canonical" href="https://DOMINIO-DEL-SITIO/index.html">  
+
+    <!-- Open Graph: así se ve el link al compartirlo por WhatsApp o Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="IES N° 11 Jujuy">
+    <meta property="og:locale" content="es_AR">
+    <meta property="og:title" content="IES N° 11 Jujuy - Portal Oficial">                           
+    <meta property="og:description" content="Instituto de Educación Superior N° 11 de Jujuy. Formación técnica y docente pública y gratuita, con títulos de validez nacional.">                
+    <meta property="og:url" content="https://DOMINIO-DEL-SITIO/index.html">  
+    <meta property="og:image" content="https://DOMINIO-DEL-SITIO/assets/images/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Instituto de Educación Superior N° 11, San Salvador de Jujuy">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="IES N° 11 Jujuy - Portal Oficial">                          
+    <meta name="twitter:description" content="Instituto de Educación Superior N° 11 de Jujuy. Formación técnica y docente pública y gratuita, con títulos de validez nacional.">               
+    <meta name="twitter:image" content="https://DOMINIO-DEL-SITIO/assets/images/og-image.jpg">
+
     <title>IES N° 11 Jujuy - Portal Oficial</title>
     <link rel="icon" href="favicon.ico">
     <!-- Google Fonts y Material Symbols -->
@@ -72,15 +139,14 @@
         <!-- 1. HERO CAROUSEL SECTION -->
         <section class="hero-carousel-section" id="hero-carousel">
             <div class="hero-slide-container">
-                <div class="hero-bg-image" id="carousel-bg" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBq83VI5Oy4eKxIVLx_sP3XFxT7dV07-Xh7oQFw56ItZrYhtvMrrIOcAvSmAJIawjr7pWO8vPYKwAzqQBI-yDHrq60_U21UCjGxcthfAtFXucec5QtqSltZflCJY9gDhLZueI3qJDUDW2KNMjlyjGVFb9IYmG41FSCVodYxsXzDigCWVxoRcFuh0Ggr042qBLSR8cgmilcXL8gvRhDYxh4iDrWB8WPtkN0MXHxc2cQjXvzuQ4LgKd6_Ig')">
-                </div>
+                <div class="hero-bg-image hero-bg-rings" id="carousel-bg"></div>
                 <div class="hero-overlay"></div>
 
                 <div class="hero-content-wrapper">
                     <div class="hero-text-box">
                         <div class="hero-badge">
                             <span class="dot-pulse"></span>
-                            <span>Ciclo Lectivo 2025 • Educación Superior Pública y Gratuita</span>
+                            <span>Educación Superior Pública y Gratuita • Títulos de Validez Nacional</span>
                         </div>
                         <h1 class="hero-main-title">
                             Construí tu Futuro Profesional en Jujuy
@@ -134,7 +200,7 @@
                         <div class="metric-icon-box"><span class="material-symbols-outlined">school</span></div>
                         <div>
                             <span class="metric-number">15+</span>
-                            <h3 class="metric-title">Carreras de Grado Técnico</h3>
+                            <h2 class="metric-title">Carreras de Grado Técnico</h2>
                             <p class="metric-desc">Tecnicaturas Superiores y Profesorados con validez nacional y ministerial.</p>
                         </div>
                     </div>
@@ -142,7 +208,7 @@
                         <div class="metric-icon-box"><span class="material-symbols-outlined">groups</span></div>
                         <div>
                             <span class="metric-number">6000+</span>
-                            <h3 class="metric-title">Estudiantes Regulares</h3>
+                            <h2 class="metric-title">Estudiantes Regulares</h2>
                             <p class="metric-desc">Comunidad activa en nuestras sedes urbanas y plataformas virtuales de estudio.</p>
                         </div>
                     </div>
@@ -150,7 +216,7 @@
                         <div class="metric-icon-box"><span class="material-symbols-outlined">workspace_premium</span></div>
                         <div>
                             <span class="metric-number">1500+</span>
-                            <h3 class="metric-title">Egresados Profesionales</h3>
+                            <h2 class="metric-title">Egresados Profesionales</h2>
                             <p class="metric-desc">Profesionales plenamente insertados en el sector productivo, público y educativo.</p>
                         </div>
                     </div>
@@ -172,21 +238,33 @@
                             <div class="bullet-item">
                                 <span class="material-symbols-outlined">check</span>
                                 <div>
-                                    <h4>Formación socioproductiva orientada</h4>
+                                    <h3>Formación socioproductiva orientada</h3>
                                     <p>Diseño curricular coordinado con los polos industriales de Jujuy y el NOA.</p>
                                 </div>
                             </div>
                             <div class="bullet-item">
                                 <span class="material-symbols-outlined">check</span>
                                 <div>
-                                    <h4>Cuerpo docente de trayectoria</h4>
+                                    <h3>Cuerpo docente de trayectoria</h3>
                                     <p>Profesionales activos y pedagogos experimentados que guían la práctica académica.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="about-image-box">
-                        <img src="assets/images/edificio.avif" alt="Edificio Institucional IES 11 Jujuy" class="about-img">
+                                        <!-- Panel de datos institucionales. Cuando haya una foto propia
+                         del edificio, se puede volver a:
+                         <div class="about-image-box">
+                           <img src="assets/images/edificio.jpg" alt="Edificio del IES N° 11" class="about-img" loading="lazy">
+                         </div> -->
+                    <div class="facts-panel">
+                        <h3>Datos institucionales</h3>
+                        <dl class="facts-list">
+                            <div class="fact"><dt>Dependencia</dt><dd>Ministerio de Educación de Jujuy — Dirección de Educación Superior</dd></div>
+                            <div class="fact"><dt>Sede</dt><dd>Alvear 1151 — San Salvador de Jujuy</dd></div>
+                            <div class="fact"><dt>Atención</dt><dd>Lunes a viernes, de 08:00 a 22:30 hs</dd></div>
+                            <div class="fact"><dt>Títulos</dt><dd>Validez nacional y provincial</dd></div>
+                            <div class="fact"><dt>Modalidad</dt><dd>Educación pública, gratuita y presencial</dd></div>
+                        </dl>
                     </div>
                 </div>
             </div>
@@ -235,7 +313,7 @@
 
             <!-- Columna 2: Enlaces Rápidos -->
             <div class="footer-col">
-                <h4 class="footer-heading">Enlaces Rápidos</h4>
+                <h2 class="footer-heading">Enlaces Rápidos</h2>
                 <ul class="footer-nav-list">
                     <li><a href="index.html" class="footer-link">Inicio</a></li>
                     <li><a href="autoridades.html" class="footer-link">Autoridades</a></li>
@@ -250,7 +328,7 @@
 
             <!-- Columna 3: Contacto y Sedes -->
             <div class="footer-col">
-                <h4 class="footer-heading">Contacto & Sedes</h4>
+                <h2 class="footer-heading">Contacto & Sedes</h2>
                 <div class="footer-contact-list">
                     <div class="footer-contact-item">
                         <span class="material-symbols-outlined">location_on</span>
@@ -273,7 +351,7 @@
 
             <!-- Columna 4: Redes y Atención por Turnos -->
             <div class="footer-col">
-                <h4 class="footer-heading">Redes & Atención</h4>
+                <h2 class="footer-heading">Redes & Atención</h2>
                 <p class="footer-description">Canales institucionales oficiales de comunicación:</p>
                 
                 <div class="footer-social-icons">
@@ -292,14 +370,11 @@
             </div>
 
         </div>
-<!-- ... Contenido actual de tu footer ... -->
-  <div style="text-align: center; margin-top: 15px; font-size: 13px;">
-    <a href="admin/login.html" style="color: #64748b; text-decoration: none;">Acceso Administración</a>
-  </div>
+
         <!-- Barra inferior de Copyright -->
         <div class="footer-bottom">
             <div class="footer-bottom-container">
-                <p>© 2025/2026 IES N° 11 Jujuy - Todos los derechos reservados.</p>
+                <p>© <span id="currentYear">2026</span> IES N° 11 Jujuy - Todos los derechos reservados.</p>
                 <p>Ministerio de Educación de Jujuy • Dirección de Educación Superior</p>
             </div>
         </div>
