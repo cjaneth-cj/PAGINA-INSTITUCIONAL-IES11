@@ -51,6 +51,15 @@ begin
     return '';
   end if;
 
+  -- Correcciones de concordancia entre palabras.
+  -- Mantener sincronizado con FRASES en js/titulos.js.
+  v_texto := regexp_replace(
+    v_texto,
+    '\menerg[ií]a renovables\M',
+    'energías renovables',
+    'g'
+  );
+
   -- Correcciones puntuales de tipeo / tildes.
   -- Mantener sincronizado con CORRECCIONES en js/titulos.js.
   for v_par in

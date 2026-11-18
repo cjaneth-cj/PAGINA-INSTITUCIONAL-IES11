@@ -73,6 +73,15 @@
         automatizacion: "automatización"
     });
 
+    /**
+     * Correcciones de concordancia que abarcan más de una palabra.
+     * Se aplican antes de capitalizar, sobre el texto ya recortado.
+     */
+    const FRASES = Object.freeze([
+        // "Gestión de Energía Renovables" no concuerda en número.
+        [/energ[ií]a\s+renovables/gi, "energías renovables"]
+    ]);
+
     function quitarTildes(texto) {
         return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
@@ -88,7 +97,12 @@
         const limpio = String(valor).replace(/\s+/g, " ").trim();
         if (!limpio) return "";
 
-        return limpio
+        let texto = limpio;
+        FRASES.forEach(([patron, reemplazo]) => {
+            texto = texto.replace(patron, reemplazo);
+        });
+
+        return texto
             .split(" ")
             .map((palabra, indice) => {
                 const clave = quitarTildes(palabra.toLowerCase());
@@ -114,6 +128,7 @@
             normalizarDenominacion,
             CORRECCIONES,
             CONECTORES,
+            FRASES,
             SIGLAS
         };
     }

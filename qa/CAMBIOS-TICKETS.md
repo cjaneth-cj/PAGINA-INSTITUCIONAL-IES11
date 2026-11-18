@@ -18,6 +18,7 @@ Rama: `qa/auditoria-seguridad` · Base: `main` (`69bdcbd`) · Fecha: 15/11/2026.
 | OFE-01 | Baja | Resuelto | Grilla de carreras centrada y con márgenes equilibrados. |
 | OFE-03 | Media | Implementado (requiere migración) | Nombres y títulos con escritura uniforme, en pantalla guardado y base de datos. |
 | OFE-04 | Media | Implementado (requiere datos) | «Modalidad» reemplazado por «Turno» en la oferta y en el panel. |
+| OFE-05 | Media | Resuelto (pendiente confirmación oficial) | Revisión integral de los 13 títulos: ortografía, tildes, concordancia y capitalización. |
 
 ---
 
@@ -223,14 +224,39 @@ Si la migración no está aplicada, el panel sigue guardando el resto de la carr
 
 ---
 
+### OFE-05 — Revisión integral de denominaciones
+
+**Alcance:** revisión de los 13 registros de `carreras`, nombre y título, verificando ortografía, tildes, concordancia y capitalización.
+
+**Resultado:** todos los registros quedan con escritura uniforme. Se detectó y corrigió un caso que OFE-03 no cubría: `GESTION DE ENERGIA RENOVABLES` → **Gestión de Energías Renovables** (concordancia entre sustantivo y adjetivo).
+
+**Archivos:**
+
+- `js/titulos.js`: nueva lista `FRASES` para correcciones de concordancia.
+- `qa/sql/ofe-03-titulos.sql`: la misma corrección dentro de la función de base de datos.
+- `qa/auditoria-ofe-05-titulos.md`: planilla con los 13 casos, antes/después y pendientes de confirmación.
+- `qa/pruebas-titulos.js`: prueba repetible con los 13 registros reales, casos borde e idempotencia.
+
+**Verificación:**
+
+```bash
+node qa/pruebas-titulos.js
+# OK: 33 casos, 33 pruebas de idempotencia
+```
+
+**Pendiente de confirmación institucional:** títulos que hoy figuran solo como «Laboratorio», «Hotelería», «Cocinero» o «Agente Sanitario»; si Higiene y Seguridad incluye «en el Trabajo»; y la denominación oficial de Administración de la Salud y Enfermería. El detalle está en `qa/auditoria-ofe-05-titulos.md`.
+
+---
+
 ## Orden sugerido de despliegue
 
 1. Backup de Supabase.
 2. Ejecutar `qa/sql/migracion-tickets.sql`.
 3. Ejecutar `qa/sql/ofe-03-titulos.sql`.
-4. Desplegar los cambios de frontend.
-5. Probar DASH-02, OFE-03 y OFE-04.
-6. Revisar el calendario de exámenes con el cronograma oficial.
+4. Ejecutar `node qa/pruebas-titulos.js` (debe dar OK).
+5. Desplegar los cambios de frontend.
+6. Probar DASH-02, OFE-03, OFE-04 y OFE-05.
+7. Revisar el calendario de exámenes con el cronograma oficial.
 
 ## Pruebas de regresión mínimas
 
