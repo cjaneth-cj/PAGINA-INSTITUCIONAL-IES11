@@ -71,6 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let carrerasContextoIA = 'Tecnicaturas Superiores en Desarrollo de Software, Enfermería, Industrias Alimentarias, etc.';
 
     // 4. OBTENER CARRERAS EN TIEMPO REAL DESDE SUPABASE
+    // OFE-03: nombres y títulos con la misma escritura que en la oferta.
+    const normalizar = (valor) =>
+        typeof normalizarDenominacion === 'function'
+            ? normalizarDenominacion(valor)
+            : String(valor || '').trim();
+
     async function cargarCarrerasDesdeSupabase() {
         try {
             if (typeof supabaseClient !== 'undefined') {
@@ -80,11 +86,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (!error && data && data.length > 0) {
                     carrerasContextoIA = data.map(c => 
-                        `- ${c.nombre} (${c.duracion || '3 años'}, Título: ${c.titulo_otorgado || 'Técnico Superior'})`
+                        `- ${normalizar(c.nombre)} (${c.duracion || '3 años'}, Título: ${normalizar(c.titulo_otorgado) || 'A confirmar'})`
                     ).join('\n');
 
                     listaCarrerasHTML = data.map(c => 
-                        `• <b>${c.nombre}</b> (${c.duracion || '3 años'})`
+                        `• <b>${normalizar(c.nombre)}</b> (${c.duracion || '3 años'})`
                     ).join('<br>');
                 }
             }

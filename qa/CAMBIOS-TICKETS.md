@@ -16,6 +16,7 @@ Rama: `qa/auditoria-seguridad` · Base: `main` (`69bdcbd`) · Fecha: 15/11/2026.
 | INI-05 | Baja | Resuelto | Año del ciclo lectivo calculado dinámicamente. |
 | INI-06 | Baja | Resuelto | Copyright con un solo año, calculado dinámicamente. |
 | OFE-01 | Baja | Resuelto | Grilla de carreras centrada y con márgenes equilibrados. |
+| OFE-03 | Media | Implementado (requiere migración) | Nombres y títulos con escritura uniforme, en pantalla guardado y base de datos. |
 | OFE-04 | Media | Implementado (requiere datos) | «Modalidad» reemplazado por «Turno» en la oferta y en el panel. |
 
 ---
@@ -178,13 +179,58 @@ Si la migración no está aplicada, el panel sigue guardando el resto de la carr
 
 ---
 
+### OFE-03 — Denominaciones de carreras y títulos
+
+**Problema:** los nombres y títulos se cargaron a mano y quedaron con mayúsculas sostenidas, errores de tipeo y tildes faltantes (`ADMINITRACION`, `DESARROLO`, `Superios`, `Gerentologia`, `Hoteleria`, `ENFERMERIA`).
+
+**Criterio:** se unifica **solo la escritura**, no la denominación académica. No se inventan títulos ni se convierten carreras en «Técnico Superior en…» por criterio estético. Si un título falta, se muestra «A confirmar».
+
+**Regla aplicada** (idéntica en frontend y base de datos):
+
+1. Se recortan y colapsan los espacios.
+2. Se corrigen errores de tipeo y tildes conocidos.
+3. Capitalización tipo título: mayúscula inicial y conectores (`de`, `del`, `la`, `en`, `y`, …) en minúscula.
+4. Las siglas (`IA`, `TIC`) se mantienen en mayúsculas.
+
+**Archivos:**
+
+- `js/titulos.js`: función `normalizarDenominacion()`, compartida por el sitio y el panel.
+- `oferta-academica.html`: normaliza nombre, título, texto alternativo de logos y palabras clave. La búsqueda ahora ignora tildes y mayúsculas.
+- `admin/oferta-management.html` y `admin/js/oferta-management.js`: normaliza al guardar, al editar y al salir del campo, para que el dato entre limpio a la base.
+- `js/chatbot.js` e `index.html`: el asistente usa las mismas denominaciones.
+- `qa/sql/ofe-03-titulos.sql`: función `public.normalizar_denominacion(text)`, trigger `trg_carreras_normalizar_denominacion` y corrección de los registros existentes.
+
+**Resultado en la oferta pública:**
+
+| Antes | Después |
+|---|---|
+| `ADMINITRACION DE LA SALUD` | Administración de la Salud |
+| `TECNICO SUPERIOR EN DESARROLLO DE SOFTWARE` | Técnico Superior en Desarrollo de Software |
+| `Tecnico Superios en Gerentologia` | Técnico Superior en Gerontología |
+| `COCINA REGIONALES` | Cocina Regional (título: Cocinero) |
+| `Hoteleria` | Hotelería |
+| `ENFERMERIA` | Enfermería |
+
+**Verificación:** 28 casos de prueba y prueba de idempotencia en Node; revisión en navegador de las 13 carreras sin errores de consola; filtros por categoría y búsqueda con y sin tildes.
+
+**Migración necesaria:** ejecutar `qa/sql/ofe-03-titulos.sql` en el SQL Editor de Supabase. Sin la migración, el sitio ya se ve corregido porque la normalización se aplica en el navegador, pero la base sigue guardando lo que se tipee.
+
+**Pendiente de confirmación institucional:**
+
+- Denominación oficial del título de cada carrera (hoy se respeta el texto cargado, solo corregido en su escritura).
+- ``COCINA REGIONALES`` → ``Cocina Regional``: es una corrección gramatical, falta confirmar el nombre oficial de la carrera.
+- Títulos que hoy figuran solo como ``Cocinero``, ``Agente Sanitario`` o ``Laboratorio``: no se ampliaron para no inventar denominaciones.
+
+---
+
 ## Orden sugerido de despliegue
 
 1. Backup de Supabase.
 2. Ejecutar `qa/sql/migracion-tickets.sql`.
-3. Desplegar los cambios de frontend.
-4. Probar DASH-02 y OFE-04.
-5. Revisar el calendario de exámenes con el cronograma oficial.
+3. Ejecutar `qa/sql/ofe-03-titulos.sql`.
+4. Desplegar los cambios de frontend.
+5. Probar DASH-02, OFE-03 y OFE-04.
+6. Revisar el calendario de exámenes con el cronograma oficial.
 
 ## Pruebas de regresión mínimas
 
