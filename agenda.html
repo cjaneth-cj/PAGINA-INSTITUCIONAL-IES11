@@ -159,75 +159,23 @@
                     <div class="panel-header">
                         <div class="panel-title-box">
                             <span class="material-symbols-outlined">event_upcoming</span>
-                            <h3>Próximos Hitos y Fechas Clave</h3>
+                            <h3 id="panelMesTitulo">Fechas Clave del Mes</h3>
                         </div>
-                        <span class="badge-status open">Período Vigente</span>
+                        <span class="badge-status open" id="panelMesBadge">Período Vigente</span>
                     </div>
 
-                    <div class="events-timeline">
-                        <!-- Evento 1 -->
-                        <article class="timeline-event exam">
-                            <div class="timeline-date-box">
-                                <span class="t-day">16</span>
-                                <span class="t-month">Mar</span>
-                            </div>
-                            <div class="timeline-body">
-                                <span class="event-tag exam">Mesas Extraordinarias</span>
-                                <h4>Turno Especial de Exámenes Finales</h4>
-                                <p>Habilitado para estudiantes que adeudan hasta dos materias para egresar.</p>
-                            </div>
-                        </article>
-
-                        <!-- Evento 2 -->
-                        <article class="timeline-event inscrip">
-                            <div class="timeline-date-box">
-                                <span class="t-day">23</span>
-                                <span class="t-month">Mar</span>
-                            </div>
-                            <div class="timeline-body">
-                                <span class="event-tag inscrip">Gestión de Alumnos</span>
-                                <h4>Inscripción a Cursada (1° Cuatrimestre)</h4>
-                                <p>Registro online por sistema para todas las tecnicaturas superiores.</p>
-                            </div>
-                        </article>
-
-                        <!-- Evento 3 -->
-                        <article class="timeline-event clases">
-                            <div class="timeline-date-box">
-                                <span class="t-day">30</span>
-                                <span class="t-month">Mar</span>
-                            </div>
-                            <div class="timeline-body">
-                                <span class="event-tag clases">Inicio de Ciclo</span>
-                                <h4>Inicio Efectivo de Clases Presenciales</h4>
-                                <p>Comienzo de actividades regulares y bienvenida a cohortes ingresantes.</p>
-                            </div>
-                        </article>
-
-                        <!-- Evento 4 -->
-                        <article class="timeline-event feriado">
-                            <div class="timeline-date-box">
-                                <span class="t-day">02</span>
-                                <span class="t-month">Abr</span>
-                            </div>
-                            <div class="timeline-body">
-                                <span class="event-tag feriado">Feriado Nacional</span>
-                                <h4>Día del Veterano y de los Caídos en Malvinas</h4>
-                                <p>Sin actividades académicas ni administrativas en todas las sedes.</p>
-                            </div>
-                        </article>
-                    </div>
+                    <div class="events-timeline" id="eventsTimeline"></div>
 
                     <!-- Descarga de Resolución -->
                     <div class="agenda-download-banner">
-                        <div class="download-info">
+                        <div class="download-info" id="agendaPdfNota">
                             <span class="material-symbols-outlined">picture_as_pdf</span>
                             <div>
                                 <strong>Resolución Calendario Académico Anual</strong>
-                                <small>Documento oficial firmado por Secretaría Académica (PDF)</small>
+                                <small>Secretaría Académica todavía no publicó el documento</small>
                             </div>
                         </div>
-                        <a href="#" class="btn-action">Descargar PDF</a>
+                        <button type="button" class="btn-action" disabled aria-describedby="agendaPdfNota">Próximamente</button>
                     </div>
                 </div>
 

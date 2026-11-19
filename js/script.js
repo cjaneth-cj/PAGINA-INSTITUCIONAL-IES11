@@ -394,73 +394,261 @@ function initCareerFilters() {
 document.addEventListener("DOMContentLoaded", () => {
     initAgendaCalendar();
 });
-
 function initAgendaCalendar() {
     const calendarDays = document.getElementById("calendarDays");
     const monthYearDisplay = document.getElementById("monthYearDisplay");
     const prevBtn = document.getElementById("prevMonth");
     const nextBtn = document.getElementById("nextMonth");
+    const timeline = document.getElementById("eventsTimeline");
+    const panelTitle = document.getElementById("panelMesTitulo");
+    const panelBadge = document.getElementById("panelMesBadge");
 
     if (!calendarDays || !monthYearDisplay) return;
 
-    let currentDate = new Date();
+    /* ----------------------------------------------------------------
+     * FUENTE ÚNICA DE DATOS
+     * Cada hito se escribe UNA sola vez acá. El calendario lo pinta y el
+     * panel de la derecha lo lista. Si una fecha cambia, se cambia acá.
+     *
+     *   desde / hasta : "AAAA-MM-DD". "hasta" es opcional (evento de un día).
+     *   tipo          : exam | inscrip | clases | feriado  (define el color)
+     *
+     * PENDIENTE DE CONFIRMACIÓN: las fechas académicas deben validarse
+     * contra la resolución del calendario oficial del IES N° 11.
+     * ---------------------------------------------------------------- */
+    const EVENTOS = [
+        /* --- Asuetos y feriados: noviembre y diciembre 2026 --- */
+        {
+            desde: "2026-11-02",
+            tipo: "feriado",
+            etiqueta: "Asueto Provincial",
+            titulo: "Día de los Fieles Difuntos",
+            detalle: "Asueto administrativo y escolar en la provincia de Jujuy."
+        },
+        {
+            desde: "2026-11-09",
+            tipo: "feriado",
+            etiqueta: "Feriado Nacional",
+            titulo: "Visita del papa León XIV",
+            detalle: "Feriado nacional excepcional (Decreto 1103/2026)."
+        },
+        {
+            desde: "2026-11-18",
+            tipo: "feriado",
+            etiqueta: "No Laborable Provincial",
+            titulo: "Día de la Autonomía Política de Jujuy",
+            detalle: "Conmemora la separación política de Salta en 1834. Jornada no laborable en el ámbito provincial."
+        },
+        {
+            desde: "2026-11-23",
+            tipo: "feriado",
+            etiqueta: "Feriado Nacional",
+            titulo: "Día de la Soberanía Nacional",
+            detalle: "Trasladado desde el viernes 20 (Ley 27.399). Sin actividades académicas ni administrativas."
+        },
+        {
+            desde: "2026-12-08",
+            tipo: "feriado",
+            etiqueta: "Feriado Nacional",
+            titulo: "Inmaculada Concepción de María",
+            detalle: "Sin actividades académicas ni administrativas en la sede."
+        },
+        {
+            desde: "2026-12-25",
+            tipo: "feriado",
+            etiqueta: "Feriado Nacional",
+            titulo: "Navidad",
+            detalle: "Sin actividades académicas ni administrativas en la sede."
+        },
 
-    // Hitos académicos del calendario (formato YYYY-MM-DD)
-    const academicEvents = {
-        "2026-03-16": "exam",
-        "2026-03-23": "inscrip",
-        "2026-03-30": "clases",
-        "2026-04-02": "feriado",
-        "2026-07-06": "exam",
-        "2026-07-13": "feriado" // Receso invernal
-    };
+        /* --- Hitos académicos --- */
+                {
+            desde: "2026-12-01",
+            hasta: "2026-12-02",
+            tipo: "inscrip",
+            etiqueta: "Permisos de Examen",
+            titulo: "Permisos de examen (inscripción a mesas finales)",
+            detalle: "Registro por sistema para rendir finales del último turno del ciclo."
+        },
+        {
+            desde: "2026-12-09",
+            hasta: "2026-12-23",
+            tipo: "exam",
+            etiqueta: "Mesas de Examen",
+            titulo: "Período de mesas de examen (Turno Nov - Dic)",
+            detalle: "Último llamado del ciclo lectivo. Consultá el detalle por carrera en Estudiante."
+        }
+    ];
 
-    const monthNames = [
+    const MESES = [
         "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
         "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
     ];
+    const MESES_CORTOS = [
+        "Ene", "Feb", "Mar", "Abr", "May", "Jun",
+        "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"
+    ];
 
-    function renderCalendar(date) {
-        calendarDays.innerHTML = "";
-        const year = date.getFullYear();
-        const month = date.getMonth();
-
-        monthYearDisplay.textContent = `${monthNames[month]} ${year}`;
-
-        const firstDayIndex = new Date(year, month, 1).getDay();
-        const lastDay = new Date(year, month + 1, 0).getDate();
-
-        // Celdas en blanco previas
-        for (let i = 0; i < firstDayIndex; i++) {
-            const emptyCell = document.createElement("div");
-            emptyCell.classList.add("cal-day-cell", "empty");
-            calendarDays.appendChild(emptyCell);
-        }
-
-        // Celdas de los días del mes
-        const today = new Date();
-        for (let day = 1; day <= lastDay; day++) {
-            const dayCell = document.createElement("div");
-            dayCell.classList.add("cal-day-cell");
-            dayCell.textContent = day;
-
-            const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-
-            if (
-                day === today.getDate() &&
-                month === today.getMonth() &&
-                year === today.getFullYear()
-            ) {
-                dayCell.classList.add("today");
-            }
-
-            if (academicEvents[formattedDate]) {
-                dayCell.classList.add("has-event", `event-${academicEvents[formattedDate]}`);
-            }
-
-            calendarDays.appendChild(dayCell);
-        }
+    // "2026-11-02" -> Date local (sin corrimiento por zona horaria)
+    function aFecha(iso) {
+        const [a, m, d] = iso.split("-").map(Number);
+        return new Date(a, m - 1, d);
     }
+
+    function aClave(fecha) {
+        return `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, "0")}-${String(fecha.getDate()).padStart(2, "0")}`;
+    }
+
+    // Normaliza: todo evento pasa a tener inicio y fin como objetos Date
+    const eventos = EVENTOS.map((ev) => ({
+        ...ev,
+        inicio: aFecha(ev.desde),
+        fin: aFecha(ev.hasta || ev.desde)
+    })).sort((a, b) => a.inicio - b.inicio);
+
+    // Qué tipo de evento le toca a un día concreto.
+    // Un evento de un solo día (ej. un feriado) gana sobre un período largo
+    // que lo contenga (ej. el feriado dentro del período de exámenes).
+    function tipoDelDia(fecha) {
+        // Sábado y domingo no se marcan: no hay clases ni actividad institucional,
+        // aunque la fecha caiga dentro de un período largo.
+        const diaSemana = fecha.getDay();
+        if (diaSemana === 0 || diaSemana === 6) return null;
+
+        const cubren = eventos.filter((e) => fecha >= e.inicio && fecha <= e.fin);
+        if (!cubren.length) return null;
+        const puntual = cubren.find((e) => e.inicio.getTime() === e.fin.getTime());
+        return (puntual || cubren[0]).tipo;
+    }
+
+    // Eventos que tocan el mes mostrado (aunque empiecen o terminen fuera)
+    function eventosDelMes(anio, mes) {
+        const primero = new Date(anio, mes, 1);
+        const ultimo = new Date(anio, mes + 1, 0);
+        return eventos.filter((e) => e.inicio <= ultimo && e.fin >= primero);
+    }
+
+    function textoRango(ev) {
+        const d1 = ev.inicio.getDate();
+        const d2 = ev.fin.getDate();
+        const m1 = MESES[ev.inicio.getMonth()].toLowerCase();
+        const m2 = MESES[ev.fin.getMonth()].toLowerCase();
+        if (ev.inicio.getTime() === ev.fin.getTime()) return "";
+        return m1 === m2
+            ? `Del ${d1} al ${d2} de ${m1}.`
+            : `Del ${d1} de ${m1} al ${d2} de ${m2}.`;
+    }
+
+    /* ------------------------- Grilla del mes ------------------------- */
+    function renderCalendar(date) {
+        calendarDays.textContent = "";
+        const anio = date.getFullYear();
+        const mes = date.getMonth();
+
+        monthYearDisplay.textContent = `${MESES[mes]} ${anio}`;
+
+        const primerDiaSemana = new Date(anio, mes, 1).getDay();
+        const ultimoDia = new Date(anio, mes + 1, 0).getDate();
+        const hoy = new Date();
+        const claveHoy = aClave(hoy);
+
+        for (let i = 0; i < primerDiaSemana; i++) {
+            const vacia = document.createElement("div");
+            vacia.classList.add("cal-day-cell", "empty");
+            calendarDays.appendChild(vacia);
+        }
+
+        for (let dia = 1; dia <= ultimoDia; dia++) {
+            const fecha = new Date(anio, mes, dia);
+            const celda = document.createElement("div");
+            celda.classList.add("cal-day-cell");
+            celda.textContent = dia;
+
+            if (aClave(fecha) === claveHoy) {
+                celda.classList.add("today");
+            }
+
+            const tipo = tipoDelDia(fecha);
+            if (tipo) {
+                celda.classList.add("has-event", `event-${tipo}`);
+            }
+
+            calendarDays.appendChild(celda);
+        }
+
+        renderTimeline(anio, mes);
+    }
+
+    /* --------------------- Panel de la derecha ------------------------ */
+    function renderTimeline(anio, mes) {
+        if (!timeline) return;
+
+        const lista = eventosDelMes(anio, mes);
+        timeline.textContent = "";
+
+        if (panelTitle) {
+            panelTitle.textContent = `Fechas Clave de ${MESES[mes]} ${anio}`;
+        }
+
+        if (!lista.length) {
+            const vacio = document.createElement("p");
+            vacio.className = "timeline-empty";
+            vacio.textContent = `No hay hitos cargados para ${MESES[mes].toLowerCase()} de ${anio}. Usá las flechas para ver otro mes.`;
+            timeline.appendChild(vacio);
+            if (panelBadge) {
+                panelBadge.textContent = "Sin actividad";
+                panelBadge.className = "badge-status closed";
+            }
+            return;
+        }
+
+        if (panelBadge) {
+            panelBadge.textContent = `${lista.length} ${lista.length === 1 ? "hito" : "hitos"}`;
+            panelBadge.className = "badge-status open";
+        }
+
+        lista.forEach((ev) => {
+            const art = document.createElement("article");
+            art.className = `timeline-event ${ev.tipo}`;
+
+            const caja = document.createElement("div");
+            caja.className = "timeline-date-box";
+            const dia = document.createElement("span");
+            dia.className = "t-day";
+            dia.textContent = String(ev.inicio.getDate()).padStart(2, "0");
+            const mesTxt = document.createElement("span");
+            mesTxt.className = "t-month";
+            mesTxt.textContent = MESES_CORTOS[ev.inicio.getMonth()];
+            caja.append(dia, mesTxt);
+
+            const cuerpo = document.createElement("div");
+            cuerpo.className = "timeline-body";
+
+            const tag = document.createElement("span");
+            tag.className = `event-tag ${ev.tipo}`;
+            tag.textContent = ev.etiqueta;
+
+            const titulo = document.createElement("h4");
+            titulo.textContent = ev.titulo;
+
+            const parrafo = document.createElement("p");
+            const rango = textoRango(ev);
+            if (rango) {
+                const fuerte = document.createElement("strong");
+                fuerte.textContent = rango + " ";
+                parrafo.appendChild(fuerte);
+            }
+            parrafo.appendChild(document.createTextNode(ev.detalle));
+
+            cuerpo.append(tag, titulo, parrafo);
+            art.append(caja, cuerpo);
+            timeline.appendChild(art);
+        });
+    }
+
+    /* ----------------------------- Navegación ------------------------- */
+    const hoy = new Date();
+    let currentDate = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
 
     if (prevBtn && nextBtn) {
         prevBtn.addEventListener("click", () => {

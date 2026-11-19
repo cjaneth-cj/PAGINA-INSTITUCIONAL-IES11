@@ -1761,7 +1761,7 @@ body.page-body {
 
 @media (max-width: 992px) {
   .agenda-grid-layout {
-    grid-template-columns: 1fr;
+   grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -1858,10 +1858,10 @@ body.page-body {
 .cal-day-cell.has-event::after {
   content: '';
   position: absolute;
-  bottom: 4px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
+  bottom: 5px;
+  width: 16px;
+  height: 3px;
+  border-radius: 2px;
 }
 
 .cal-day-cell.event-exam::after { background-color: #be185d; }
@@ -1872,7 +1872,7 @@ body.page-body {
 .calendar-legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
+  gap: 10px;
   justify-content: center;
   margin-top: 24px;
   padding-top: 20px;
@@ -1882,15 +1882,15 @@ body.page-body {
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   font-size: 12px;
   color: var(--on-surface-variant);
 }
 
 .legend-item .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+  width: 10px;
+  height: 3px;
+  border-radius: 2px;
 }
 
 .dot-exam { background-color: #be185d; }
@@ -2676,10 +2676,15 @@ body.page-body {
   .news-cards-grid,
   .contact-layout { grid-template-columns: minmax(0, 1fr) !important; }
 
-  /* oferta-academica.html tiene un <style> propio en el <head> que redeclara
-     .careers-grid con !important; se necesita más especificidad para ganarle. */
   .academic-container .careers-grid { grid-template-columns: minmax(0, 1fr) !important; }
-}
+
+  /* En pantallas angostas la celda del calendario baja a ~29px: la raya de
+16px queda casi del ancho de la celda y parece un subrayado del número. */
+  .cal-day-cell.has-event::after {
+  width: 12px;
+  bottom: 3px;
+  }
+  }
 
 @media (max-width: 360px) {
   .brand-title { font-size: 15px; }
@@ -2800,3 +2805,23 @@ body.page-body {
   .hero-main-title { font-size: 26px; }
 }
 .contact-form-box h2 { font-size: 1.17em; }
+/* Estado vacío del panel de hitos (mes sin eventos cargados) */
+.timeline-empty {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--on-surface-variant);
+  background-color: var(--surface-container-low);
+  border: 1px dashed var(--outline);
+  border-radius: 10px;
+  padding: 18px 16px;
+  text-align: center;
+}
+
+/* AGE-02: el PDF de la resolución todavía no existe. El botón queda visible
+   pero inoperable, en vez de ser un enlace muerto a "#". */
+.btn-action:disabled {
+  background-color: var(--surface-container-high);
+  color: var(--on-surface-variant);
+  cursor: not-allowed;
+  opacity: 1;
+}

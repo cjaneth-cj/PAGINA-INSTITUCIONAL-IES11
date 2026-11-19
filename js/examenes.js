@@ -34,10 +34,10 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         {
             nombre: "Turno Noviembre - Diciembre",
-            periodoInicio: "11-20",
-            periodoFin: "12-18",
-            inscripcionInicio: "11-02",
-            inscripcionFin: "11-18"
+            periodoInicio: "12-09",
+            periodoFin: "12-23",
+            inscripcionInicio: "12-01",
+            inscripcionFin: "12-02"
         }
     ];
 
