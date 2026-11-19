@@ -64,9 +64,14 @@
             </div>
             <div class="form-group">
               <label for="titulo">Título</label>
-              <input type="text" id="titulo" placeholder="Ej: Técnico Sup.">
+              <input type="text" id="titulo" placeholder="Ej: Técnico Superior en Desarrollo de Software">
             </div>
           </div>
+
+          <small style="display: block; margin: -6px 0 4px; color: var(--text-muted); font-size: 0.78rem;">
+            El nombre y el título se normalizan automáticamente: mayúscula inicial,
+            conectores en minúscula y corrección de tildes conocidas.
+          </small>
 
           <!-- OFE-04: Turno de cursado -->
           <div class="form-group">
@@ -145,6 +150,7 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../assets/supabaseClient.js"></script>
+  <script src="../js/titulos.js"></script>
   <script src="js/admin-auth.js"></script>
   <script src="js/sidebar.js"></script>
   <script src="js/oferta-management.js"></script>

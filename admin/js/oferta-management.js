@@ -23,6 +23,14 @@ const pdfActualInfo = document.getElementById('pdfActualInfo');
 let urlLogoExistente = null;
 let urlPdfExistente = null;
 
+// OFE-03: normaliza la escritura de nombres y títulos.
+// La función vive en js/titulos.js (se carga antes de este archivo).
+function normalizarTexto(valor) {
+  return typeof normalizarDenominacion === 'function'
+    ? normalizarDenominacion(valor)
+    : String(valor || '').trim();
+}
+
 // OFE-04: la columna "turno" puede no existir todavía en Supabase.
 // Se detecta al iniciar para no romper el alta/edición de carreras.
 let columnaTurnoDisponible = false;
@@ -38,6 +46,15 @@ let columnaTurnoDisponible = false;
     columnaTurnoDisponible = false;
   }
 })();
+
+// OFE-03: al salir del campo se muestra la escritura normalizada,
+// para que el usuario vea cómo va a quedar guardado.
+[nombreInput, tituloInput].forEach((input) => {
+  if (!input) return;
+  input.addEventListener('blur', () => {
+    input.value = normalizarTexto(input.value);
+  });
+});
 
 // Aviso al seleccionar logo
 if (logoCarreraInput) {
@@ -92,7 +109,7 @@ async function cargarCarreras() {
     fila.innerHTML = `
       <td>${logoImg}</td>
       <td>
-        <strong>${c.nombre}</strong>
+        <strong>${normalizarTexto(c.nombre)}</strong>
         ${c.categoria ? `<br><small style="color: var(--primary); text-transform: capitalize; font-weight: 600;">${c.categoria}</small>` : ''}
       </td>
       <td>${c.duracion || '-'}</td>
@@ -116,10 +133,10 @@ if (form) {
     btnGuardar.innerText = 'Guardando...';
 
     const id = carreraIdInput.value;
-    const nombre = nombreInput.value.trim();
+    const nombre = normalizarTexto(nombreInput.value);
     const descripcion = descripcionInput ? descripcionInput.value.trim() : '';
     const duracion = duracionInput ? duracionInput.value.trim() : '';
-    const titulo_otorgado = tituloInput ? tituloInput.value.trim() : '';
+    const titulo_otorgado = normalizarTexto(tituloInput ? tituloInput.value : '');
     const categoria = categoriaInput ? categoriaInput.value : ''; // <-- Lee la categoría elegida
     const turno = turnoInput ? turnoInput.value.trim() : ''; // OFE-04
     const archivoLogo = logoCarreraInput ? logoCarreraInput.files[0] : null;
@@ -211,10 +228,10 @@ window.prepararEdicion = async (id) => {
   if (error) return;
 
   carreraIdInput.value = c.id;
-  nombreInput.value = c.nombre;
+  nombreInput.value = normalizarTexto(c.nombre);
   if (descripcionInput) descripcionInput.value = c.descripcion || '';
   if (duracionInput) duracionInput.value = c.duracion || '';
-  if (tituloInput) tituloInput.value = c.titulo_otorgado || '';
+  if (tituloInput) tituloInput.value = normalizarTexto(c.titulo_otorgado);
   if (categoriaInput) categoriaInput.value = c.categoria || ''; // <-- Pone la categoría que ya tenía cargada
   if (turnoInput) turnoInput.value = c.turno || ''; // OFE-04
   urlLogoExistente = c.logo_url;

@@ -257,6 +257,8 @@
     <!-- Scripts de Supabase y Lógica Dinámica -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/supabaseClient.js"></script>
+    <!-- OFE-03: normalización de nombres y títulos -->
+    <script src="js/titulos.js"></script>
 
     <script>
       document.addEventListener('DOMContentLoaded', async () => {
@@ -265,6 +267,22 @@
         const keywordInput = document.getElementById('keyword-filter');
 
         if (!grid) return;
+
+        // OFE-03: misma escritura para todos los nombres y títulos,
+        // sin importar cómo estén cargados en la base.
+        const normalizar = (valor) =>
+          typeof normalizarDenominacion === 'function'
+            ? normalizarDenominacion(valor)
+            : String(valor || '').trim();
+
+        // OFE-03: la búsqueda también ignora tildes y mayúsculas,
+        // así "gerontologia" encuentra "Gerontología".
+        const claveBusqueda = (valor) =>
+          String(valor || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .trim();
 
         // Mapeo amigable para los títulos de categoría
         const etiquetasCategorias = {
@@ -304,8 +322,12 @@
             const catClave = (c.categoria || 'tecnologia').toLowerCase().trim();
             const catTexto = etiquetasCategorias[catClave] || (catClave.charAt(0).toUpperCase() + catClave.slice(1));
 
+            // OFE-03: nombre y título con escritura uniforme
+            const nombre = normalizar(c.nombre);
+            const titulo = normalizar(c.titulo_otorgado) || 'A confirmar';
+
             const logoHtml = c.logo_url
-              ? `<img src="${c.logo_url}" alt="Logo ${c.nombre}" loading="lazy">`
+              ? `<img src="${c.logo_url}" alt="Logo ${nombre}" loading="lazy">`
               : `<img src="assets/images/logo-ies11.webp" alt="Logo IES 11" loading="lazy">`;
 
             const btnPlan = c.plan_estudio_url
@@ -319,7 +341,7 @@
             const card = document.createElement('article');
             card.className = 'career-card';
             card.dataset.category = catClave;
-            card.dataset.keywords = `${c.nombre} ${c.descripcion || ''} ${c.duracion || ''} ${catTexto}`.toLowerCase();
+            card.dataset.keywords = claveBusqueda(`${nombre} ${c.descripcion || ''} ${c.duracion || ''} ${catTexto} ${titulo}`);
 
             card.innerHTML = `
               <div class="career-logo-box">
@@ -327,10 +349,10 @@
               </div>
               <div class="career-content">
                 <span class="career-tag ${catClave}">${catTexto}</span>
-                <h3>${c.nombre}</h3>
+                <h3>${nombre}</h3>
                 <ul class="career-specs">
                   <li><span class="material-symbols-outlined">hourglass_bottom</span> <strong>Duración:</strong> ${c.duracion || '3 años'}</li>
-                  <li><span class="material-symbols-outlined">schedule</span> <strong>Título:</strong> ${c.titulo_otorgado || 'Técnico Superior'}</li>
+                  <li><span class="material-symbols-outlined">schedule</span> <strong>Título:</strong> ${titulo}</li>
                   <li><span class="material-symbols-outlined">schedule</span> <strong>Turno:</strong> ${turno}</li>
                 </ul>
                 <div class="career-actions">
@@ -352,16 +374,15 @@
         function filtrarCarreras() {
           const activeBtn = document.querySelector('#category-filter-group .filter-btn.active');
           const selectedCategory = activeBtn ? activeBtn.dataset.filter : 'all';
-          const query = keywordInput ? keywordInput.value.toLowerCase().trim() : '';
+          const query = keywordInput ? claveBusqueda(keywordInput.value) : '';
 
           const cards = grid.querySelectorAll('.career-card');
           cards.forEach(card => {
             const cardCat = card.dataset.category || '';
             const cardKeywords = card.dataset.keywords || '';
-            const cardTitle = (card.querySelector('h3')?.textContent || '').toLowerCase();
 
             const matchCat = (selectedCategory === 'all' || cardCat.includes(selectedCategory));
-            const matchSearch = (cardTitle.includes(query) || cardKeywords.includes(query));
+            const matchSearch = (query === '' || cardKeywords.includes(query));
 
             card.style.display = (matchCat && matchSearch) ? '' : 'none';
           });
