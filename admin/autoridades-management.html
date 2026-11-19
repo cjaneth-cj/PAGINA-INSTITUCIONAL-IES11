@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Autoridades - IES N° 11</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin-styles.css">
+</head>
+<body class="autoridades-page-body">
+
+  <main class="admin-main-content">
+    <div class="top-bar">
+      <div class="page-title">
+        <h1>Autoridades y Cuerpo Docente</h1>
+        <p>Administrá directivos y coordinadores; las fotos se convierten y comprimen a WebP automáticamente.</p>
+      </div>
+      <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Volver al Dashboard</a>
+    </div>
+
+    <div class="admin-layout">
+      <!-- Formulario Agregar / Editar -->
+      <div class="card">
+        <h2 id="formTitulo"><i class="fa-solid fa-user-plus"></i> Nueva Autoridad / Coordinador</h2>
+        <form id="formAutoridad">
+          <input type="hidden" id="autoridadId">
+
+          <div class="form-group">
+            <label for="tipo">Categoría</label>
+            <select id="tipo" required>
+              <option value="directivo">Cuerpo Directivo</option>
+              <option value="coordinador" selected>Coordinador de Área / Carrera</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="nombre">Nombre y Apellido / Título</label>
+            <input type="text" id="nombre" required placeholder="Ej: Ing. Esteban Morales">
+          </div>
+
+          <div class="form-group">
+            <label for="cargo">Cargo o Rol</label>
+            <input type="text" id="cargo" required placeholder="Ej: Coordinador de Departamento">
+          </div>
+
+          <div class="form-group">
+            <label for="areaOResolucion">Área Académica o Resolución</label>
+            <input type="text" id="areaOResolucion" placeholder="Ej: Área Tecnología e Informática / Res. 4812/21">
+          </div>
+
+          <div class="form-row-grid">
+            <div class="form-group">
+              <label for="turno">Turno</label>
+              <input type="text" id="turno" placeholder="Ej: Turno Vespertino">
+            </div>
+            <div class="form-group">
+              <label for="email">Correo Electrónico</label>
+              <input type="email" id="email" placeholder="correo@ies11jujuy.edu.ar">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="carreras">Carreras (separadas por coma)</label>
+            <input type="text" id="carreras" placeholder="Ej: Tec. Sup. en Desarrollo de Software, Redes">
+          </div>
+
+          <div class="form-group">
+            <label for="ubicacion">Sede / Ubicación</label>
+            <input type="text" id="ubicacion" placeholder="Ej: Sede Central • Lab. Informático 1">
+          </div>
+
+          <div class="form-group">
+            <label for="descripcion">Descripción / Perfil</label>
+            <textarea id="descripcion" rows="3" placeholder="Breve reseña o función..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Fotografía (se comprimirá a WebP)</label>
+            <div class="file-dropzone">
+              <i class="fa-solid fa-camera"></i>
+              <span>Hacé clic o arrastrá una imagen</span>
+              <small>Salida automática en formato .webp</small>
+              <input type="file" id="fotoAutoridad" accept="image/*">
+            </div>
+            <div id="fileSelectedText" class="file-selected-name"></div>
+            <small id="fotoActualInfo" class="img-actual-info"></small>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="btnGuardar" class="btn-save">Guardar Registro</button>
+            <button type="button" id="btnCancelar" class="btn-cancel">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tabla de Registros -->
+      <div class="card">
+        <h2><i class="fa-solid fa-users"></i> Integrantes Registrados</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Foto</th>
+                <th>Nombre / Cargo</th>
+                <th>Categoría</th>
+                <th>Área / Turno</th>
+                <th style="text-align: right;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaAutoridades">
+              <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 24px;">Cargando registros...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../assets/supabaseClient.js"></script>
+  <script src="js/admin-auth.js"></script>
+  <script src="js/sidebar.js"></script>
+  <script src="js/autoridades-management.js"></script>
+</body>
+</html>

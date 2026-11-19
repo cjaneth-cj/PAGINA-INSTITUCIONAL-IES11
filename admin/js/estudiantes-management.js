@@ -1,20 +1,38 @@
 // admin/js/estudiantes-management.js
-// Lógica para la gestión de solicitudes estudiantiles conectada a Supabase
+// Conecta la bandeja de trámites y el formulario de mesas de examen con Supabase
 
 document.addEventListener('DOMContentLoaded', () => {
-  const tablaSolicitudes = document.getElementById('tablaSolicitudes');
+  // Referencias del DOM de trámites (coinciden con estudiantes-management.html)
+  const tablaTramites = document.getElementById('tablaTramites');
   const filtroPreceptor = document.getElementById('filtroPreceptor');
   const filtroEstado = document.getElementById('filtroEstado');
-  const btnImprimir = document.getElementById('btnImprimir');
 
-  let listaSolicitudes = [];
+  // Referencias del DOM de mesas de examen
+  const formTurnoExamen = document.getElementById('formTurnoExamen');
+  const turnoConvocatoriaInput = document.getElementById('turnoConvocatoria');
+  const periodoExamenesInput = document.getElementById('periodoExamenes');
+  const cierreInscripcionInput = document.getElementById('cierreInscripcion');
+  const estadoTurnoInput = document.getElementById('estadoTurno');
 
-  // 1. Cargar las solicitudes desde Supabase
-  async function cargarSolicitudes() {
+  // Contenedor opcional si más adelante agregás una tabla de turnos en el HTML
+  const tablaTurnosExamen = document.getElementById('tablaTurnosExamen');
+
+  let listaTramites = [];
+
+  // Verifica que supabaseClient esté disponible
+  function tieneSupabase() {
     if (typeof supabaseClient === 'undefined') {
-      console.error('Supabase no está disponible.');
-      return;
+      console.error('El cliente supabaseClient no está disponible.');
+      return false;
     }
+    return true;
+  }
+
+  // -----------------------------------------------------------------------
+  // 1. TRÁMITES ESTUDIANTILES
+  // -----------------------------------------------------------------------
+  async function cargarTramites() {
+    if (!tieneSupabase() || !tablaTramites) return;
 
     const { data, error } = await supabaseClient
       .from('solicitudes_estudiantes')
@@ -22,87 +40,102 @@ document.addEventListener('DOMContentLoaded', () => {
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Error al cargar solicitudes:', error);
-      tablaSolicitudes.innerHTML = '<tr><td colspan="7" style="text-align: center; color: red;">Error al cargar datos.</td></tr>';
+      console.error('Error al cargar trámites:', error);
+      tablaTramites.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#dc2626; padding:24px;">Error al cargar trámites.</td></tr>';
       return;
     }
 
-    listaSolicitudes = data || [];
-    poblarFiltroPreceptores(listaSolicitudes);
-    renderizarTabla(listaSolicitudes);
+    listaTramites = data || [];
+    poblarFiltroPreceptores(listaTramites);
+    renderizarTramites();
   }
 
-  // 2. Poblar opciones del selector de preceptores de forma automática según los registros
-  function poblarFiltroPreceptores(solicitudes) {
-    const preceptoresUnicos = [...new Set(solicitudes.map(s => s.preceptor).filter(Boolean))];
+  function poblarFiltroPreceptores(tramites) {
+    if (!filtroPreceptor) return;
     const valorActual = filtroPreceptor.value;
-    
-    filtroPreceptor.innerHTML = '<option value="">Todos los preceptores</option>';
-    preceptoresUnicos.forEach(p => {
-      filtroPreceptor.innerHTML += `<option value="${p}">${p}</option>`;
+    const preceptoresUnicos = [...new Set(tramites.map((t) => t.preceptor).filter(Boolean))];
+
+    filtroPreceptor.innerHTML = '<option value="">Todos los Preceptores</option>';
+    preceptoresUnicos.forEach((preceptor) => {
+      const option = document.createElement('option');
+      option.value = preceptor;
+      option.textContent = preceptor;
+      filtroPreceptor.appendChild(option);
     });
+
     filtroPreceptor.value = valorActual;
   }
 
-  // 3. Renderizar filas en la tabla según filtros aplicados
-  function renderizarTabla(solicitudes) {
-    const pFiltro = filtroPreceptor.value.toLowerCase();
-    const eFiltro = filtroEstado.value;
+  function renderizarTramites() {
+    if (!tablaTramites) return;
 
-    const filtradas = solicitudes.filter(s => {
-      const matchPreceptor = pFiltro === '' || (s.preceptor && s.preceptor.toLowerCase().includes(pFiltro));
-      const matchEstado = eFiltro === '' || s.estado === eFiltro;
-      return matchPreceptor && matchEstado;
+    const pFiltro = filtroPreceptor ? filtroPreceptor.value.trim().toLowerCase() : '';
+    const eFiltro = filtroEstado ? filtroEstado.value.trim() : '';
+
+    const filtrados = listaTramites.filter((t) => {
+      const coincidePreceptor =
+        !pFiltro || (t.preceptor && t.preceptor.toLowerCase().includes(pFiltro));
+      const coincideEstado = !eFiltro || t.estado === eFiltro;
+      return coincidePreceptor && coincideEstado;
     });
 
-    if (filtradas.length === 0) {
-      tablaSolicitudes.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 30px;">No se encontraron solicitudes registradas.</td></tr>';
+    if (filtrados.length === 0) {
+      tablaTramites.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:28px;">No hay trámites para mostrar.</td></tr>';
       return;
     }
 
-    tablaSolicitudes.innerHTML = '';
-    filtradas.forEach(s => {
-      const fecha = new Date(s.created_at).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-      
-      let badgeClass = 'estado-pend';
-      if (s.estado === 'En Proceso') badgeClass = 'estado-proc';
-      if (s.estado === 'Listo para retirar') badgeClass = 'estado-list';
+    tablaTramites.innerHTML = '';
+
+    filtrados.forEach((t) => {
+      const fecha = t.created_at
+        ? new Date(t.created_at).toLocaleDateString('es-AR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+          })
+        : '-';
 
       const fila = document.createElement('tr');
       fila.innerHTML = `
-        <td><small style="color: var(--text-muted);">${fecha}</small></td>
+        <td><small style="color:var(--text-muted);">${fecha}</small></td>
         <td>
-          <strong>${s.nombre_completo}</strong><br>
-          <small style="color: var(--text-muted);">DNI: ${s.dni}</small>
+          <strong>${t.nombre_completo || 'Sin nombre'}</strong><br>
+          <small style="color:var(--text-muted);">DNI: ${t.dni || '-'}</small>
         </td>
         <td>
-          ${s.carrera}<br>
-          <small style="color: var(--text-muted);">Ingreso: ${s.anio_inicio}</small>
+          ${t.carrera || '-'}<br>
+          <small style="color:var(--text-muted);">Preceptor: ${t.preceptor || 'Sin asignar'}</small>
         </td>
         <td>
-          <strong>${s.tipo_tramite}</strong>
-          ${s.mensaje_adicional ? `<br><small style="color: var(--text-muted);">Obs: ${s.mensaje_adicional}</small>` : ''}
+          <strong>${t.tipo_tramite || '-'}</strong>
+          ${t.mensaje_adicional ? `<br><small style="color:var(--text-muted);">${t.mensaje_adicional}</small>` : ''}
         </td>
-        <td>${s.preceptor || 'Sin asignar'}</td>
         <td>
-          <select class="select-estado" data-id="${s.id}">
-            <option value="Pendiente" ${s.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
-            <option value="En Proceso" ${s.estado === 'En Proceso' ? 'selected' : ''}>En Proceso</option>
-            <option value="Listo para retirar" ${s.estado === 'Listo para retirar' ? 'selected' : ''}>Listo para retirar</option>
+          <select class="select-estado-tramite" data-id="${t.id}">
+            <option value="Pendiente" ${t.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+            <option value="En Proceso" ${t.estado === 'En Proceso' ? 'selected' : ''}>En Proceso</option>
+            <option value="Completado" ${t.estado === 'Completado' ? 'selected' : ''}>Completado</option>
+            <option value="Listo para retirar" ${t.estado === 'Listo para retirar' ? 'selected' : ''}>Listo para retirar</option>
           </select>
         </td>
-        <td style="text-align: right;" class="no-print">
-          <button class="btn-action btn-mail" data-email="${s.email}" data-nombre="${s.nombre_completo}" data-tramite="${s.tipo_tramite}" title="Enviar Correo de Aviso"><i class="fa-solid fa-envelope"></i></button>
-          <button class="btn-action btn-delete" data-id="${s.id}" title="Eliminar Solicitud"><i class="fa-solid fa-trash"></i></button>
+        <td style="text-align:right;">
+          <button type="button" class="btn-action btn-mail-tramite" data-email="${t.email || ''}" data-nombre="${t.nombre_completo || ''}" data-tramite="${t.tipo_tramite || ''}" title="Enviar correo">
+            <i class="fa-solid fa-envelope"></i>
+          </button>
+          <button type="button" class="btn-action btn-delete-tb btn-eliminar-tramite" data-id="${t.id}" title="Eliminar">
+            <i class="fa-solid fa-trash"></i>
+          </button>
         </td>
       `;
-      tablaSolicitudes.appendChild(fila);
+      tablaTramites.appendChild(fila);
     });
   }
 
-  // 4. Cambiar estado directamente desde el select de la tabla
-  tablaSolicitudes.addEventListener('change', async (e) => {
-    if (e.target.classList.contains('select-estado')) {
+  // Cambio de estado en la fila
+  if (tablaTramites) {
+    tablaTramites.addEventListener('change', async (e) => {
+      if (!e.target.classList.contains('select-estado-tramite')) return;
+
       const id = e.target.getAttribute('data-id');
       const nuevoEstado = e.target.value;
 
@@ -113,80 +146,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (error) {
         alert('Error al actualizar el estado: ' + error.message);
-      } else {
-        // Actualizar localmente
-        const item = listaSolicitudes.find(s => s.id == id);
-        if (item) item.estado = nuevoEstado;
-        renderizarTabla(listaSolicitudes);
+        return;
       }
-    }
-  });
 
-  // 5. Botones de acción en la tabla (Correo y Eliminar)
-  tablaSolicitudes.addEventListener('click', async (e) => {
-    const btnMail = e.target.closest('.btn-mail');
-    const btnDel = e.target.closest('.btn-delete');
+      const item = listaTramites.find((t) => String(t.id) === String(id));
+      if (item) item.estado = nuevoEstado;
+      renderizarTramites();
+    });
 
-    if (btnMail) {
-      const email = btnMail.getAttribute('data-email');
-      const nombre = btnMail.getAttribute('data-nombre');
-      const tramite = btnMail.getAttribute('data-tramite');
-      
-      const asunto = encodeURIComponent(`Actualización sobre tu trámite: ${tramite} - IES N° 11`);
-      const cuerpo = encodeURIComponent(`Hola ${nombre},\n\nTe escribimos desde Bedelía del IES N° 11 para informarte que tu solicitud de "${tramite}" ha sido procesada y ya se encuentra lista para retirar.\n\nSaludos cordiales.`);
-      
-      window.location.href = `mailto:${email}?subject=${asunto}&body=${cuerpo}`;
-    }
+    // Acciones de correo y eliminar
+    tablaTramites.addEventListener('click', async (e) => {
+      const btnMail = e.target.closest('.btn-mail-tramite');
+      const btnDelete = e.target.closest('.btn-eliminar-tramite');
 
-    if (btnDel) {
-      const id = btnDel.getAttribute('data-id');
-      if (!confirm('¿Estás seguro de eliminar esta solicitud del registro?')) return;
+      if (btnMail) {
+        const email = btnMail.getAttribute('data-email');
+        const nombre = btnMail.getAttribute('data-nombre');
+        const tramite = btnMail.getAttribute('data-tramite');
 
-      const { error } = await supabaseClient
-        .from('solicitudes_estudiantes')
-        .delete()
-        .eq('id', id);
+        if (!email) {
+          alert('Esta solicitud no tiene correo electrónico registrado.');
+          return;
+        }
 
-      if (error) {
-        alert('Error al eliminar: ' + error.message);
-      } else {
-        cargarSolicitudes();
+        const asunto = encodeURIComponent(`Trámite ${tramite} - IES N° 11`);
+        const cuerpo = encodeURIComponent(
+          `Hola ${nombre},\n\nTe contactamos desde el IES N° 11 respecto a tu solicitud de "${tramite}".\n\nSaludos cordiales.`
+        );
+        window.location.href = `mailto:${email}?subject=${asunto}&body=${cuerpo}`;
       }
-    }
-  });
 
-  // Eventos de filtrado
-  filtroPreceptor.addEventListener('change', () => renderizarTabla(listaSolicitudes));
-  filtroEstado.addEventListener('change', () => renderizarTabla(listaSolicitudes));
+      if (btnDelete) {
+        const id = btnDelete.getAttribute('data-id');
+        if (!confirm('¿Eliminar esta solicitud de trámite?')) return;
 
-  // Evento de impresión
-  btnImprimir.addEventListener('click', () => {
-    window.print();
-  });
+        const { error } = await supabaseClient
+          .from('solicitudes_estudiantes')
+          .delete()
+          .eq('id', id);
 
-  // Carga inicial
-  cargarSolicitudes();
-});
+        if (error) {
+          alert('Error al eliminar trámite: ' + error.message);
+          return;
+        }
 
-// ==========================================
-// GESTIÓN DE CALENDARIO DE EXÁMENES
-// ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-  const formExamen = document.getElementById('formExamen');
-  const examenIdInput = document.getElementById('examenId');
-  const turnoInput = document.getElementById('turno');
-  const periodoInput = document.getElementById('periodo');
-  const cierreInput = document.getElementById('cierre');
-  const estadoExamenInput = document.getElementById('estadoExamen');
-  const tablaExamenesAdmin = document.getElementById('tablaExamenesAdmin');
-  const formExamenTitulo = document.getElementById('formExamenTitulo');
-  const btnCancelarExamen = document.getElementById('btnCancelarExamen');
-  const btnGuardarExamen = document.getElementById('btnGuardarExamen');
+        await cargarTramites();
+      }
+    });
+  }
 
-  let listaExamenes = [];
+  if (filtroPreceptor) {
+    filtroPreceptor.addEventListener('change', renderizarTramites);
+  }
+  if (filtroEstado) {
+    filtroEstado.addEventListener('change', renderizarTramites);
+  }
 
-  async function cargarExamenesAdmin() {
-    if (typeof supabaseClient === 'undefined') return;
+  // -----------------------------------------------------------------------
+  // 2. MESAS DE EXAMEN
+  // -----------------------------------------------------------------------
+  async function cargarTurnosExamen() {
+    if (!tieneSupabase() || !tablaTurnosExamen) return;
 
     const { data, error } = await supabaseClient
       .from('calendario_examenes')
@@ -194,100 +214,57 @@ document.addEventListener('DOMContentLoaded', () => {
       .order('id', { ascending: true });
 
     if (error) {
-      console.error('Error al cargar exámenes:', error);
+      console.error('Error al cargar turnos de examen:', error);
       return;
     }
 
-    listaExamenes = data || [];
-    renderizarTablaExamenes(listaExamenes);
-  }
-
-  function renderizarTablaExamenes(examenes) {
-    if (!examenes.length) {
-      tablaExamenesAdmin.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 20px;">No hay turnos cargados.</td></tr>';
+    const turnos = data || [];
+    if (turnos.length === 0) {
+      tablaTurnosExamen.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:16px;">No hay turnos cargados.</td></tr>';
       return;
     }
 
-    tablaExamenesAdmin.innerHTML = '';
-    examenes.forEach(ex => {
-      let badgeStyle = 'background: #f1f5f9; color: #64748b;';
-      if (ex.estado === 'Inscripciones Abiertas') badgeStyle = 'background: #dcfce7; color: #15803d;';
-      if (ex.estado === 'Concluido') badgeStyle = 'background: #fee2e2; color: #b91c1c;';
-
-      tablaExamenesAdmin.innerHTML += `
-        <tr>
-          <td><strong>${ex.turno}</strong></td>
-          <td>${ex.periodo}</td>
-          <td>${ex.cierre_inscripcion}</td>
-          <td><span style="font-size:0.75rem; padding:3px 8px; border-radius:4px; font-weight:700; ${badgeStyle}">${ex.estado}</span></td>
-          <td style="text-align: right;">
-            <button class="btn-action btn-edit-ex" data-id="${ex.id}" style="background:#fef3c7; color:#b45309; border:none; padding:6px 8px; border-radius:6px; cursor:pointer;"><i class="fa-solid fa-pen"></i></button>
-            <button class="btn-action btn-del-ex" data-id="${ex.id}" style="background:#fee2e2; color:#dc2626; border:none; padding:6px 8px; border-radius:6px; cursor:pointer; margin-left:4px;"><i class="fa-solid fa-trash"></i></button>
-          </td>
-        </tr>
+    tablaTurnosExamen.innerHTML = '';
+    turnos.forEach((ex) => {
+      const fila = document.createElement('tr');
+      fila.innerHTML = `
+        <td><strong>${ex.turno}</strong></td>
+        <td>${ex.periodo}</td>
+        <td>${ex.cierre_inscripcion || '-'}</td>
+        <td>${ex.estado}</td>
       `;
+      tablaTurnosExamen.appendChild(fila);
     });
   }
 
-  formExamen.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const id = examenIdInput.value;
-    const datos = {
-      turno: turnoInput.value.trim(),
-      periodo: periodoInput.value.trim(),
-      cierre_inscripcion: cierreInput.value.trim(),
-      estado: estadoExamenInput.value
-    };
+  if (formTurnoExamen) {
+    formTurnoExamen.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!tieneSupabase()) return;
 
-    if (id) {
-      const { error } = await supabaseClient.from('calendario_examenes').update(datos).eq('id', id);
-      if (error) alert('Error al actualizar: ' + error.message);
-      else { limpiarFormExamen(); cargarExamenesAdmin(); }
-    } else {
-      const { error } = await supabaseClient.from('calendario_examenes').insert([datos]);
-      if (error) alert('Error al crear: ' + error.message);
-      else { limpiarFormExamen(); cargarExamenesAdmin(); }
-    }
-  });
+      const datosTurno = {
+        turno: turnoConvocatoriaInput ? turnoConvocatoriaInput.value.trim() : '',
+        periodo: periodoExamenesInput ? periodoExamenesInput.value.trim() : '',
+        cierre_inscripcion: cierreInscripcionInput ? cierreInscripcionInput.value.trim() : '',
+        estado: estadoTurnoInput ? estadoTurnoInput.value : 'Programado'
+      };
 
-  tablaExamenesAdmin.addEventListener('click', async (e) => {
-    const btnEdit = e.target.closest('.btn-edit-ex');
-    const btnDel = e.target.closest('.btn-del-ex');
+      const { error } = await supabaseClient
+        .from('calendario_examenes')
+        .insert([datosTurno]);
 
-    if (btnEdit) {
-      const id = btnEdit.getAttribute('data-id');
-      const ex = listaExamenes.find(item => item.id == id);
-      if (!ex) return;
+      if (error) {
+        alert('Error al guardar el turno de examen: ' + error.message);
+        return;
+      }
 
-      examenIdInput.value = ex.id;
-      turnoInput.value = ex.turno;
-      periodoInput.value = ex.periodo;
-      cierreInput.value = ex.cierre_inscripcion;
-      estadoExamenInput.value = ex.estado;
-
-      formExamenTitulo.innerText = 'Editar Turno de Examen';
-      btnCancelarExamen.style.display = 'block';
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    }
-
-    if (btnDel) {
-      const id = btnDel.getAttribute('data-id');
-      if (!confirm('¿Eliminar este turno del calendario?')) return;
-
-      const { error } = await supabaseClient.from('calendario_examenes').delete().eq('id', id);
-      if (error) alert('Error al eliminar: ' + error.message);
-      else cargarExamenesAdmin();
-    }
-  });
-
-  btnCancelarExamen.addEventListener('click', limpiarFormExamen);
-
-  function limpiarFormExamen() {
-    formExamen.reset();
-    examenIdInput.value = '';
-    formExamenTitulo.innerText = 'Nuevo Turno de Examen';
-    btnCancelarExamen.style.display = 'none';
+      formTurnoExamen.reset();
+      alert('Turno de examen guardado correctamente.');
+      await cargarTurnosExamen();
+    });
   }
 
-  cargarExamenesAdmin();
+  // Carga inicial
+  cargarTramites();
+  cargarTurnosExamen();
 });

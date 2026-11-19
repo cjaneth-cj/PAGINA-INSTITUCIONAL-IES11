@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const path = window.location.pathname;
   const currentPage = path.split('/').pop() || 'index.html';
 
-  // 2. Estructura HTML del Sidebar
+  // 2. Estructura HTML del Sidebar (incluye Autoridades)
   const sidebarHTML = `
     <aside class="admin-sidebar">
       <div class="sidebar-brand">
@@ -15,6 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <li>
           <a href="index.html" class="${currentPage === 'index.html' ? 'active' : ''}">
             <i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="autoridades-management.html" class="${currentPage === 'autoridades-management.html' ? 'active' : ''}">
+            <i class="fa-solid fa-user-tie"></i> <span>Autoridades</span>
           </a>
         </li>
         <li>
