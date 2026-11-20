@@ -922,7 +922,7 @@ body.page-body {
 }
 
 .auth-board-section {
-  padding: 60px 24px;
+  padding: 20px 24px;
 }
 
 .section-heading {
@@ -1043,7 +1043,7 @@ body.page-body {
 }
 
 .auth-coord-section {
-  padding: 64px 25px;
+  padding: 20px 25px;
   background-color: var(--surface-container-low, #f2f4f6);
 }
 
@@ -2810,7 +2810,7 @@ body.page-body {
   .btn-outline-hero { justify-content: center; padding: 14px 20px; }
   .hero-controls-layer { bottom: 56px; }
   .slide-counter { display: none; }
-  .metrics-overlap-section { margin-top: -24px; }
+  .metrics-overlap-section { margin-top: 24px; }
 }
 
 @media (max-width: 380px) {
@@ -2836,4 +2836,371 @@ body.page-body {
   color: var(--on-surface-variant);
   cursor: not-allowed;
   opacity: 1;
+}
+/* ==========================================================================
+   EST-01 — Solicitud de trámites
+   Dirección: trámite administrativo serio. Densidad ordenada por grilla,
+   el azul institucional solo donde hay acción. Escala de espaciado de 4px.
+   ========================================================================== */
+
+/* --- Tarjetas de selección ------------------------------------------------ */
+.tramite-cards { align-items: stretch; }
+
+.tramite-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 20px;
+  text-align: left;
+  background-color: var(--surface-container-lowest);
+  border: 1px solid #dfe3e8;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+.tramite-card:hover {
+  border-color: var(--secondary);
+  box-shadow: 0 4px 16px rgba(6, 16, 33, .07);
+  transform: translateY(-2px);
+}
+
+.tramite-card:focus-visible {
+  outline: none;
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 3px rgba(0, 101, 141, .22);
+}
+
+.tramite-card[aria-pressed="true"] {
+  border-color: var(--secondary);
+  background-color: #f4fafd;
+  box-shadow: inset 3px 0 0 var(--secondary);
+}
+
+.tramite-card-ico {
+  font-size: 26px;
+  color: var(--secondary);
+  margin-bottom: 4px;
+}
+
+.tramite-card-tit {
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -.01em;
+  color: var(--primary);
+}
+
+.tramite-card-txt {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--on-surface-variant);
+  flex-grow: 1;
+}
+
+.tramite-card-cta {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--secondary);
+}
+
+.tramite-card:hover .tramite-card-cta { text-decoration: underline; }
+
+/* --- Panel del formulario ------------------------------------------------- */
+.tr-panel {
+  margin-top: 28px;
+  max-width: 680px;
+  background-color: var(--surface-container-lowest);
+  border: 1px solid #dfe3e8;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(6, 16, 33, .08);
+}
+
+.tr-panel-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px 24px;
+  background-color: var(--primary);
+  color: var(--on-primary);
+}
+
+.tr-panel-ico {
+  font-size: 24px;
+  color: var(--secondary-fixed-dim);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.tr-panel-head-txt { flex-grow: 1; min-width: 0; }
+
+.tr-panel-head h3 {
+  margin: 0;
+  font-family: 'Outfit', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -.015em;
+  color: var(--on-primary);
+}
+
+.tr-panel-head p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--on-primary-container);
+  max-width: 62ch;
+}
+
+.tr-panel-head p:empty { display: none; }
+
+.tr-cerrar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--on-primary-container);
+  display: flex;
+  padding: 4px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  transition: background-color .15s ease, color .15s ease;
+}
+
+.tr-cerrar:hover { background-color: rgba(255,255,255,.12); color: var(--on-primary); }
+.tr-cerrar:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(129, 207, 255, .5); }
+
+.tr-body { padding: 24px; }
+
+/* --- Grupos y grilla ------------------------------------------------------ */
+.tr-grupo {
+  border: none;
+  padding: 0;
+  margin: 0 0 28px;
+  min-width: 0;
+}
+
+.tr-grupo:last-of-type { margin-bottom: 24px; }
+
+.tr-grupo legend {
+  padding: 0;
+  margin-bottom: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--on-surface-variant);
+}
+
+.tr-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.tr-campo { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.tr-campo.is-ancho { grid-column: 1 / -1; }
+
+.tr-campo label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--on-surface);
+}
+
+.tr-campo label .req { color: var(--secondary); margin-left: 2px; }
+
+.tr-campo input,
+.tr-campo select,
+.tr-campo textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--on-surface);
+  background-color: var(--surface-container-low);
+  border: 1px solid #d3d8de;
+  border-radius: 8px;
+  transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+
+.tr-campo textarea { resize: vertical; min-height: 76px; }
+
+.tr-campo input:hover,
+.tr-campo select:hover,
+.tr-campo textarea:hover { border-color: #b9c0c8; }
+
+.tr-campo input:focus-visible,
+.tr-campo select:focus-visible,
+.tr-campo textarea:focus-visible {
+  outline: none;
+  background-color: var(--surface-container-lowest);
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 3px rgba(0, 101, 141, .16);
+}
+
+.tr-campo.is-mal input,
+.tr-campo.is-mal select { border-color: #b3261e; background-color: #fef6f6; }
+
+/* --- Documentación -------------------------------------------------------- */
+.tr-ayuda {
+  margin: -6px 0 14px;
+  font-size: 12px;
+  color: var(--on-surface-variant);
+}
+
+.tr-docs { display: flex; flex-direction: column; gap: 10px; }
+
+.tr-doc {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background-color: var(--surface-container-low);
+  border: 1px dashed #c3c9d0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color .15s ease, background-color .15s ease;
+}
+
+.tr-doc:hover { border-color: var(--secondary); background-color: #f4fafd; }
+
+.tr-doc:focus-within {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 3px rgba(0, 101, 141, .16);
+}
+
+.tr-doc input[type="file"] {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+.tr-doc-ico { font-size: 22px; color: var(--on-surface-variant); flex-shrink: 0; }
+
+.tr-doc-txt { flex-grow: 1; min-width: 0; }
+
+.tr-doc-nombre {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--on-surface);
+}
+
+.tr-doc-estado {
+  display: block;
+  font-size: 12px;
+  color: var(--on-surface-variant);
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tr-doc.is-cargado {
+  border-style: solid;
+  border-color: var(--secondary);
+  background-color: #f4fafd;
+}
+
+.tr-doc.is-cargado .tr-doc-ico { color: var(--secondary); }
+.tr-doc.is-cargado .tr-doc-estado { color: var(--on-secondary-container); }
+
+.tr-doc-quitar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--on-surface-variant);
+  display: flex;
+  padding: 4px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.tr-doc-quitar:hover { background-color: var(--surface-container-high); color: #b3261e; }
+
+/* --- Avisos --------------------------------------------------------------- */
+.tr-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.tr-alert strong { display: block; margin-bottom: 2px; font-size: 14px; }
+.tr-alert p { margin: 0; }
+.tr-alert .material-symbols-outlined { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+
+.tr-alert.is-ok { background-color: #e7f6ec; color: #11512a; }
+.tr-alert.is-error { background-color: #fdeceb; color: #8c1d18; }
+
+/* --- Acciones ------------------------------------------------------------- */
+.tr-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 20px;
+  border-top: 1px solid var(--surface-container-high);
+}
+
+.tr-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+
+.tr-btn .material-symbols-outlined { font-size: 18px; }
+
+.tr-btn.is-primario { background-color: var(--secondary); color: var(--on-secondary); }
+.tr-btn.is-primario:hover { background-color: #005175; }
+.tr-btn.is-primario:disabled { background-color: #9aa5ad; cursor: not-allowed; }
+
+.tr-btn.is-secundario {
+  background-color: var(--surface-container-lowest);
+  color: var(--primary);
+  border-color: #d3d8de;
+}
+.tr-btn.is-secundario:hover { border-color: var(--secondary); color: var(--secondary); }
+
+.tr-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(0, 101, 141, .28); }
+
+/* --- Ocultar de verdad ----------------------------------------------------
+   Los contenedores de arriba declaran display:flex o grid, y cualquier
+   `display` del autor le gana al `[hidden]{display:none}` del navegador. */
+.tr-campo[hidden],
+.tr-grupo[hidden],
+.tr-alert[hidden],
+.tr-panel[hidden],
+.tr-doc-quitar[hidden],
+.tr-btn[hidden] { display: none !important; }
+
+/* --- Angosto -------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .tr-grid { grid-template-columns: minmax(0, 1fr); }
+  .tr-panel-head { padding: 18px; }
+  .tr-body { padding: 18px; }
+  .tr-acciones { flex-direction: column; align-items: stretch; }
+  .tramite-card { padding: 16px; }
+}
+@media (max-width: 940px) {
+  .metrics-grid { grid-template-columns: minmax(0, 1fr); }
 }

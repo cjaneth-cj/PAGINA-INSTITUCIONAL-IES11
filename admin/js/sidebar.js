@@ -42,6 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <i class="fa-solid fa-calendar-check"></i> <span>Agenda</span>
           </a>
         </li>
+                <li>
+          <a href="tramites-management.html" class="${currentPage === 'tramites-management.html' ? 'active' : ''}">
+            <i class="fa-solid fa-folder-open"></i> <span>Trámites</span>
+          </a>
+        </li>
         <li>
           <a href="contacto-management.html" class="${currentPage === 'contacto-management.html' ? 'active' : ''}">
             <i class="fa-solid fa-inbox"></i> <span>Consultas</span>
