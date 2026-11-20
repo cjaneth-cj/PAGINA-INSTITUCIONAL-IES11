@@ -922,7 +922,7 @@ body.page-body {
 }
 
 .auth-board-section {
-  padding: 60px 24px;
+  padding: 20px 24px;
 }
 
 .section-heading {
@@ -1043,7 +1043,7 @@ body.page-body {
 }
 
 .auth-coord-section {
-  padding: 64px 25px;
+  padding: 20px 25px;
   background-color: var(--surface-container-low, #f2f4f6);
 }
 
