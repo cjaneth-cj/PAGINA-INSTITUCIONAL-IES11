@@ -213,5 +213,67 @@
 
 <!-- 2. Tu archivo con las credenciales -->
 <script src="assets/supabaseClient.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const contenedor = document.getElementById('contenedorNoticiasPublicas');
+    if (!contenedor) return;
+
+    if (typeof supabaseClient === 'undefined' || !supabaseClient) {
+      contenedor.innerHTML = '<p style="text-align: center; grid-column: 1 / -1; color: #dc2626;">No se pudo conectar con el servidor de novedades.</p>';
+      return;
+    }
+
+    try {
+      const { data: noticias, error } = await supabaseClient
+        .from('noticias')
+        .select('*')
+        .order('fecha', { ascending: false });
+
+      if (error) throw error;
+
+      if (!noticias || noticias.length === 0) {
+        contenedor.innerHTML = '<p style="text-align: center; grid-column: 1 / -1; color: #64748b;">No hay novedades publicadas por el momento.</p>';
+        return;
+      }
+
+      contenedor.innerHTML = '';
+
+      noticias.forEach(n => {
+        const titulo = escaparTexto(n.titulo || 'Comunicado Institucional');
+        const contenido = escaparTexto(n.contenido || '');
+
+        let fechaFormateada = '';
+        if (n.fecha) {
+          const [anio, mes, dia] = n.fecha.split('-');
+          fechaFormateada = `${dia}/${mes}/${anio}`;
+        }
+
+        const imagenHtml = n.imagen_url
+          ? `<div class="news-card-img">
+               <img src="${escaparTexto(n.imagen_url)}" alt="${titulo}" loading="lazy">
+               <span class="news-tag">Comunicado</span>
+             </div>`
+          : '';
+
+        const card = document.createElement('article');
+        card.className = 'news-card';
+        card.innerHTML = `
+          ${imagenHtml}
+          <div class="news-card-body">
+            ${fechaFormateada ? `<span class="news-resolution">Publicado el ${fechaFormateada}</span>` : ''}
+            <h3>${titulo}</h3>
+            <p style="white-space: pre-line;">${contenido}</p>
+          </div>
+        `;
+
+        contenedor.appendChild(card);
+      });
+
+    } catch (err) {
+      console.error('Error al cargar noticias:', err);
+      contenedor.innerHTML = '<p style="text-align: center; grid-column: 1 / -1; color: #dc2626;">Ocurrió un error al cargar las novedades.</p>';
+    }
+  });
+</script>
 </body>
 </html>

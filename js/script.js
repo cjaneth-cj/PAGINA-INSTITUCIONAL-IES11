@@ -76,25 +76,32 @@ function initHeroCarousel() {
     // Sin imagen: el hero usa el fondo diseñado por CSS (.hero-bg-rings).
     // Para volver a fotos, poner la ruta en "image" (ej. "assets/images/hero-1.jpg")
     // y quitar la clase .hero-bg-rings del div #carousel-bg en index.html.
+// Rutas .webp ubicadas en assets/images/ (ajustables según el orden deseado)
     const slides = [
         {
-            image: "",
+            image: "assets/images/edificio.webp",
             title: "Construí tu Futuro Profesional en Jujuy",
             subtitle: "Formación técnica y docente con excelencia académica, compromiso social y salida laboral orientada al desarrollo productivo y cultural regional."
         },
         {
-            image: "",
+            image: "assets/images/enfermeria.webp",
             title: "Títulos Oficiales con Validez Nacional",
             subtitle: "Tecnicaturas superiores y profesorados pensados para responder a las demandas laborales del NOA."
         },
         {
-            image: "",
+            image: "assets/images/acto-colacion-2.webp",
             title: "Educación Pública, Gratuita y de Calidad",
             subtitle: "Prácticas profesionalizantes, vinculación con el sector productivo y acompañamiento académico durante toda la cursada."
         }
     ];
-        // Precarga: evita el parpadeo en blanco al cambiar de slide
-    slides.forEach((s) => { const img = new Image(); img.src = s.image; });
+
+    // Precarga solo de slides que tengan ruta de imagen definida
+    slides.forEach((s) => {
+        if (s.image) {
+            const img = new Image();
+            img.src = s.image;
+        }
+    });
     let currentIndex = 0;
     let autoPlayTimer = null;
     let autoPlayPaused = false;
