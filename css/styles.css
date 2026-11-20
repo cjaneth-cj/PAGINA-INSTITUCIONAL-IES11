@@ -990,6 +990,12 @@ body.page-body {
   flex: 1;
 }
 
+.board-img-wrapper {
+  position: relative;
+  height: 360px; /* antes 260px: más alto para que no corte el rostro */
+  background-color: #cbd5e1;
+}
+
 .board-resolution {
   font-size: 12px;
   color: var(--secondary);

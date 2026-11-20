@@ -819,3 +819,173 @@ function initIconosDecorativos() {
         });
     }).observe(document.body, { childList: true, subtree: true });
 }
+
+/**
+ * ==========================================================================
+ * MÓDULO: AUTORIDADES Y CUERPO DOCENTE (VISTA PÚBLICA)
+ * ==========================================================================
+ */
+document.addEventListener("DOMContentLoaded", () => {
+    initAutoridadesPublicas();
+});
+
+async function initAutoridadesPublicas() {
+    const boardGrid = document.querySelector(".board-grid");
+    const coordGrid = document.querySelector(".coord-grid");
+
+    if (!boardGrid && !coordGrid) return;
+    if (typeof supabaseClient === "undefined" || !supabaseClient) return;
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("autoridades")
+            .select("*");
+
+        if (error || !Array.isArray(data) || data.length === 0) {
+            return;
+        }
+
+        const directivos = data
+            .filter((item) => item.tipo === "directivo")
+            .sort((a, b) => prioridadDirectivo(a) - prioridadDirectivo(b));
+
+        const coordinadores = data.filter((item) => item.tipo !== "directivo");
+
+        if (boardGrid && directivos.length > 0) {
+            boardGrid.innerHTML = "";
+            directivos.forEach((item) => {
+                boardGrid.insertAdjacentHTML("beforeend", crearTarjetaDirectivo(item));
+            });
+        }
+
+        if (coordGrid && coordinadores.length > 0) {
+            coordGrid.innerHTML = "";
+            coordinadores.forEach((item) => {
+                coordGrid.insertAdjacentHTML("beforeend", crearTarjetaCoordinador(item));
+            });
+        }
+    } catch (err) {
+        console.warn("No se pudieron cargar las autoridades desde Supabase:", err);
+    }
+}
+
+function prioridadDirectivo(item) {
+    const texto = `${obtenerCampo(item, ["cargo", "carga"], "")} ${obtenerCampo(item, ["nombre"], "")}`.toLowerCase();
+    // Rector / Rectora primero (izquierda)
+    if (texto.includes("rector") && !texto.includes("vice")) return 1;
+    // Vicerrector / Vicerrectora segundo (derecha)
+    if (texto.includes("vice")) return 2;
+    return 3;
+}
+
+function escaparTexto(valor) {
+    return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+}
+
+function obtenerCampo(item, claves, respaldo = "") {
+    for (const clave of claves) {
+        const val = item[clave];
+        if (val !== undefined && val !== null && typeof val !== "object") {
+            const limpio = String(val).trim();
+            if (limpio !== "" && limpio !== "{}") {
+                return limpio;
+            }
+        }
+    }
+    return respaldo;
+}
+
+function crearTarjetaDirectivo(item) {
+    const nombre = escaparTexto(obtenerCampo(item, ["nombre"], "Autoridad Institucional"));
+    const cargo = escaparTexto(obtenerCampo(item, ["cargo", "carga"], "Cuerpo Directivo"));
+    const resolucion = escaparTexto(obtenerCampo(item, ["area_o_resolucion", "área_o_resolución"], ""));
+    const descripcion = escaparTexto(obtenerCampo(item, ["descripcion", "descripción"], ""));
+    const email = obtenerCampo(item, ["email", "correo_electronico", "correo electrónico"], "");
+    const foto = obtenerCampo(item, ["foto_url", "foto url"], "assets/images/rectora.webp");
+
+    return `
+        <article class="board-card">
+            <div class="board-img-wrapper">
+                <img src="${escaparTexto(foto)}" alt="${nombre}" class="board-img">
+                <span class="board-tag">${cargo}</span>
+            </div>
+            <div class="board-info">
+                ${resolucion ? `<span class="board-resolution">${resolucion}</span>` : ""}
+                <h3>${nombre}</h3>
+                ${descripcion ? `<p class="board-desc">${descripcion}</p>` : ""}
+                ${email ? `
+                    <div class="board-contact">
+                        <a href="mailto:${escaparTexto(email)}">${escaparTexto(email)}</a>
+                    </div>
+                ` : ""}
+            </div>
+        </article>
+    `;
+}
+
+function crearTarjetaCoordinador(item) {
+    const nombre = escaparTexto(obtenerCampo(item, ["nombre"], "Coordinador/a"));
+    const cargo = escaparTexto(obtenerCampo(item, ["cargo", "carga"], "Coordinador de Departamento"));
+    const area = escaparTexto(obtenerCampo(item, ["area_o_resolucion", "área_o_resolución"], "Área Académica"));
+    const turno = escaparTexto(obtenerCampo(item, ["turno"], ""));
+    const ubicacion = escaparTexto(obtenerCampo(item, ["ubicacion", "ubicación"], ""));
+    const descripcion = escaparTexto(obtenerCampo(item, ["descripcion", "descripción"], ""));
+    const email = obtenerCampo(item, ["email", "correo_electronico", "correo electrónico"], "");
+    const foto = obtenerCampo(item, ["foto_url", "foto url"], "assets/images/rectora.webp");
+    const carrerasRaw = obtenerCampo(item, ["carreras"], "");
+
+    const pillsCarreras = carrerasRaw
+        ? carrerasRaw
+            .split(",")
+            .map((c) => c.trim())
+            .filter(Boolean)
+            .map((c) => `<span class="career-pill">${escaparTexto(c)}</span>`)
+            .join("")
+        : "";
+
+    return `
+        <article class="coord-card">
+            <div class="coord-header">
+                <span class="coord-badge">${area}</span>
+                ${turno ? `
+                    <span class="coord-shift">
+                        <span class="material-symbols-outlined">schedule</span> ${turno}
+                    </span>
+                ` : ""}
+            </div>
+            <div class="coord-profile">
+                <img src="${escaparTexto(foto)}" alt="${nombre}" class="coord-img">
+                <div class="coord-titles">
+                    <h3>${nombre}</h3>
+                    <p class="coord-role">${cargo}</p>
+                </div>
+            </div>
+            ${pillsCarreras ? `<div class="coord-careers">${pillsCarreras}</div>` : ""}
+            ${descripcion ? `<p class="board-desc" style="margin: 10px 0;">${descripcion}</p>` : ""}
+            <div class="coord-details">
+                ${ubicacion ? `
+                    <div class="detail-item">
+                        <span class="material-symbols-outlined">location_on</span>
+                        <span>${ubicacion}</span>
+                    </div>
+                ` : ""}
+                ${email ? `
+                    <div class="detail-item">
+                        <span class="material-symbols-outlined">mail</span>
+                        <a href="mailto:${escaparTexto(email)}">${escaparTexto(email)}</a>
+                    </div>
+                ` : ""}
+            </div>
+            ${email ? `
+                <a href="mailto:${escaparTexto(email)}" class="btn-coord-contact">
+                    <span>Enviar Consulta</span>
+                    <span class="material-symbols-outlined">send</span>
+                </a>
+            ` : ""}
+        </article>
+    `;
+}
