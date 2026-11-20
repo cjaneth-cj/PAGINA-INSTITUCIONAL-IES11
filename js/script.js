@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initMetrics();
     initAnioActual();
     initIconosDecorativos();
+    initSolicitudTramites();
 });
 
 
@@ -394,6 +395,490 @@ function initCareerFilters() {
 document.addEventListener("DOMContentLoaded", () => {
     initAgendaCalendar();
 });
+/**
+ * ==========================================================================
+ * MÓDULO: SOLICITUD DE TRÁMITES ESTUDIANTILES (EST-01)
+ * Cada trámite pide datos distintos. Acá se define qué campos muestra cada
+ * uno, qué documentación adjunta y qué se valida antes de enviar. Los datos
+ * van a `solicitudes_tramites` y los archivos al bucket privado `tramites`.
+ * ==========================================================================
+ */
+function initSolicitudTramites() {
+    const panel = document.getElementById("tramiteFormBox");
+    const form = document.getElementById("tramiteForm");
+    if (!panel || !form) return;
+
+    const MAX_BYTES = 5 * 1024 * 1024;
+    const TIPOS_OK = ["application/pdf", "image/jpeg", "image/png", "image/webp"];
+
+    const TRAMITES = {
+        "Constancia de Alumno Regular": {
+            icono: "badge",
+            campos: ["nombre_completo", "dni", "email", "telefono", "carrera", "anio_cursada", "motivo", "observaciones"],
+            obligatorios: ["nombre_completo", "dni", "email", "carrera"],
+            aviso: "Sale sellada y firmada. Si es para BEGU o BEGUP, revisá que el organismo no te pida también el analítico."
+        },
+        "Certificado Analítico Parcial": {
+            icono: "description",
+            campos: ["nombre_completo", "dni", "email", "telefono", "carrera", "turno", "destinatario", "observaciones"],
+            obligatorios: ["nombre_completo", "dni", "email", "telefono", "carrera", "turno"],
+            aviso: "Se retira los lunes o martes, en el mismo turno en el que cursás."
+        },
+        "Inicio de Trámite de Título": {
+            icono: "school",
+            campos: ["nombre_completo", "dni", "email", "telefono", "carrera", "observaciones"],
+            obligatorios: ["nombre_completo", "dni", "email", "telefono", "carrera"],
+            etiquetaTelefono: "Celular",
+            documentos: ["Partida de nacimiento", "Título secundario autenticado", "Fotocopia de DNI"],
+            aviso: "Subí los tres documentos. Secretaría revisa cada uno y te avisa si alguno hay que mandarlo de nuevo."
+        },
+        "Equivalencias y Pases": {
+            icono: "swap_horiz",
+            campos: ["nombre_completo", "dni", "email", "telefono", "carrera", "carrera_destino", "cohorte", "anio_cursada", "observaciones"],
+            obligatorios: ["nombre_completo", "dni", "email", "telefono", "carrera", "carrera_destino"],
+            etiquetaCarrera: "Carrera que cursás actualmente",
+            documentos: ["Certificado Analítico Actualizado", "Fotocopia de DNI"],
+            nota: true,
+            aviso: "Con tus datos armamos la nota de solicitud de vacante: descargala, firmala y presentala con el analítico y la fotocopia del DNI."
+        }
+    };
+
+    const INPUTS = {
+        nombre_completo: "tr-nombre", dni: "tr-dni", email: "tr-email", telefono: "tr-telefono",
+        carrera: "tr-carrera", carrera_destino: "tr-carrera-destino", cohorte: "tr-cohorte",
+        anio_cursada: "tr-anio", turno: "tr-turno", motivo: "tr-motivo",
+        destinatario: "tr-destinatario", observaciones: "tr-observaciones"
+    };
+
+    const ETIQUETAS = {
+        nombre_completo: "tu nombre y apellido", dni: "tu DNI", email: "tu correo",
+        telefono: "tu teléfono", carrera: "la carrera", carrera_destino: "la carrera de destino",
+        turno: "el turno", destinatario: "a quién va dirigido"
+    };
+
+    const titulo = document.getElementById("tramiteFormTitulo");
+    const icono = document.getElementById("tramiteFormIcono");
+    const aviso = document.getElementById("tramiteAviso");
+    const campoTipo = document.getElementById("tr-tipo");
+    const alertaOk = document.getElementById("tramiteOk");
+    const alertaOkTexto = document.getElementById("tramiteOkTexto");
+    const alertaError = document.getElementById("tramiteError");
+    const errorTitulo = document.getElementById("tramiteErrorTitulo");
+    const errorTexto = document.getElementById("tramiteErrorTexto");
+    const boton = document.getElementById("tramiteSubmit");
+    const botonNota = document.getElementById("tramiteNota");
+    const fsDocs = document.getElementById("tramiteDocs");
+    const listaDocs = document.getElementById("tramiteDocsLista");
+    const tarjetas = document.querySelectorAll(".tramite-card");
+
+    let actual = null;
+
+    const valor = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : "";
+    };
+
+    function limpiarMarcas() {
+        form.querySelectorAll(".tr-campo.is-mal").forEach((c) => c.classList.remove("is-mal"));
+    }
+
+    function ocultarAvisos() {
+        alertaOk.hidden = true;
+        alertaError.hidden = true;
+    }
+
+    function mostrarError(tit, txt, campos) {
+        errorTitulo.textContent = tit;
+        errorTexto.textContent = txt;
+        alertaError.hidden = false;
+        limpiarMarcas();
+        (campos || []).forEach((c) => {
+            const g = form.querySelector('[data-campo="' + c + '"]');
+            if (g) g.classList.add("is-mal");
+        });
+        alertaError.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function pesoLegible(bytes) {
+        return bytes < 1024 * 1024
+            ? Math.round(bytes / 1024) + " KB"
+            : (bytes / 1024 / 1024).toFixed(1).replace(".", ",") + " MB";
+    }
+
+    /* --- Zona de subida de un documento --------------------------------- */
+    function crearZonaDoc(nombreDoc, indice) {
+        const zona = document.createElement("label");
+        zona.className = "tr-doc";
+        zona.setAttribute("for", "tr-doc-" + indice);
+
+        const ico = document.createElement("span");
+        ico.className = "material-symbols-outlined tr-doc-ico";
+        ico.textContent = "upload_file";
+
+        const txt = document.createElement("span");
+        txt.className = "tr-doc-txt";
+        const nom = document.createElement("span");
+        nom.className = "tr-doc-nombre";
+        nom.textContent = nombreDoc;
+        const est = document.createElement("span");
+        est.className = "tr-doc-estado";
+        est.textContent = "Tocá para elegir el archivo";
+        txt.append(nom, est);
+
+        const input = document.createElement("input");
+        input.type = "file";
+        input.id = "tr-doc-" + indice;
+        input.dataset.documento = nombreDoc;
+        input.accept = ".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp";
+
+        const quitar = document.createElement("button");
+        quitar.type = "button";
+        quitar.className = "tr-doc-quitar";
+        quitar.hidden = true;
+        quitar.setAttribute("aria-label", "Quitar " + nombreDoc);
+        const icoQ = document.createElement("span");
+        icoQ.className = "material-symbols-outlined";
+        icoQ.textContent = "close";
+        quitar.appendChild(icoQ);
+
+        function reiniciar() {
+            input.value = "";
+            zona.classList.remove("is-cargado");
+            ico.textContent = "upload_file";
+            est.textContent = "Tocá para elegir el archivo";
+            quitar.hidden = true;
+        }
+
+        input.addEventListener("change", () => {
+            const f = input.files && input.files[0];
+            if (!f) return reiniciar();
+            if (TIPOS_OK.indexOf(f.type) === -1) {
+                mostrarError("Formato no aceptado.",
+                    "«" + f.name + "» no es PDF, JPG, PNG ni WEBP.");
+                return reiniciar();
+            }
+            if (f.size > MAX_BYTES) {
+                mostrarError("Archivo demasiado grande.",
+                    "«" + f.name + "» pesa " + pesoLegible(f.size) + " y el máximo es 5 MB.");
+                return reiniciar();
+            }
+            zona.classList.add("is-cargado");
+            ico.textContent = "task";
+            est.textContent = f.name + " · " + pesoLegible(f.size);
+            quitar.hidden = false;
+            ocultarAvisos();
+        });
+
+        quitar.addEventListener("click", (ev) => {
+            ev.preventDefault();
+            ev.stopPropagation();
+            reiniciar();
+        });
+
+        zona.append(ico, txt, input, quitar);
+        return zona;
+    }
+
+    /* --- Configurar el formulario para un trámite ------------------------ */
+    function configurar(nombreTramite) {
+        const cfg = TRAMITES[nombreTramite];
+        if (!cfg) return;
+        actual = { nombre: nombreTramite, cfg: cfg };
+
+        campoTipo.value = nombreTramite;
+        titulo.textContent = nombreTramite;
+        icono.textContent = cfg.icono;
+        aviso.textContent = cfg.aviso || "";
+
+        tarjetas.forEach((t) => {
+            t.setAttribute("aria-pressed", String(t.dataset.tramite === nombreTramite));
+        });
+
+        form.querySelectorAll("[data-campo]").forEach((grupo) => {
+            const nombre = grupo.dataset.campo;
+            const visible = cfg.campos.indexOf(nombre) !== -1;
+            grupo.hidden = !visible;
+
+            const input = document.getElementById(INPUTS[nombre]);
+            const label = grupo.querySelector("label");
+            if (!input || !label) return;
+
+            const req = cfg.obligatorios.indexOf(nombre) !== -1;
+            input.required = visible && req;
+
+            // Reconstruir la etiqueta con su marca de obligatorio
+            let base = label.dataset.base;
+            if (!base) {
+                base = label.textContent.trim();
+                label.dataset.base = base;
+            }
+            if (nombre === "carrera" && cfg.etiquetaCarrera) base = cfg.etiquetaCarrera;
+            if (nombre === "carrera" && !cfg.etiquetaCarrera) base = "Carrera";
+            if (nombre === "telefono") base = cfg.etiquetaTelefono || "Teléfono";
+
+            label.textContent = base;
+            if (req) {
+                const ast = document.createElement("span");
+                ast.className = "req";
+                ast.textContent = "*";
+                ast.setAttribute("aria-hidden", "true");
+                label.appendChild(ast);
+                input.setAttribute("aria-required", "true");
+            } else {
+                // Los opcionales no llevan marca: la ausencia del asterisco alcanza.
+                input.removeAttribute("aria-required");
+            }
+        });
+
+        listaDocs.textContent = "";
+        if (cfg.documentos && cfg.documentos.length) {
+            cfg.documentos.forEach((d, i) => listaDocs.appendChild(crearZonaDoc(d, i)));
+            fsDocs.hidden = false;
+        } else {
+            fsDocs.hidden = true;
+        }
+
+        botonNota.hidden = !cfg.nota;
+        limpiarMarcas();
+        ocultarAvisos();
+    }
+
+    tarjetas.forEach((t) => {
+        t.addEventListener("click", () => {
+            configurar(t.dataset.tramite || "");
+            panel.hidden = false;
+            panel.scrollIntoView({ behavior: "smooth", block: "start" });
+            setTimeout(() => {
+                const p = document.getElementById("tr-nombre");
+                if (p) p.focus({ preventScroll: true });
+            }, 420);
+        });
+    });
+
+    const cerrar = document.getElementById("tramiteFormCerrar");
+    if (cerrar) {
+        cerrar.addEventListener("click", () => {
+            panel.hidden = true;
+            ocultarAvisos();
+            tarjetas.forEach((t) => t.setAttribute("aria-pressed", "false"));
+        });
+    }
+
+    /* --- Sugerencias de carrera ------------------------------------------ */
+    (async function cargarCarreras() {
+        const lista = document.getElementById("listaCarreras");
+        if (!lista || typeof supabaseClient === "undefined" || !supabaseClient) return;
+        try {
+            const { data, error } = await supabaseClient.from("carreras").select("nombre").order("nombre");
+            if (error || !Array.isArray(data)) return;
+            data.forEach((c) => {
+                if (!c || !c.nombre) return;
+                const op = document.createElement("option");
+                op.value = c.nombre;
+                lista.appendChild(op);
+            });
+        } catch (e) {
+            // Sin sugerencias sigue siendo texto libre. No se bloquea nada.
+        }
+    })();
+
+    /* --- Nota de solicitud de vacante ------------------------------------ */
+    function generarNota() {
+        const hoy = new Date();
+        const meses = ["enero","febrero","marzo","abril","mayo","junio","julio",
+                       "agosto","septiembre","octubre","noviembre","diciembre"];
+        const d = {
+            nombre: valor("tr-nombre") || "…………………………………",
+            dni: valor("tr-dni") || "…………………",
+            carrera: valor("tr-carrera") || "…………………………………",
+            cohorte: valor("tr-cohorte") || "………",
+            anio: valor("tr-anio") || "………",
+            destino: valor("tr-carrera-destino") || "…………………………………",
+            tel: valor("tr-telefono") || "………………………"
+        };
+
+        const win = window.open("", "_blank");
+        if (!win) {
+            mostrarError("No pudimos abrir la nota.",
+                "El navegador bloqueó la ventana emergente. Permitila para este sitio y volvé a intentar.");
+            return;
+        }
+
+        const doc = win.document;
+        doc.title = "Solicitud de vacante para pase - IES N° 11";
+        const estilo = doc.createElement("style");
+        estilo.textContent = "body{font-family:Georgia,'Times New Roman',serif;max-width:19cm;margin:2cm auto;"
+            + "line-height:1.9;color:#000;font-size:12pt}h1{font-size:13pt;text-align:center;margin-bottom:2.5em;"
+            + "text-transform:uppercase;letter-spacing:.5px}.fecha{text-align:right;margin-bottom:2.5em}"
+            + ".dest{margin-bottom:2.5em}.cuerpo{text-align:justify;margin-bottom:2em}"
+            + "ul{margin:1em 0 2.5em 1.5em}.firma{margin-top:4em}.firma p{margin:.3em 0}"
+            + "@media print{body{margin:1.5cm}}";
+        doc.head.appendChild(estilo);
+
+        const p = (t, c) => {
+            const el = doc.createElement("p");
+            if (c) el.className = c;
+            el.textContent = t;
+            return el;
+        };
+
+        const h = doc.createElement("h1");
+        h.textContent = "Solicitud de vacante para pase";
+        doc.body.appendChild(h);
+
+        doc.body.appendChild(p("San Salvador de Jujuy, " + hoy.getDate() + " de "
+            + meses[hoy.getMonth()] + " de " + hoy.getFullYear() + ".", "fecha"));
+
+        const dest = doc.createElement("div");
+        dest.className = "dest";
+        ["A la", "Señora Rectora", "del IES N° 11", "Prof. Silvia Roxana Adaro", "Su Despacho"]
+            .forEach((l) => dest.appendChild(p(l)));
+        doc.body.appendChild(dest);
+
+        doc.body.appendChild(p("Quien suscribe, " + d.nombre + ", DNI " + d.dni
+            + ", estudiante de la Carrera de " + d.carrera + ", de la Cohorte " + d.cohorte
+            + ", cursando el " + d.anio + " año, solicito AUTORICE una CONSTANCIA DE VACANTE para la Carrera de "
+            + d.destino + " que se dicta en Vuestra Institución, para así poder tramitar el pase a la misma.",
+            "cuerpo"));
+
+        doc.body.appendChild(p("Adjunto:"));
+        const ul = doc.createElement("ul");
+        ["Certificado Analítico Actualizado (origen)", "Fotocopia de DNI"].forEach((t) => {
+            const li = doc.createElement("li");
+            li.textContent = t;
+            ul.appendChild(li);
+        });
+        doc.body.appendChild(ul);
+        doc.body.appendChild(p("Sin otro particular, saludo a Ud. atentamente."));
+
+        const firma = doc.createElement("div");
+        firma.className = "firma";
+        firma.appendChild(p("Firma: …………………………………………………"));
+        firma.appendChild(p("Aclaración: " + d.nombre));
+        firma.appendChild(p("Teléfono: " + d.tel));
+        doc.body.appendChild(firma);
+
+        setTimeout(() => win.print(), 500);
+    }
+
+    botonNota.addEventListener("click", generarNota);
+
+    /* --- Envío ------------------------------------------------------------ */
+    form.addEventListener("submit", async (ev) => {
+        ev.preventDefault();
+        ocultarAvisos();
+        limpiarMarcas();
+        if (!actual) return;
+
+        const cfg = actual.cfg;
+        const datos = { tipo_tramite: actual.nombre };
+        cfg.campos.forEach((c) => {
+            let v = valor(INPUTS[c]);
+            if (c === "dni") v = v.replace(/[.\s-]/g, "");
+            datos[c] = v || null;
+        });
+
+        const faltan = [];
+        const malos = [];
+        cfg.obligatorios.forEach((c) => {
+            if (!datos[c]) { faltan.push(ETIQUETAS[c] || c); malos.push(c); }
+        });
+        if (datos.dni && datos.dni.length < 6) { faltan.push("un DNI válido"); malos.push("dni"); }
+        if (datos.email && datos.email.indexOf("@") < 1) { faltan.push("un correo válido"); malos.push("email"); }
+
+        if (faltan.length) {
+            mostrarError("Faltan datos", "Completá " + faltan.join(", ") + ".", malos);
+            return;
+        }
+
+        const archivos = [];
+        listaDocs.querySelectorAll("input[type=file]").forEach((inp) => {
+            const f = inp.files && inp.files[0];
+            if (f) archivos.push({ documento: inp.dataset.documento, file: f });
+        });
+
+        if (cfg.documentos && archivos.length === 0) {
+            mostrarError("Falta la documentación",
+                "Subí al menos uno de los documentos para que Secretaría pueda empezar el trámite.");
+            return;
+        }
+
+        if (typeof supabaseClient === "undefined" || !supabaseClient) {
+            mostrarError("No pudimos conectar con el sistema",
+                "Escribinos a contacto@ies11jujuy.edu.ar y lo gestionamos por correo.");
+            return;
+        }
+
+        boton.disabled = true;
+        const etiqueta = boton.querySelector("span:last-child");
+        const textoOriginal = etiqueta ? etiqueta.textContent : "";
+        if (etiqueta) etiqueta.textContent = "Enviando...";
+
+        const carpeta = (window.crypto && crypto.randomUUID)
+            ? crypto.randomUUID()
+            : String(Date.now()) + "-" + Math.random().toString(16).slice(2);
+
+        try {
+            datos.carpeta = carpeta;
+            const { error: errSol } = await supabaseClient.from("solicitudes_tramites").insert(datos);
+            if (errSol) throw errSol;
+
+            const fallados = [];
+            for (let i = 0; i < archivos.length; i++) {
+                const a = archivos[i];
+                const ext = (a.file.name.split(".").pop() || "dat").toLowerCase().slice(0, 5);
+                const slug = a.documento.toLowerCase()
+                    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+                    .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+                const ruta = "solicitudes/" + carpeta + "/" + slug + "-" + Date.now() + "." + ext;
+
+                const { error: errUp } = await supabaseClient.storage
+                    .from("tramites").upload(ruta, a.file, { contentType: a.file.type, upsert: false });
+                if (errUp) { fallados.push(a.documento); continue; }
+
+                const { error: errReg } = await supabaseClient.from("solicitudes_archivos").insert({
+                    carpeta: carpeta,
+                    tipo_documento: a.documento,
+                    storage_path: ruta,
+                    nombre_original: a.file.name.slice(0, 180),
+                    mime_type: a.file.type,
+                    tamano_bytes: a.file.size
+                });
+                if (errReg) fallados.push(a.documento);
+            }
+
+            form.reset();
+            listaDocs.querySelectorAll(".tr-doc").forEach((z) => {
+                z.classList.remove("is-cargado");
+                const i = z.querySelector(".tr-doc-ico");
+                const e = z.querySelector(".tr-doc-estado");
+                const q = z.querySelector(".tr-doc-quitar");
+                if (i) i.textContent = "upload_file";
+                if (e) e.textContent = "Tocá para elegir el archivo";
+                if (q) q.hidden = true;
+            });
+
+            if (fallados.length) {
+                alertaOkTexto.textContent = "Secretaría recibió tu solicitud, pero no pudimos subir: "
+                    + fallados.join(", ") + ". Te van a escribir para que los envíes por otro medio.";
+            } else if (archivos.length) {
+                alertaOkTexto.textContent = "Secretaría recibió tu solicitud y " + archivos.length
+                    + (archivos.length === 1 ? " documento" : " documentos")
+                    + ". Te escribimos al correo cuando esté lista.";
+            } else {
+                alertaOkTexto.textContent = "Secretaría la recibió. Te escribimos al correo cuando esté lista.";
+            }
+            alertaOk.hidden = false;
+            alertaOk.scrollIntoView({ behavior: "smooth", block: "center" });
+        } catch (err) {
+            mostrarError("No pudimos enviar la solicitud",
+                "Revisá tu conexión y volvé a intentar. Si el problema sigue, escribinos a contacto@ies11jujuy.edu.ar.");
+        } finally {
+            boton.disabled = false;
+            if (etiqueta) etiqueta.textContent = textoOriginal;
+        }
+    });
+}
 function initAgendaCalendar() {
     const calendarDays = document.getElementById("calendarDays");
     const monthYearDisplay = document.getElementById("monthYearDisplay");

@@ -177,32 +177,167 @@
             <!-- BLOQUE B: TRÁMITES Y CERTIFICADOS -->
             <section id="section-tramites" class="content-section">
                 <div class="section-header">
-                    <h2>Trámites Frecuentes y Certificados Online</h2>
-                    <p>Solicitá documentación oficial con validación de firma digital y código QR.</p>
+                    <h2>Trámites Frecuentes</h2>
+                    <p>Elegí el trámite, completá tus datos y Secretaría te escribe al correo cuando esté listo.</p>
                 </div>
 
-                <div class="cards-grid-4">
-                    <div class="student-card">
-                        <h3>Constancia de Alumno Regular</h3>
-                        <p>Válida para boleto estudiantil SUBE, ANSES (Progresar) y obra social.</p>
-                        <button class="btn-action">Solicitar Online</button>
-                    </div>
-                    <div class="student-card">
-                        <h3>Certificado Analítico Parcial</h3>
-                        <p>Detalle de materias cursadas, aprobadas y promedio general.</p>
-                        <button class="btn-action">Solicitar Analítico</button>
-                    </div>
-                    <div class="student-card">
-                        <h3>Inicio de Trámite de Título</h3>
-                        <p>Para estudiantes que completaron el 100% de la currícula.</p>
-                        <button class="btn-action">Iniciar Graduación</button>
-                    </div>
-                    <div class="student-card">
-                        <h3>Equivalencias y Pases</h3>
-                        <p>Reconocimiento de materias aprobadas en otras instituciones.</p>
-                        <button class="btn-action">Consultar Requisitos</button>
-                    </div>
+                <div class="cards-grid-4 tramite-cards">
+                    <button type="button" class="tramite-card" data-tramite="Constancia de Alumno Regular">
+                        <span class="material-symbols-outlined tramite-card-ico">badge</span>
+                        <span class="tramite-card-tit">Constancia de Alumno Regular</span>
+                        <span class="tramite-card-txt">Para BEGU, BEGUP, ANSES (Progresar) y otros organismos.</span>
+                        <span class="tramite-card-cta">Solicitar</span>
+                    </button>
+                    <button type="button" class="tramite-card" data-tramite="Certificado Analítico Parcial">
+                        <span class="material-symbols-outlined tramite-card-ico">description</span>
+                        <span class="tramite-card-tit">Certificado Analítico Parcial</span>
+                        <span class="tramite-card-txt">Materias cursadas, aprobadas y promedio general.</span>
+                        <span class="tramite-card-cta">Solicitar</span>
+                    </button>
+                    <button type="button" class="tramite-card" data-tramite="Inicio de Trámite de Título">
+                        <span class="material-symbols-outlined tramite-card-ico">school</span>
+                        <span class="tramite-card-tit">Inicio de Trámite de Título</span>
+                        <span class="tramite-card-txt">Para quienes completaron el 100% de la currícula.</span>
+                        <span class="tramite-card-cta">Solicitar</span>
+                    </button>
+                    <button type="button" class="tramite-card" data-tramite="Equivalencias y Pases">
+                        <span class="material-symbols-outlined tramite-card-ico">swap_horiz</span>
+                        <span class="tramite-card-tit">Equivalencias y Pases</span>
+                        <span class="tramite-card-txt">Reconocimiento de materias de otras instituciones.</span>
+                        <span class="tramite-card-cta">Solicitar</span>
+                    </button>
                 </div>
+
+                <!-- EST-01: formulario de solicitud. Los campos cambian según el trámite. -->
+                <section class="tr-panel" id="tramiteFormBox" hidden aria-labelledby="tramiteFormTitulo">
+                    <header class="tr-panel-head">
+                        <span class="material-symbols-outlined tr-panel-ico" id="tramiteFormIcono">badge</span>
+                        <div class="tr-panel-head-txt">
+                            <h3 id="tramiteFormTitulo">Solicitar trámite</h3>
+                            <p id="tramiteAviso"></p>
+                        </div>
+                        <button type="button" class="tr-cerrar" id="tramiteFormCerrar" aria-label="Cerrar el formulario">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </header>
+
+                    <div class="tr-body">
+                        <div class="tr-alert is-ok" id="tramiteOk" hidden role="status">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            <div>
+                                <strong>Solicitud enviada</strong>
+                                <p id="tramiteOkTexto">Secretaría la recibió. Te escribimos al correo cuando esté lista.</p>
+                            </div>
+                        </div>
+
+                        <div class="tr-alert is-error" id="tramiteError" hidden role="alert">
+                            <span class="material-symbols-outlined">error</span>
+                            <div>
+                                <strong id="tramiteErrorTitulo">No pudimos enviar la solicitud</strong>
+                                <p id="tramiteErrorTexto">Revisá tu conexión y volvé a intentar.</p>
+                            </div>
+                        </div>
+
+                        <form id="tramiteForm" novalidate>
+                            <input type="hidden" id="tr-tipo" value="">
+
+                            <fieldset class="tr-grupo">
+                                <legend>Tus datos</legend>
+                                <div class="tr-grid">
+                                    <div class="tr-campo is-ancho" data-campo="nombre_completo">
+                                        <label for="tr-nombre">Nombre y apellido</label>
+                                        <input type="text" id="tr-nombre" autocomplete="name" maxlength="120" placeholder="Ana Pérez">
+                                    </div>
+                                    <div class="tr-campo" data-campo="dni">
+                                        <label for="tr-dni">DNI</label>
+                                        <input type="text" id="tr-dni" inputmode="numeric" maxlength="20" placeholder="40123456">
+                                    </div>
+                                    <div class="tr-campo" data-campo="email">
+                                        <label for="tr-email">Correo electrónico</label>
+                                        <input type="email" id="tr-email" autocomplete="email" maxlength="120" placeholder="correo@ejemplo.com">
+                                    </div>
+                                    <div class="tr-campo" data-campo="telefono">
+                                        <label for="tr-telefono" id="lbl-telefono">Teléfono</label>
+                                        <input type="tel" id="tr-telefono" autocomplete="tel" maxlength="40" placeholder="388 400 0000">
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset class="tr-grupo">
+                                <legend>Datos del trámite</legend>
+                                <div class="tr-grid">
+                                    <div class="tr-campo is-ancho" data-campo="carrera">
+                                        <label for="tr-carrera" id="lbl-carrera">Carrera</label>
+                                        <input type="text" id="tr-carrera" list="listaCarreras" maxlength="120" placeholder="Empezá a escribir y elegí de la lista">
+                                        <datalist id="listaCarreras"></datalist>
+                                    </div>
+                                    <div class="tr-campo is-ancho" data-campo="carrera_destino" hidden>
+                                        <label for="tr-carrera-destino">Carrera a la que querés pasarte</label>
+                                        <input type="text" id="tr-carrera-destino" list="listaCarreras" maxlength="120" placeholder="Carrera de destino en el IES N° 11">
+                                    </div>
+                                    <div class="tr-campo" data-campo="anio_cursada" hidden>
+                                        <label for="tr-anio">Año que cursás</label>
+                                        <select id="tr-anio">
+                                            <option value="">Sin especificar</option>
+                                            <option value="1°">1°</option>
+                                            <option value="2°">2°</option>
+                                            <option value="3°">3°</option>
+                                            <option value="Egresado/a">Ya terminé de cursar</option>
+                                        </select>
+                                    </div>
+                                    <div class="tr-campo" data-campo="cohorte" hidden>
+                                        <label for="tr-cohorte">Cohorte</label>
+                                        <input type="text" id="tr-cohorte" inputmode="numeric" maxlength="4" placeholder="2024">
+                                    </div>
+                                    <div class="tr-campo" data-campo="turno" hidden>
+                                        <label for="tr-turno">Turno en el que cursás</label>
+                                        <select id="tr-turno">
+                                            <option value="">Elegí tu turno</option>
+                                            <option value="Mañana">Mañana</option>
+                                            <option value="Tarde">Tarde</option>
+                                            <option value="Noche">Noche</option>
+                                        </select>
+                                    </div>
+                                    <div class="tr-campo" data-campo="motivo" hidden>
+                                        <label for="tr-motivo">¿Para qué la necesitás?</label>
+                                        <select id="tr-motivo">
+                                            <option value="">Sin especificar</option>
+                                            <option value="BEGU">BEGU — Boleto Estudiantil Gratuito Universal</option>
+                                            <option value="BEGUP">BEGUP — Boleto Estudiantil Gratuito Universal Provincial</option>
+                                            <option value="ANSES Progresar">ANSES — Progresar</option>
+                                            <option value="Otro">Otro</option>
+                                        </select>
+                                    </div>
+                                    <div class="tr-campo is-ancho" data-campo="destinatario" hidden>
+                                        <label for="tr-destinatario">¿A quién va dirigido?</label>
+                                        <input type="text" id="tr-destinatario" maxlength="160" placeholder="Organismo, institución o persona">
+                                    </div>
+                                    <div class="tr-campo is-ancho" data-campo="observaciones">
+                                        <label for="tr-observaciones">Observaciones</label>
+                                        <textarea id="tr-observaciones" rows="3" maxlength="600" placeholder="Si hay algo que Secretaría deba saber, escribilo acá."></textarea>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset class="tr-grupo" id="tramiteDocs" hidden>
+                                <legend>Documentación</legend>
+                                <p class="tr-ayuda">PDF, JPG, PNG o WEBP. Hasta 5 MB por archivo.</p>
+                                <div class="tr-docs" id="tramiteDocsLista"></div>
+                            </fieldset>
+
+                            <div class="tr-acciones">
+                                <button type="submit" class="tr-btn is-primario" id="tramiteSubmit">
+                                    <span class="material-symbols-outlined">send</span>
+                                    <span>Enviar solicitud</span>
+                                </button>
+                                <button type="button" class="tr-btn is-secundario" id="tramiteNota" hidden>
+                                    <span class="material-symbols-outlined">print</span>
+                                    <span>Descargar nota para firmar</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
             </section>
 
             <!-- BLOQUE C: RAM / RÉGIMEN ESTUDIANTIL -->

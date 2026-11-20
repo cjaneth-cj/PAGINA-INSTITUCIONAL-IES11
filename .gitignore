@@ -1,0 +1,10 @@
+# Borradores de trabajo que no forman parte del sitio
+Claude outputs/
+
+# Copia anidada del proyecto, agregada por error como submodulo
+PAGINA-INSTITUCIONAL-IES11/
+
+# Basura del sistema operativo
+Thumbs.db
+desktop.ini
+.DS_Store
